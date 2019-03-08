@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <Author>Heidelpay</Author>
+    <Authors>Heidelpay</Authors>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Nerdbank.GitVersioning">
