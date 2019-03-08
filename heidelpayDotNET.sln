@@ -1,0 +1,67 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28705.295
+MinimumVisualStudioVersion = 15.0.26124.0
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2B4DC1AF-F9BA-4ED5-93E1-9F1270CE401D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Heidelpay.Payment", "src\Heidelpay.Payment\Heidelpay.Payment.csproj", "{3D4A6B73-5794-4545-9BF1-0AEA75DC200C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{25D17B03-71FC-4365-9D7D-7B749254014B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Heidelpay.Payment.Tests", "test\Heidelpay.Payment.Tests\Heidelpay.Payment.Tests.csproj", "{F17331EB-BD81-4A79-81E9-15A4E4357177}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F5695996-4AD3-4DF1-A010-BC9D4DF1CF6B}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+		LICENSE = LICENSE
+		README.md = README.md
+		version.json = version.json
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3D4A6B73-5794-4545-9BF1-0AEA75DC200C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D4A6B73-5794-4545-9BF1-0AEA75DC200C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D4A6B73-5794-4545-9BF1-0AEA75DC200C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3D4A6B73-5794-4545-9BF1-0AEA75DC200C}.Debug|x64.Build.0 = Debug|Any CPU
+		{3D4A6B73-5794-4545-9BF1-0AEA75DC200C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3D4A6B73-5794-4545-9BF1-0AEA75DC200C}.Debug|x86.Build.0 = Debug|Any CPU
+		{3D4A6B73-5794-4545-9BF1-0AEA75DC200C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D4A6B73-5794-4545-9BF1-0AEA75DC200C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D4A6B73-5794-4545-9BF1-0AEA75DC200C}.Release|x64.ActiveCfg = Release|Any CPU
+		{3D4A6B73-5794-4545-9BF1-0AEA75DC200C}.Release|x64.Build.0 = Release|Any CPU
+		{3D4A6B73-5794-4545-9BF1-0AEA75DC200C}.Release|x86.ActiveCfg = Release|Any CPU
+		{3D4A6B73-5794-4545-9BF1-0AEA75DC200C}.Release|x86.Build.0 = Release|Any CPU
+		{F17331EB-BD81-4A79-81E9-15A4E4357177}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F17331EB-BD81-4A79-81E9-15A4E4357177}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F17331EB-BD81-4A79-81E9-15A4E4357177}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F17331EB-BD81-4A79-81E9-15A4E4357177}.Debug|x64.Build.0 = Debug|Any CPU
+		{F17331EB-BD81-4A79-81E9-15A4E4357177}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F17331EB-BD81-4A79-81E9-15A4E4357177}.Debug|x86.Build.0 = Debug|Any CPU
+		{F17331EB-BD81-4A79-81E9-15A4E4357177}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F17331EB-BD81-4A79-81E9-15A4E4357177}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F17331EB-BD81-4A79-81E9-15A4E4357177}.Release|x64.ActiveCfg = Release|Any CPU
+		{F17331EB-BD81-4A79-81E9-15A4E4357177}.Release|x64.Build.0 = Release|Any CPU
+		{F17331EB-BD81-4A79-81E9-15A4E4357177}.Release|x86.ActiveCfg = Release|Any CPU
+		{F17331EB-BD81-4A79-81E9-15A4E4357177}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3D4A6B73-5794-4545-9BF1-0AEA75DC200C} = {2B4DC1AF-F9BA-4ED5-93E1-9F1270CE401D}
+		{F17331EB-BD81-4A79-81E9-15A4E4357177} = {25D17B03-71FC-4365-9D7D-7B749254014B}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D0C6B3D6-BD90-4019-92B3-23ACFA010CB5}
+	EndGlobalSection
+EndGlobal
