@@ -1,4 +1,4 @@
-using Heidelpay.Payment.Communication;
+using Heidelpay.Payment.RestClient;
 using Heidelpay.Payment.Tests.Communication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +12,7 @@ using Xunit;
 
 namespace Heidelpay.Payment.Tests
 {
-    public class AbstractHeidelpayHttpCommunicationTest
+    public class RestClientBaseTest
     {
         private string privateKey = "samplekey";
 

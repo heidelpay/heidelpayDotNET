@@ -1,17 +1,18 @@
-﻿using System;
+﻿using Heidelpay.Payment.RestClient;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Heidelpay.Payment.PaymentTypes
 {
-    public abstract class AbstractPaymentType : IPaymentType
+    public abstract class PaymentType : IRestResource
     {
-        public AbstractPaymentType(Heidelpay heidelpay)
+        public PaymentType(Heidelpay heidelpay)
         {
             Heidelpay = heidelpay;
         }
 
-        public AbstractPaymentType()
+        public PaymentType()
         {
         }
 

@@ -6,21 +6,21 @@ namespace Heidelpay.Payment
 {
     public class PaymentError
     {
-        public PaymentError(string merchantMessage, string customerMessage, string code)
-        {
-            MerchantMessage = merchantMessage;
-            CustomerMessage = customerMessage;
-            Code = code;
-        }
+        public string MerchantMessage { get; set; }
+        public string CustomerMessage { get; set; }
+        public string Code { get; set; }
 
         public PaymentError()
         {
 
         }
 
-        public string MerchantMessage { get; set; }
-        public string CustomerMessage { get; set; }
-        public string Code { get; set; }
+        public PaymentError(string merchantMessage, string customerMessage, string code)
+        {
+            MerchantMessage = merchantMessage;
+            CustomerMessage = customerMessage;
+            Code = code;
+        }
 
         public override string ToString()
         {

@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Net.Http;
+using System.Threading.Tasks;
+using Heidelpay.Payment.PaymentTypes;
+using Heidelpay.Payment.RestClient;
 
 /*-
  * #%L
@@ -32,7 +35,27 @@ namespace Heidelpay.Payment
             PrivateKey = privateKey;
         }
 
-        public Cancel CancelCharge(string id1, string id2, decimal? amount = null)
+        public async Task<Cancel> CancelChargeAsync(string id1, string id2, decimal? amount = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<Customer> FetchCustomerAsync(string customerId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<PaymentType> FetchPaymentTypeAsync(string paymentTypeId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<MetaData> FetchMetaDataAsync(string metaDataId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<Basket> FetchBasketAsync(string basketId)
         {
             throw new NotImplementedException();
         }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Heidelpay.Payment.Communication
+namespace Heidelpay.Payment.RestClient
 {
     public class RestClientErrorObject
     {

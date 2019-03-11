@@ -1,5 +1,5 @@
 ﻿using Heidelpay.Payment;
-using Heidelpay.Payment.Communication;
+using Heidelpay.Payment.RestClient;
 
 namespace System.Net.Http
 {

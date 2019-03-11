@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Heidelpay.Payment.RestClient;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
@@ -7,7 +8,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Heidelpay.Payment.Communication
+namespace Heidelpay.Payment.RestClient
 {
     public abstract class RestClientBase : IRestClient
     {

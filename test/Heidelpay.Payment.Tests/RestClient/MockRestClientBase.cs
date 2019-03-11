@@ -1,4 +1,4 @@
-﻿using Heidelpay.Payment.Communication;
+﻿using Heidelpay.Payment.RestClient;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Heidelpay.Payment.PaymentTypes
+namespace Heidelpay.Payment.RestClient
 {
-    public interface IPaymentType
+    public interface IRestResource
     {
         string TypeUrl { get; }
         string Id { get; }

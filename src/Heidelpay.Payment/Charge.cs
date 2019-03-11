@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Heidelpay.Payment
 {
@@ -31,14 +32,14 @@ namespace Heidelpay.Payment
         {
         }
 
-        public Cancel Cancel()
+        public async Task<Cancel> Cancel()
         {
-            return Heidelpay.CancelCharge(Payment.Id, Id);
+            return await Heidelpay.CancelChargeAsync(Payment.Id, Id);
         }
 
-        public Cancel Cancel(decimal amount)
+        public async Task<Cancel> Cancel(decimal amount)
         {
-            return Heidelpay.CancelCharge(Payment.Id, Id, amount);
+            return await Heidelpay.CancelChargeAsync(Payment.Id, Id, amount);
         }
 
         public Cancel GetCancel(string cancelId)
