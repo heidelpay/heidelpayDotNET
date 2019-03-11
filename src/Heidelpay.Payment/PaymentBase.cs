@@ -5,18 +5,11 @@ using System.Text;
 
 namespace Heidelpay.Payment
 {
-    public abstract class AbstractPayment : IPaymentType
+    public abstract class PaymentBase : IPaymentType
     {
-        public AbstractPayment(Heidelpay heidelpay)
-        {
-            Heidelpay = heidelpay;
-        }
-
-        public AbstractPayment()
-        {
-        }
-
         public Heidelpay Heidelpay { get; set; }
+
+        public Payment Payment { get; set; }
 
         public abstract string TypeUrl { get; }
 
@@ -25,5 +18,15 @@ namespace Heidelpay.Payment
         public string Type { get; set; }
 
         public Uri ResourceUri { get; set; }
+
+        public PaymentBase()
+        {
+        }
+
+        public PaymentBase(Heidelpay heidelpay)
+        {
+            Heidelpay = heidelpay;
+        }
+
     }
 }

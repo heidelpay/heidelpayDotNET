@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Heidelpay.Payment
 {
-    public class Refund : AbstractPayment
+    public class Refund : PaymentBase
     {
         public override string TypeUrl => string.Empty;
     }

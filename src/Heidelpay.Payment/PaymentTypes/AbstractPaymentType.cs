@@ -13,12 +13,10 @@ namespace Heidelpay.Payment.PaymentTypes
 
         public AbstractPaymentType()
         {
-
         }
 
         public Heidelpay Heidelpay { get; set; }
         public string Id { get; set; }
-
         public abstract string TypeUrl { get; }
     }
 }

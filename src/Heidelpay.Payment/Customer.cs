@@ -4,13 +4,8 @@ using System.Text;
 
 namespace Heidelpay.Payment
 {
-    public class Customer : AbstractPayment
+    public class Customer : PaymentBase
     {
-        public Customer(string firstName, string lastName)
-        {
-
-        }
-
         public string Firstname { get; set; }
         public string Lastname { get; set; }
         public Salutation Salutation { get; set; }
@@ -22,8 +17,19 @@ namespace Heidelpay.Payment
         public Address BillingAddress { get; set; }
         public Address ShippingAddress { get; set; }
 
+        public Customer(string firstName, string lastName)
+        {
+            this.Firstname = firstName;
+            this.Lastname = lastName;
+        }
+
         public override string TypeUrl => "customers";
     }
 
-    public enum Salutation { Mr, Ms, Unknown };
+    public enum Salutation
+    {
+        Mr,
+        Ms,
+        Unknown,
+    };
 }

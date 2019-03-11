@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 
 /*-
  * #%L
@@ -24,5 +25,16 @@ namespace Heidelpay.Payment
 {
     public sealed class Heidelpay
     {
+        public string PrivateKey { get; }
+
+        public Heidelpay(string privateKey)
+        {
+            PrivateKey = privateKey;
+        }
+
+        public Cancel CancelCharge(string id1, string id2, decimal? amount = null)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
