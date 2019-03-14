@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
@@ -16,7 +17,9 @@ namespace Heidelpay.Payment.Tests
     {
         private string privateKey = "samplekey";
 
-        private IRestClient BuildMockRestClient()
+        const string MockHttpClientName = "Mocked";
+
+        private IRestClient BuildMockRestClient(HttpStatusCode code = HttpStatusCode.OK, string response = null)
         {
             var services = new ServiceCollection();
 
@@ -26,7 +29,9 @@ namespace Heidelpay.Payment.Tests
 
             var config = configBuilder.Build();
 
-            services.AddHttpClient();
+            services
+                .AddHttpClient<HttpClient>(MockHttpClientName)
+                .ConfigurePrimaryHttpMessageHandler(() => new MockHttpMessageHandler(code, response));
             services.AddLogging();
             services.Configure<SDKOptions>(config.GetSection("Heidelpay"));
 
@@ -36,13 +41,14 @@ namespace Heidelpay.Payment.Tests
             var options = serviceProvider.GetService<IOptions<SDKOptions>>();
             var logger = serviceProvider.GetService<ILogger<RestClientBase>>();
 
-            return new MockRestClient(factory, options, logger);
+            return new MockRestClientBase(MockHttpClientName, factory, options, logger);
         }
 
         [Fact]
         public async Task Test_httpGet()
         {
             var restClient = BuildMockRestClient();
+
             var response = await restClient.HttpGetAsync(new Uri("http://heidelpay.com"), privateKey);
         }
     }

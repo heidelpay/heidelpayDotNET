@@ -8,9 +8,15 @@ using System.Text;
 
 namespace Heidelpay.Payment.Tests.Communication
 {
-    class MockRestClient : RestClientBase
+    class MockRestClientBase : RestClientBase
     {
-        public MockRestClient(IHttpClientFactory factory, IOptions<SDKOptions> options, ILogger<RestClientBase> logger)
+        public MockRestClientBase(string mockedHttpClientName, IHttpClientFactory factory, IOptions<SDKOptions> options, ILogger<RestClientBase> logger)
+            : base(mockedHttpClientName, factory, options, logger)
+        {
+
+        }
+
+        public MockRestClientBase(IHttpClientFactory factory, IOptions<SDKOptions> options, ILogger<RestClientBase> logger)
             : base(factory, options, logger)
         {
 
@@ -19,6 +25,18 @@ namespace Heidelpay.Payment.Tests.Communication
         protected override HttpRequestMessage CreateRequest(Uri uri, HttpMethod method)
         {
             return new HttpRequestMessage(method, uri);
+        }
+
+        public HttpRequestMessage LoggedRequest { get; private set; }
+        protected override void LogRequest(HttpRequestMessage request)
+        {
+            LoggedRequest = request;
+        }
+
+        public HttpResponseMessage LoggedResponse { get; private set; }
+        protected override void LogResponse(HttpResponseMessage response)
+        {
+            LoggedResponse = response;
         }
     }
 }

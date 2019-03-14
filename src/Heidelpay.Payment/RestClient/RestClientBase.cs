@@ -12,11 +12,21 @@ namespace Heidelpay.Payment.RestClient
 {
     public abstract class RestClientBase : IRestClient
     {
-        private IHttpClientFactory factory;
-        private ILogger<RestClientBase> logger;
-        private IOptions<SDKOptions> options;
+        private readonly IHttpClientFactory factory;
+        private readonly ILogger<RestClientBase> logger;
+        private readonly IOptions<SDKOptions> options;
 
-        public RestClientBase(IHttpClientFactory factory, IOptions<SDKOptions> options, ILogger<RestClientBase> logger)
+        private readonly string namedHttpClientInstance;
+
+        public RestClientBase(string namedHttpClientInstance, 
+            IHttpClientFactory factory, IOptions<SDKOptions> options, ILogger<RestClientBase> logger)
+            : this(factory, options, logger)
+        {
+            this.namedHttpClientInstance = namedHttpClientInstance;
+        }
+
+        public RestClientBase(
+            IHttpClientFactory factory, IOptions<SDKOptions> options, ILogger<RestClientBase> logger)
         {
             this.factory = factory;
             this.logger = logger;
@@ -35,17 +45,27 @@ namespace Heidelpay.Payment.RestClient
             return await response.Content.ReadAsStringAsync();
         }
 
+        protected virtual void LogRequest(HttpRequestMessage request)
+        {
+            logger?.LogDebug(request.ToString());
+        }
+
+        protected virtual void LogResponse(HttpResponseMessage response)
+        {
+            logger?.LogDebug(response.ToString());
+        }
+
         protected async Task<HttpResponseMessage> SendRequestAsync(HttpRequestMessage request, string privateKey)
         {
             request.AddUserAgent(GetType().FullName);
             request.AddAuthentication(privateKey);
 
-            logger?.LogDebug(request.ToString());
+            LogRequest(request);
 
-            var response = await factory.CreateClient().SendAsync(request);
+            var response = await factory.CreateClient(namedHttpClientInstance)
+                .SendAsync(request);
 
-            logger?.LogDebug(response.StatusCode.ToString());
-            logger?.LogDebug(response.ToString());
+            LogResponse(response);
 
             if (response.IsError())
             {
