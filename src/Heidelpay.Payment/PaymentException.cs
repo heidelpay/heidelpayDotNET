@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 
 namespace Heidelpay.Payment
@@ -10,9 +11,9 @@ namespace Heidelpay.Payment
         public IEnumerable<PaymentError> PaymentErrorList { get; }
         public DateTime Timestamp { get; }
         public Uri Uri { get; }
-        public int StatusCode { get; }
+        public HttpStatusCode StatusCode { get; }
 
-        public PaymentException(Uri uri, int statusCode, DateTime timestamp, IEnumerable<PaymentError> errors)
+        public PaymentException(Uri uri, HttpStatusCode statusCode, DateTime timestamp, IEnumerable<PaymentError> errors)
             : base(ToMessage(uri, statusCode, errors))
         {
             Timestamp = timestamp;
@@ -27,13 +28,13 @@ namespace Heidelpay.Payment
             PaymentErrorList = new[] { new PaymentError(merchantMessage, customerMessage, code) };
         }
 
-        private static string ToMessage(Uri uri, int statusCode, IEnumerable<PaymentError> errors)
+        private static string ToMessage(Uri uri, HttpStatusCode statusCode, IEnumerable<PaymentError> errors)
         {
             var sb = new StringBuilder();
             if (uri != null)
             {
                 sb.Append("Heidelpay responded with ");
-                sb.Append(statusCode);
+                sb.Append((int)statusCode);
                 sb.Append(" when calling ");
                 sb.Append(uri);
                 sb.Append(".");

@@ -31,12 +31,7 @@ namespace Heidelpay.Payment
         {
         }
 
-        public async Task<Cancel> Cancel()
-        {
-            return await Heidelpay.CancelChargeAsync(Payment.Id, Id);
-        }
-
-        public async Task<Cancel> Cancel(decimal amount)
+        public async Task<Cancel> CancelAsync(decimal? amount = null)
         {
             return await Heidelpay.CancelChargeAsync(Payment.Id, Id, amount);
         }

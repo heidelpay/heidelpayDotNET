@@ -11,6 +11,6 @@ namespace Heidelpay.Payment.Interfaces
 
         Task<string> HttpPutAsync(Uri uri, string privateKey, object content);
 
-        Task<string> HttpDeleteAsync<TData>(Uri uri, string privateKey);
+        Task<string> HttpDeleteAsync(Uri uri, string privateKey);
     }
 }

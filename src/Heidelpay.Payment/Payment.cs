@@ -1,4 +1,5 @@
 ﻿using Heidelpay.Payment.PaymentTypes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,10 +32,65 @@ namespace Heidelpay.Payment
 
         }
 
+        public async Task<Charge> ChargeAsync(decimal? amount = null)
+        {
+            return await Heidelpay.ChargeAuthorizationAsync(Payment.Id, amount);
+        }
+
+        public async Task<Charge> ChargeAsync(decimal amount, string currency, string typeId, Uri returnUrl = null, string customerId = null)
+        {
+            return await Heidelpay.ChargeAsync(amount, currency, typeId, returnUrl, customerId);
+        }
+
+        public async Task<Charge> ChargeAsync(decimal amount, string currency, PaymentType paymentType)
+        {
+            return await Heidelpay.ChargeAsync(amount, currency, paymentType);
+        }
+
+        public async Task<Charge> ChargeAsync(decimal amount, string currency, PaymentType paymentType, Uri returnUrl, string customerId)
+        {
+            return await Heidelpay.ChargeAsync(amount, currency, paymentType, returnUrl, customerId);
+        }
+
+        public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, string typeId, Uri returnUrl = null, string customerId = null)
+        {
+            return await Heidelpay.AuthorizeAsync(amount, currency, typeId, returnUrl, customerId);
+        }
+
+        public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, PaymentType paymentType)
+        {
+            return await Heidelpay.AuthorizeAsync(amount, currency, paymentType);
+        }
+
+        public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, PaymentType paymentType, Uri returnUrl, string customerId)
+        {
+            return await Heidelpay.AuthorizeAsync(amount, currency, paymentType, returnUrl, customerId);
+        }
+
+        public async Task<Cancel> CancelAsync(decimal? amount = null)
+        {
+            if(Authorization == null)
+            {
+                throw new PaymentException("Cancel is only possible for an Authorization", "Payment cancelation not possible", null, null);
+            }
+
+            return await Authorization.CancelAsync(amount);
+        }
+
+        public Charge GetCharge(string chargeId)
+        {
+            return ChargesList?.FirstOrDefault(x => string.Equals(x.Id, chargeId, StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        public Cancel GetCancel(string cancelId)
+        {
+            return CancelList?.FirstOrDefault(x => string.Equals(x.Id, cancelId, StringComparison.InvariantCultureIgnoreCase));
+        }
+
         Customer customer;
         public async Task<Customer> GetCustomerAsync()
         {
-            if (customer == null && !string.IsNullOrEmpty(CustomerId))
+            if (customer == null && !string.IsNullOrWhiteSpace(CustomerId))
                 customer = await Heidelpay.FetchCustomerAsync(CustomerId);
 
             return customer;
@@ -43,7 +99,7 @@ namespace Heidelpay.Payment
         PaymentType paymentType;
         public async Task<PaymentType> GetPaymentTypeAsync()
         {
-            if (paymentType == null && !string.IsNullOrEmpty(PaymentTypeId))
+            if (paymentType == null && !string.IsNullOrWhiteSpace(PaymentTypeId))
                 paymentType = await Heidelpay.FetchPaymentTypeAsync(PaymentTypeId);
 
             return paymentType;
@@ -52,7 +108,7 @@ namespace Heidelpay.Payment
         MetaData metaData;
         public async Task<MetaData> GetMetaDataAsync()
         {
-            if (metaData == null && !string.IsNullOrEmpty(MetaDataId))
+            if (metaData == null && !string.IsNullOrWhiteSpace(MetaDataId))
                 metaData = await Heidelpay.FetchMetaDataAsync(MetaDataId);
 
             return metaData;
@@ -61,7 +117,7 @@ namespace Heidelpay.Payment
         Basket basket;
         public async Task<Basket> GetBasketAsync()
         {
-            if (basket == null && !string.IsNullOrEmpty(BasketId))
+            if (basket == null && !string.IsNullOrWhiteSpace(BasketId))
                 basket = await Heidelpay.FetchBasketAsync(BasketId);
 
             return basket;

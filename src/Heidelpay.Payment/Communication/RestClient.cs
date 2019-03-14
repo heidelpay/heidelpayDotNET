@@ -67,7 +67,7 @@ namespace Heidelpay.Payment.Communication
             var responseContent = await response.Content.ReadAsStringAsync();
             var error = JsonConvert.DeserializeObject<RestClientErrorObject>(responseContent);
 
-		    throw new PaymentException(new Uri(error.Url), (int)response.StatusCode, DateTime.Parse(error.Timestamp), error.Errors);
+		    throw new PaymentException(new Uri(error.Url), response.StatusCode, DateTime.Parse(error.Timestamp), error.Errors);
         }
 
         private HttpRequestMessage CreateRequest(Uri uri, HttpMethod method, object content = null)
@@ -77,6 +77,7 @@ namespace Heidelpay.Payment.Communication
             if (content != null)
             {
                 request.Content = new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, "application/json");
+                request.Content.Headers.ContentEncoding.Add("UTF-8");
             }
 
             return request;
@@ -106,7 +107,7 @@ namespace Heidelpay.Payment.Communication
             return await response.Content.ReadAsStringAsync();
         }
 
-        public async Task<string> HttpDeleteAsync<TData>(Uri uri, string privateKey)
+        public async Task<string> HttpDeleteAsync(Uri uri, string privateKey)
         {
             var response = await SendRequestAsync(CreateRequest(uri, HttpMethod.Delete), privateKey);
             return await response.Content.ReadAsStringAsync();
