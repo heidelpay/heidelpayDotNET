@@ -83,12 +83,6 @@ namespace Heidelpay.Payment.Communication
             return request;
         }
 
-        //public async Task<TResponse> HttpGetAsync<TResponse>(Uri uri, string privateKey)
-        //{
-        //    var responseContent = await HttpGetAsync(uri, privateKey);
-        //    return JsonConvert.DeserializeObject<TResponse>(responseContent);
-        //}
-
         public async Task<string> HttpGetAsync(Uri uri, string privateKey)
         {
             var response = await SendRequestAsync(CreateRequest(uri, HttpMethod.Get), privateKey);
