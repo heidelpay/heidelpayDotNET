@@ -1,4 +1,5 @@
-using Heidelpay.Payment.RestClient;
+using Heidelpay.Payment.Communication;
+using Heidelpay.Payment.Interfaces;
 using Heidelpay.Payment.Tests.Communication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,7 +14,7 @@ using Xunit;
 
 namespace Heidelpay.Payment.Tests
 {
-    public class RestClientBaseTest
+    public class RestClientTest
     {
         private string privateKey = "samplekey";
 
@@ -39,9 +40,9 @@ namespace Heidelpay.Payment.Tests
 
             var factory = serviceProvider.GetService<IHttpClientFactory>();
             var options = serviceProvider.GetService<IOptions<SDKOptions>>();
-            var logger = serviceProvider.GetService<ILogger<RestClientBase>>();
+            var logger = serviceProvider.GetService<ILogger<RestClient>>();
 
-            return new MockRestClientBase(MockHttpClientName, factory, options, logger);
+            return new MockRestClient(MockHttpClientName, factory, options, logger);
         }
 
         [Fact]

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
-namespace Heidelpay.Payment.RestClient
+namespace Heidelpay.Payment.Communication
 {
     public class RestClientErrorObject
     {

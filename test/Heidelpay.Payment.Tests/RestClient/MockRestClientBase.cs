@@ -1,30 +1,22 @@
-﻿using Heidelpay.Payment.RestClient;
+﻿using Heidelpay.Payment.Communication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 
 namespace Heidelpay.Payment.Tests.Communication
 {
-    class MockRestClientBase : RestClientBase
+    class MockRestClient : RestClient
     {
-        public MockRestClientBase(string mockedHttpClientName, IHttpClientFactory factory, IOptions<SDKOptions> options, ILogger<RestClientBase> logger)
+        public MockRestClient(string mockedHttpClientName, IHttpClientFactory factory, IOptions<SDKOptions> options, ILogger<RestClient> logger)
             : base(mockedHttpClientName, factory, options, logger)
         {
 
         }
 
-        public MockRestClientBase(IHttpClientFactory factory, IOptions<SDKOptions> options, ILogger<RestClientBase> logger)
+        public MockRestClient(IHttpClientFactory factory, IOptions<SDKOptions> options, ILogger<RestClient> logger)
             : base(factory, options, logger)
         {
 
-        }
-
-        protected override HttpRequestMessage CreateRequest(Uri uri, HttpMethod method)
-        {
-            return new HttpRequestMessage(method, uri);
         }
 
         public HttpRequestMessage LoggedRequest { get; private set; }

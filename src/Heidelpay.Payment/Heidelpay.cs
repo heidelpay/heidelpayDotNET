@@ -1,8 +1,6 @@
-﻿using System;
-using System.Net.Http;
+﻿using Heidelpay.Payment.PaymentTypes;
+using System;
 using System.Threading.Tasks;
-using Heidelpay.Payment.PaymentTypes;
-using Heidelpay.Payment.RestClient;
 
 /*-
  * #%L

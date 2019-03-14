@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Heidelpay.Payment.RestClient
+﻿namespace Heidelpay.Payment.Communication
 {
     public static class RestClientConstants
     {

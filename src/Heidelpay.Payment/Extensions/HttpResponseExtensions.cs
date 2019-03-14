@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
-
-namespace System.Net.Http
+﻿namespace System.Net.Http
 {
     public static class HttpResponseExtensions
     {

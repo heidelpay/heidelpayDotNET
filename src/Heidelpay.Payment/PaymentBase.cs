@@ -1,8 +1,5 @@
-﻿using Heidelpay.Payment.PaymentTypes;
-using Heidelpay.Payment.RestClient;
+﻿using Heidelpay.Payment.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Heidelpay.Payment
 {
