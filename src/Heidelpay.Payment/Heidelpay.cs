@@ -33,7 +33,47 @@ namespace Heidelpay.Payment
             PrivateKey = privateKey;
         }
 
-        public async Task<Cancel> CancelChargeAsync(string id1, string id2, decimal? amount = null)
+        public async Task<Charge> ChargeAuthorizationAsync(string paymentId, decimal? amount = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<Cancel> CancelAuthorizationAsync(string paymentId, decimal? amount = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal Task<Charge> ChargeAsync(decimal amount, string currency, string typeId, Uri returnUrl = null, string customerId = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Charge> ChargeAsync(decimal amount, string currency, PaymentType paymentType)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Charge> ChargeAsync(decimal amount, string currency, PaymentType paymentType, Uri returnUrl, string customerId)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal Task<Authorization> AuthorizeAsync(decimal amount, string currency, string typeId, Uri returnUrl = null, string customerId = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Authorization> AuthorizeAsync(decimal amount, string currency, PaymentType paymentType)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Authorization> AuthorizeAsync(decimal amount, string currency, PaymentType paymentType, Uri returnUrl, string customerId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<Cancel> CancelChargeAsync(string paymentId, string chargeId, decimal? amount = null)
         {
             throw new NotImplementedException();
         }
@@ -47,6 +87,7 @@ namespace Heidelpay.Payment
         {
             throw new NotImplementedException();
         }
+
 
         public async Task<MetaData> FetchMetaDataAsync(string metaDataId)
         {

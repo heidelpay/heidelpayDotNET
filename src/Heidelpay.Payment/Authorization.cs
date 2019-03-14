@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Heidelpay.Payment
 {
@@ -29,6 +30,16 @@ namespace Heidelpay.Payment
         public Authorization(Heidelpay heidelpay)
             : base(heidelpay)
         {
+        }
+
+        public async Task<Cancel> CancelAsync(decimal? amount = null)
+        {
+            return await Heidelpay.CancelAuthorizationAsync(Payment?.Id ?? PaymentId, amount);
+        }
+
+        public async Task<Charge> ChargeAsync(decimal? amount = null)
+        {
+            return await Heidelpay.ChargeAuthorizationAsync(Payment?.Id ?? PaymentId, amount);
         }
 
         public override string TypeUrl => "payments/<paymentId>/authorize";
