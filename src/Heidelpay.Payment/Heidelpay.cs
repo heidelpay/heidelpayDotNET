@@ -54,9 +54,9 @@ namespace Heidelpay.Payment
 
         private IRestClient BuildDefaultRestClient()
         {
-            var factory = new IHttpClientFactory();
+            //var factory = new IHttpClientFactory();
 
-            return new RestClient(factory, new NullLogger<RestClient>());
+            return null; // new RestClient(DefaultHttpClientFactory, new NullLogger<RestClient>());
         }
 
         public async Task<Charge> ChargeAuthorizationAsync(string paymentId, decimal? amount = null)
