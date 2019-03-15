@@ -1,5 +1,6 @@
 ﻿using Heidelpay.Payment;
 using Heidelpay.Payment.Communication;
+using Heidelpay.Payment.Extensions;
 
 namespace System.Net.Http
 {
@@ -7,6 +8,8 @@ namespace System.Net.Http
     {
         public static void AddAuthentication(this HttpRequestMessage request, string privateKey)
         {
+            Check.NotNull(request, nameof(request));
+
             if (string.IsNullOrEmpty(privateKey))
             {
                 throw new PaymentException(
@@ -25,9 +28,11 @@ namespace System.Net.Http
             request.Headers.Add(RestClientConstants.AUTHORIZATION, $"{RestClientConstants.BASIC}{privateKeyBase64}");
         }
 
-        public static void AddUserAgent(this HttpRequestMessage message, string callerName)
+        public static void AddUserAgent(this HttpRequestMessage request, string callerName)
         {
-            message.Headers.Add(RestClientConstants.USER_AGENT, $"{RestClientConstants.USER_AGENT_PREFIX}{SDKOptions.SDKVersion} - {callerName}");
+            Check.NotNull(request, nameof(request));
+
+            request.Headers.Add(RestClientConstants.USER_AGENT, $"{RestClientConstants.USER_AGENT_PREFIX}{SDKOptions.SDKVersion} - {callerName}");
         }
     }
 }

@@ -15,6 +15,12 @@ namespace Heidelpay.Payment.Extensions
 
         public static bool TryParseDateTime(this string value, out DateTime result)
         {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                result = default; 
+                return false;
+            }
+
             return DateTime.TryParseExact(value, AllowedDateTimeFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out result);
         }
 

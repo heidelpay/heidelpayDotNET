@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging.Abstractions;
+using Heidelpay.Payment.Extensions;
 
 namespace Heidelpay.Payment.Communication
 {
@@ -59,6 +60,8 @@ namespace Heidelpay.Payment.Communication
 
         protected async Task<HttpResponseMessage> SendRequestAsync(HttpRequestMessage request, string privateKey)
         {
+            Check.NotNull(request, nameof(request));
+
             request.AddUserAgent(GetType().FullName);
             request.AddAuthentication(privateKey);
 
@@ -89,24 +92,32 @@ namespace Heidelpay.Payment.Communication
 
         public async Task<string> HttpGetAsync(Uri uri, string privateKey)
         {
+            Check.NotNull(uri, nameof(uri));
+
             var response = await SendRequestAsync(CreateRequest(uri, HttpMethod.Get), privateKey);
             return await response.Content.ReadAsStringAsync();
         }
 
         public async Task<string> HttpPostAsync(Uri uri, string privateKey, object data)
         {
+            Check.NotNull(uri, nameof(uri));
+
             var response = await SendRequestAsync(CreateRequest(uri, HttpMethod.Post, data), privateKey);
             return await response.Content.ReadAsStringAsync();
         }
 
         public async Task<string> HttpPutAsync(Uri uri, string privateKey, object data)
         {
+            Check.NotNull(uri, nameof(uri));
+
             var response = await SendRequestAsync(CreateRequest(uri, HttpMethod.Put, data), privateKey);
             return await response.Content.ReadAsStringAsync();
         }
 
         public async Task<string> HttpDeleteAsync(Uri uri, string privateKey)
         {
+            Check.NotNull(uri, nameof(uri));
+
             var response = await SendRequestAsync(CreateRequest(uri, HttpMethod.Delete), privateKey);
             return await response.Content.ReadAsStringAsync();
         }
