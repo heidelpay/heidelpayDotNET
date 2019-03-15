@@ -1,5 +1,6 @@
 using Heidelpay.Payment.Communication;
 using Heidelpay.Payment.Interfaces;
+using Heidelpay.Payment.Options;
 using Heidelpay.Payment.Tests.Communication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,7 +21,6 @@ namespace Heidelpay.Payment.Tests
     {
         readonly Uri TestUri = new Uri("https://heidelpay.com");
         const string PrivateKey = "Samplekey";
-        const string MockHttpClientName = "Mocked";
 
         const string ErrorResponse = 
                 "{" +
@@ -47,7 +47,7 @@ namespace Heidelpay.Payment.Tests
             var config = configBuilder.Build();
 
             services
-                .AddHttpClient<HttpClient>(MockHttpClientName)
+                .AddHttpClient<HttpClient>("MockHttpMessageHandler")
                 .ConfigurePrimaryHttpMessageHandler(() => new MockHttpMessageHandler(code, response));
             services.AddLogging();
             services.Configure<SDKOptions>(config.GetSection("Heidelpay"));
@@ -55,10 +55,9 @@ namespace Heidelpay.Payment.Tests
             var serviceProvider = services.BuildServiceProvider();
 
             var factory = serviceProvider.GetService<IHttpClientFactory>();
-            var options = serviceProvider.GetService<IOptions<SDKOptions>>();
             var logger = serviceProvider.GetService<ILogger<RestClient>>();
 
-            return new MockRestClient(MockHttpClientName, factory, options, logger);
+            return new MockRestClient(factory, logger);
         }
 
         [Fact]
@@ -232,7 +231,7 @@ namespace Heidelpay.Payment.Tests
 
         private static void AssertUserAgentHeader(MockRestClient restClient)
         {
-            Assert.Equal($"{RestClientConstants.USER_AGENT_PREFIX}{SDKOptions.SDKVersion} - {typeof(MockRestClient).FullName}",
+            Assert.Equal($"{RestClientConstants.USER_AGENT_PREFIX}{SDKInfo.Version} - {typeof(MockRestClient).FullName}",
                 restClient.LoggedRequest.Headers.UserAgent.ToString());
         }
     }

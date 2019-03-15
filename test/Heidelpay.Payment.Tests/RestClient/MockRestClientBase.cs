@@ -4,23 +4,19 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Net.Http;
+using Heidelpay.Payment.Options;
 
 namespace Heidelpay.Payment.Tests.Communication
 {
     class MockRestClient : RestClient
     {
-        public MockRestClient(string mockedHttpClientName, IHttpClientFactory factory, IOptions<SDKOptions> options, ILogger<RestClient> logger)
-            : base(mockedHttpClientName, factory, options, logger)
+        protected override HttpClient ResolveHttpClient(IHttpClientFactory factory)
         {
+            return factory.CreateClient("MockHttpMessageHandler");
         }
 
-        public MockRestClient(IHttpClientFactory factory, IOptions<SDKOptions> options, ILogger<RestClient> logger)
-            : base(factory, options, logger)
-        {
-        }
-
-        public MockRestClient(string mockedHttpClientName, IServiceProvider serviceProvider)
-            : base(mockedHttpClientName, serviceProvider)
+        public MockRestClient(IHttpClientFactory factory, ILogger<RestClient> logger)
+            : base(factory, logger)
         {
         }
 

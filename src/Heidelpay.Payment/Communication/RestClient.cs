@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging.Abstractions;
 using Heidelpay.Payment.Extensions;
+using Heidelpay.Payment.Options;
 
 namespace Heidelpay.Payment.Communication
 {
@@ -16,35 +17,16 @@ namespace Heidelpay.Payment.Communication
     {
         private readonly IHttpClientFactory factory;
         private readonly ILogger<RestClient> logger;
-        private readonly IOptions<SDKOptions> options;
 
-        private readonly string namedHttpClientInstance;
-
-        public RestClient(string namedHttpClientInstance, 
-            IHttpClientFactory factory, IOptions<SDKOptions> options, ILogger<RestClient> logger)
-            : this(factory, options, logger)
-        {
-            this.namedHttpClientInstance = namedHttpClientInstance;
-        }
-
-        public RestClient(
-            IHttpClientFactory factory, IOptions<SDKOptions> options, ILogger<RestClient> logger)
+        public RestClient(IHttpClientFactory factory, ILogger<RestClient> logger)
         {
             this.factory = factory;
             this.logger = logger;
-            this.options = options;
-        }
-
-        public RestClient(string namedHttpClientInstance, IServiceProvider serviceProvider)
-            : this(serviceProvider)
-        {
-            this.namedHttpClientInstance = namedHttpClientInstance;
         }
 
         public RestClient(IServiceProvider serviceProvider)
         {
             this.factory = serviceProvider.GetRequiredService<IHttpClientFactory>();
-            this.options = serviceProvider.GetRequiredService<IOptions<SDKOptions>>();
             this.logger = serviceProvider.GetService<ILogger<RestClient>>();
         }
 
@@ -58,6 +40,11 @@ namespace Heidelpay.Payment.Communication
             logger?.LogDebug(response.ToString());
         }
 
+        protected virtual HttpClient ResolveHttpClient(IHttpClientFactory factory)
+        {
+            return (factory ?? this.factory).CreateClient();
+        }
+
         protected async Task<HttpResponseMessage> SendRequestAsync(HttpRequestMessage request, string privateKey)
         {
             Check.NotNull(request, nameof(request));
@@ -67,7 +54,8 @@ namespace Heidelpay.Payment.Communication
 
             LogRequest(request);
 
-            var response = await factory.CreateClient(namedHttpClientInstance)
+            var client = ResolveHttpClient(factory);
+            var response = await client
                 .SendAsync(request);
 
             LogResponse(response);

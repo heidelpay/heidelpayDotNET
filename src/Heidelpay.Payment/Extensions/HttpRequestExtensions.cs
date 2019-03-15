@@ -32,7 +32,7 @@ namespace System.Net.Http
         {
             Check.NotNull(request, nameof(request));
 
-            request.Headers.Add(RestClientConstants.USER_AGENT, $"{RestClientConstants.USER_AGENT_PREFIX}{SDKOptions.SDKVersion} - {callerName}");
+            request.Headers.Add(RestClientConstants.USER_AGENT, $"{RestClientConstants.USER_AGENT_PREFIX}{SDKInfo.Version} - {callerName}");
         }
     }
 }

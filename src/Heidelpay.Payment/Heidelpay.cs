@@ -1,6 +1,8 @@
 ﻿using Heidelpay.Payment.Communication;
 using Heidelpay.Payment.Interfaces;
+using Heidelpay.Payment.Options;
 using Heidelpay.Payment.PaymentTypes;
+using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
 
@@ -28,16 +30,16 @@ namespace Heidelpay.Payment
 {
     public sealed class Heidelpay
     {
-        public string PrivateKey { get; }
+        public IOptions<SDKOptions> Options { get; }
         public IRestClient RestClient { get; }
 
-        public Heidelpay(string privateKey)
+        public Heidelpay(IOptions<SDKOptions> options)
         {
-            PrivateKey = privateKey;
+            Options = options;
         }
 
-        public Heidelpay(string privateKey, IRestClient restClient)
-            : this(privateKey)
+        public Heidelpay(IOptions<SDKOptions> options, IRestClient restClient)
+            : this(options)
         {
             RestClient = restClient;
         }

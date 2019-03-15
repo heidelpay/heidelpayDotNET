@@ -3,13 +3,11 @@ using System.Reflection;
 
 namespace Heidelpay.Payment
 {
-    public class SDKOptions
+    public static class SDKInfo
     {
-        public Uri ApiEndpoint { get; set; }
+        public static string Version { get; }
 
-        public static string SDKVersion { get; }
-
-        static SDKOptions()
+        static SDKInfo()
         {
             var assembly = Assembly.GetExecutingAssembly();
 
@@ -17,7 +15,7 @@ namespace Heidelpay.Payment
                 .GetCustomAttribute(assembly, typeof(AssemblyInformationalVersionAttribute))
                     as AssemblyInformationalVersionAttribute;
 
-            SDKVersion = attr?.InformationalVersion;
+            Version = attr?.InformationalVersion;
         }
     }
 }
