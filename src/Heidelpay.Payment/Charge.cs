@@ -5,8 +5,14 @@ using System.Threading.Tasks;
 
 namespace Heidelpay.Payment
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class Charge : PaymentBase
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public decimal Amount { get; set; }
         public string Currency { get; set; }
         public Uri ReturnUrl { get; set; }
