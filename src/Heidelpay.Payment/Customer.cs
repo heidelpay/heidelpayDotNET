@@ -4,7 +4,14 @@ namespace Heidelpay.Payment
 {
     public class Customer : PaymentBase
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public string Firstname { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public string Lastname { get; set; }
         public Salutation Salutation { get; set; }
         public string CustomerId { get; set; }
