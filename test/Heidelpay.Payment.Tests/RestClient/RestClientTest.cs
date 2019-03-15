@@ -1,4 +1,5 @@
 using Heidelpay.Payment.Communication;
+using Heidelpay.Payment.Extensions;
 using Heidelpay.Payment.Interfaces;
 using Heidelpay.Payment.Options;
 using Heidelpay.Payment.Tests.Communication;
@@ -225,7 +226,7 @@ namespace Heidelpay.Payment.Tests
 
         private static void AssertAuthentication(MockRestClient restClient)
         {
-            Assert.Equal("Basic " + Base64Extensions.EncodeToBase64(PrivateKey + ":"),
+            Assert.Equal("Basic " + CoreExtensions.EncodeToBase64(PrivateKey + ":"),
                 restClient.LoggedRequest.Headers.Authorization.ToString());
         }
 
