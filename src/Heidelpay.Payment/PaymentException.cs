@@ -6,9 +6,16 @@ using System.Text;
 
 namespace Heidelpay.Payment
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public sealed class PaymentException : Exception
     {
         public IEnumerable<PaymentError> PaymentErrorList { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public DateTime Timestamp { get; }
         public Uri Uri { get; }
         public HttpStatusCode StatusCode { get; }
