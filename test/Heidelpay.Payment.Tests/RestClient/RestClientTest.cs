@@ -51,7 +51,6 @@ namespace Heidelpay.Payment.Tests
                 .AddHttpClient<HttpClient>("MockHttpMessageHandler")
                 .ConfigurePrimaryHttpMessageHandler(() => new MockHttpMessageHandler(code, response));
             services.AddLogging();
-            services.Configure<SDKOptions>(config.GetSection("Heidelpay"));
 
             var serviceProvider = services.BuildServiceProvider();
 
@@ -169,7 +168,7 @@ namespace Heidelpay.Payment.Tests
         {
             var restClient = BuildMockRestClient();
 
-            var response = await restClient.HttpGetAsync(TestUri, PrivateKey);
+            var _ = await restClient.HttpGetAsync(TestUri, PrivateKey);
 
             AssertUserAgentHeader(restClient);
             AssertAuthentication(restClient);
@@ -180,7 +179,7 @@ namespace Heidelpay.Payment.Tests
         {
             var restClient = BuildMockRestClient();
 
-            var response = await restClient.HttpPostAsync(TestUri, PrivateKey, new ContentTestData());
+            var _ = await restClient.HttpPostAsync(TestUri, PrivateKey, new ContentTestData());
 
             AssertUserAgentHeader(restClient);
             AssertAuthentication(restClient);
@@ -193,7 +192,7 @@ namespace Heidelpay.Payment.Tests
         {
             var restClient = BuildMockRestClient();
 
-            var response = await restClient.HttpPutAsync(TestUri, PrivateKey, new ContentTestData());
+            var _ = await restClient.HttpPutAsync(TestUri, PrivateKey, new ContentTestData());
 
             AssertUserAgentHeader(restClient);
             AssertAuthentication(restClient);
@@ -206,7 +205,7 @@ namespace Heidelpay.Payment.Tests
         {
             var restClient = BuildMockRestClient();
 
-            var response = await restClient.HttpDeleteAsync(TestUri, PrivateKey);
+            var _ = await restClient.HttpDeleteAsync(TestUri, PrivateKey);
 
             AssertUserAgentHeader(restClient);
             AssertAuthentication(restClient);

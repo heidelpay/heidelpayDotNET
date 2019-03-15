@@ -2,8 +2,10 @@
 using Heidelpay.Payment.Interfaces;
 using Heidelpay.Payment.Options;
 using Heidelpay.Payment.PaymentTypes;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 /*-
@@ -30,18 +32,31 @@ namespace Heidelpay.Payment
 {
     public sealed class Heidelpay
     {
-        public IOptions<SDKOptions> Options { get; }
+        public IOptions<HeidelpayApiOptions> Options { get; }
         public IRestClient RestClient { get; }
 
-        public Heidelpay(IOptions<SDKOptions> options)
+        public Heidelpay(HeidelpayApiOptions options)
+            : this(Microsoft.Extensions.Options.Options.Create(options))
         {
-            Options = options;
         }
 
-        public Heidelpay(IOptions<SDKOptions> options, IRestClient restClient)
-            : this(options)
+        public Heidelpay(IOptions<HeidelpayApiOptions> options)
         {
+            Options = options;
+            RestClient = BuildDefaultRestClient();
+        }
+
+        public Heidelpay(IOptions<HeidelpayApiOptions> options, IRestClient restClient)
+        {
+            Options = options;
             RestClient = restClient;
+        }
+
+        private IRestClient BuildDefaultRestClient()
+        {
+            var factory = new IHttpClientFactory();
+
+            return new RestClient(factory, new NullLogger<RestClient>());
         }
 
         public async Task<Charge> ChargeAuthorizationAsync(string paymentId, decimal? amount = null)

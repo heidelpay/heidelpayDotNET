@@ -20,11 +20,6 @@ namespace Heidelpay.Payment.Tests.Communication
         {
         }
 
-        public MockRestClient(IServiceProvider serviceProvide)
-            : base(serviceProvide)
-        {
-        }
-
         public HttpRequestMessage LoggedRequest { get; private set; }
         protected override void LogRequest(HttpRequestMessage request)
         {

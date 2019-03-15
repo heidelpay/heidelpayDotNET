@@ -24,12 +24,6 @@ namespace Heidelpay.Payment.Communication
             this.logger = logger;
         }
 
-        public RestClient(IServiceProvider serviceProvider)
-        {
-            this.factory = serviceProvider.GetRequiredService<IHttpClientFactory>();
-            this.logger = serviceProvider.GetService<ILogger<RestClient>>();
-        }
-
         protected virtual void LogRequest(HttpRequestMessage request)
         {
             logger?.LogDebug(request.ToString());
