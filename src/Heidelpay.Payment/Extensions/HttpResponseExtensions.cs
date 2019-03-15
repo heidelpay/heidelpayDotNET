@@ -1,16 +1,32 @@
-﻿namespace System.Net.Http
+﻿using Heidelpay.Payment;
+using Heidelpay.Payment.Communication;
+using Newtonsoft.Json;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace System.Net.Http
 {
     public static class HttpResponseExtensions
     {
-        /// <summary>
-        /// Returns true, if the value does not equal 200 or 201
-        /// </summary>
-        /// <param name="message"></param>
-        /// <returns></returns>
-        public static bool IsError(this HttpResponseMessage message)
+        public static readonly HttpStatusCode[] SuccessStatusCodes = new[] 
         {
-            // > 201, < 200
-            return message.StatusCode > HttpStatusCode.Created || message.StatusCode < HttpStatusCode.OK;
+            HttpStatusCode.Created, // 201
+            HttpStatusCode.OK       // 200
+        };
+
+        public static async Task ThrowIfErroneousResponseAsync(this HttpResponseMessage response)
+        {
+            if (SuccessStatusCodes.Contains(response.StatusCode))
+                return;
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var error = JsonConvert.DeserializeObject<RestClientErrorObject>(responseContent);
+
+            var uri = Uri.TryCreate(error.Url, UriKind.RelativeOrAbsolute, out Uri outUri) ? outUri : null;
+            var dt = DateTime.TryParse(error.Timestamp, out DateTime outDt) ? outDt : DateTime.Now;
+            var errors = error.Errors ?? Enumerable.Empty<PaymentError>();
+
+            throw new PaymentException(uri, response.StatusCode, dt, errors);
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using Heidelpay.Payment.Communication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Net.Http;
 
 namespace Heidelpay.Payment.Tests.Communication
@@ -10,13 +12,21 @@ namespace Heidelpay.Payment.Tests.Communication
         public MockRestClient(string mockedHttpClientName, IHttpClientFactory factory, IOptions<SDKOptions> options, ILogger<RestClient> logger)
             : base(mockedHttpClientName, factory, options, logger)
         {
-
         }
 
         public MockRestClient(IHttpClientFactory factory, IOptions<SDKOptions> options, ILogger<RestClient> logger)
             : base(factory, options, logger)
         {
+        }
 
+        public MockRestClient(string mockedHttpClientName, IServiceProvider serviceProvider)
+            : base(mockedHttpClientName, serviceProvider)
+        {
+        }
+
+        public MockRestClient(IServiceProvider serviceProvide)
+            : base(serviceProvide)
+        {
         }
 
         public HttpRequestMessage LoggedRequest { get; private set; }

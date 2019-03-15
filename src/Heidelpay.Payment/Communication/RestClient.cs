@@ -1,11 +1,13 @@
 ﻿using Heidelpay.Payment.Interfaces;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Heidelpay.Payment.Communication
 {
@@ -32,6 +34,19 @@ namespace Heidelpay.Payment.Communication
             this.options = options;
         }
 
+        public RestClient(string namedHttpClientInstance, IServiceProvider serviceProvider)
+            : this(serviceProvider)
+        {
+            this.namedHttpClientInstance = namedHttpClientInstance;
+        }
+
+        public RestClient(IServiceProvider serviceProvider)
+        {
+            this.factory = serviceProvider.GetRequiredService<IHttpClientFactory>();
+            this.options = serviceProvider.GetRequiredService<IOptions<SDKOptions>>();
+            this.logger = serviceProvider.GetService<ILogger<RestClient>>();
+        }
+
         protected virtual void LogRequest(HttpRequestMessage request)
         {
             logger?.LogDebug(request.ToString());
@@ -54,20 +69,9 @@ namespace Heidelpay.Payment.Communication
 
             LogResponse(response);
 
-            if (response.IsError())
-            {
-                await ThrowPaymentExceptionAsync(request, response);
-            }
+            await response.ThrowIfErroneousResponseAsync();
 
             return response;
-        }
-
-        protected async Task ThrowPaymentExceptionAsync(HttpRequestMessage request, HttpResponseMessage response)
-        {
-            var responseContent = await response.Content.ReadAsStringAsync();
-            var error = JsonConvert.DeserializeObject<RestClientErrorObject>(responseContent);
-
-		    throw new PaymentException(new Uri(error.Url), response.StatusCode, DateTime.Parse(error.Timestamp), error.Errors);
         }
 
         private HttpRequestMessage CreateRequest(Uri uri, HttpMethod method, object content = null)
@@ -82,12 +86,6 @@ namespace Heidelpay.Payment.Communication
 
             return request;
         }
-
-        //public async Task<TResponse> HttpGetAsync<TResponse>(Uri uri, string privateKey)
-        //{
-        //    var responseContent = await HttpGetAsync(uri, privateKey);
-        //    return JsonConvert.DeserializeObject<TResponse>(responseContent);
-        //}
 
         public async Task<string> HttpGetAsync(Uri uri, string privateKey)
         {

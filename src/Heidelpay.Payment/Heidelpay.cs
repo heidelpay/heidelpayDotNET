@@ -1,4 +1,6 @@
-﻿using Heidelpay.Payment.PaymentTypes;
+﻿using Heidelpay.Payment.Communication;
+using Heidelpay.Payment.Interfaces;
+using Heidelpay.Payment.PaymentTypes;
 using System;
 using System.Threading.Tasks;
 
@@ -27,10 +29,17 @@ namespace Heidelpay.Payment
     public sealed class Heidelpay
     {
         public string PrivateKey { get; }
+        public IRestClient RestClient { get; }
 
         public Heidelpay(string privateKey)
         {
             PrivateKey = privateKey;
+        }
+
+        public Heidelpay(string privateKey, IRestClient restClient)
+            : this(privateKey)
+        {
+            RestClient = restClient;
         }
 
         public async Task<Charge> ChargeAuthorizationAsync(string paymentId, decimal? amount = null)

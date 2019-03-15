@@ -79,7 +79,6 @@ namespace Heidelpay.Payment.Tests
             Assert.Equal("API.410.200.010", error.Code);
             Assert.Equal("Message for the customer.", error.CustomerMessage);
             Assert.Equal("Message for the merchant.", error.MerchantMessage);
-
         }
 
         [Fact]

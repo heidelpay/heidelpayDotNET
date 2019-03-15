@@ -1,4 +1,5 @@
-﻿using Heidelpay.Payment.PaymentTypes;
+﻿using Heidelpay.Payment.Extensions;
+using Heidelpay.Payment.PaymentTypes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -90,7 +91,7 @@ namespace Heidelpay.Payment
         Customer customer;
         public async Task<Customer> GetCustomerAsync()
         {
-            if (customer == null && !string.IsNullOrWhiteSpace(CustomerId))
+            if (customer == null && IsNotEmpty(CustomerId))
                 customer = await Heidelpay.FetchCustomerAsync(CustomerId);
 
             return customer;
@@ -99,7 +100,7 @@ namespace Heidelpay.Payment
         PaymentType paymentType;
         public async Task<PaymentType> GetPaymentTypeAsync()
         {
-            if (paymentType == null && !string.IsNullOrWhiteSpace(PaymentTypeId))
+            if (paymentType == null && IsNotEmpty(PaymentTypeId))
                 paymentType = await Heidelpay.FetchPaymentTypeAsync(PaymentTypeId);
 
             return paymentType;
@@ -108,7 +109,7 @@ namespace Heidelpay.Payment
         MetaData metaData;
         public async Task<MetaData> GetMetaDataAsync()
         {
-            if (metaData == null && !string.IsNullOrWhiteSpace(MetaDataId))
+            if (metaData == null && IsNotEmpty(MetaDataId))
                 metaData = await Heidelpay.FetchMetaDataAsync(MetaDataId);
 
             return metaData;
@@ -117,11 +118,13 @@ namespace Heidelpay.Payment
         Basket basket;
         public async Task<Basket> GetBasketAsync()
         {
-            if (basket == null && !string.IsNullOrWhiteSpace(BasketId))
+            if (basket == null && IsNotEmpty(BasketId))
                 basket = await Heidelpay.FetchBasketAsync(BasketId);
 
             return basket;
         }
+
+        static readonly Func<string, bool> IsNotEmpty = CoreExtensions.IsNotEmpty;
 
         public override string TypeUrl => "payments";
     }
