@@ -1,8 +1,4 @@
 ﻿using Heidelpay.Payment.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Heidelpay.Payment.PaymentTypes
 {
@@ -10,6 +6,16 @@ namespace Heidelpay.Payment.PaymentTypes
     {
         public string Bic { get; set; }
 
+        public Eps()
+        {
+
+        }
+
+        public Eps(Heidelpay heidelpay)
+            : base(heidelpay)
+        {
+
+        }
         public override string TypeUrl => "types/eps";
 
         Heidelpay IPaymentCharge.Heidelpay => Heidelpay;

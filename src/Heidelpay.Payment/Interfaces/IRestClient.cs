@@ -1,5 +1,4 @@
 ﻿using Heidelpay.Payment.Options;
-using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
 

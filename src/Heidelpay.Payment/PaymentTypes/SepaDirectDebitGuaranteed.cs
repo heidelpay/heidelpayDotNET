@@ -1,7 +1,4 @@
 ﻿using Heidelpay.Payment.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Heidelpay.Payment.PaymentTypes
 {
@@ -11,6 +8,16 @@ namespace Heidelpay.Payment.PaymentTypes
         public string Bic { get; set; }
         public string Holder { get; set; }
 
+        public SepaDirectDebitGuaranteed()
+        {
+
+        }
+
+        public SepaDirectDebitGuaranteed(Heidelpay heidelpay)
+            : base(heidelpay)
+        {
+
+        }
 
         public override string TypeUrl => "types/sepa-direct-debit-guaranteed";
 

@@ -1,15 +1,13 @@
-﻿using Heidelpay.Payment.Interfaces;
+﻿using Heidelpay.Payment.Extensions;
+using Heidelpay.Payment.Interfaces;
+using Heidelpay.Payment.Options;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging.Abstractions;
-using Heidelpay.Payment.Extensions;
-using Heidelpay.Payment.Options;
 
 namespace Heidelpay.Payment.Communication
 {

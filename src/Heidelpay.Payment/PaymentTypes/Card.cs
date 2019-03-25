@@ -1,8 +1,4 @@
 ﻿using Heidelpay.Payment.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Heidelpay.Payment.PaymentTypes
 {
@@ -12,6 +8,17 @@ namespace Heidelpay.Payment.PaymentTypes
         public string CVC { get; set; }
         public string ExpiryDate { get; set; }
         public string Brand { get; set; }
+
+        public Card()
+        {
+
+        }
+
+        public Card(Heidelpay heidelpay)
+            : base(heidelpay)
+        {
+
+        }
 
         public override string TypeUrl => "types/card";
 

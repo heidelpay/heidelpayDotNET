@@ -1,9 +1,4 @@
-﻿using Heidelpay.Payment.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Heidelpay.Payment.Service
+﻿namespace Heidelpay.Payment.Service
 {
     internal sealed class PaymentService
     {

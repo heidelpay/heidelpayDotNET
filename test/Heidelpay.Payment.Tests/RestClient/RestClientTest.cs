@@ -1,12 +1,9 @@
 using Heidelpay.Payment.Communication;
 using Heidelpay.Payment.Extensions;
-using Heidelpay.Payment.Interfaces;
 using Heidelpay.Payment.Options;
-using Heidelpay.Payment.Tests.Communication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
 using System.IO;
@@ -16,7 +13,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Heidelpay.Payment.Tests
+namespace Heidelpay.Payment.Tests.Communication
 {
     public class RestClientTest
     {

@@ -1,15 +1,14 @@
-﻿using System.Runtime.CompilerServices;
-using Heidelpay.Payment.Communication;
+﻿using Heidelpay.Payment.Communication;
+using Heidelpay.Payment.Extensions;
 using Heidelpay.Payment.Interfaces;
 using Heidelpay.Payment.Options;
-using Heidelpay.Payment.PaymentTypes;
+using Heidelpay.Payment.Service;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using System;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using Heidelpay.Payment.Service;
-using Heidelpay.Payment.Extensions;
 
 [assembly: InternalsVisibleTo("Heidelpay.Payment.Tests")]
 

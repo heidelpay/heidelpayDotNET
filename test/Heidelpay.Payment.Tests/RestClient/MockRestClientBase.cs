@@ -1,10 +1,8 @@
 ﻿using Heidelpay.Payment.Communication;
+using Heidelpay.Payment.Options;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Net.Http;
-using Heidelpay.Payment.Options;
 
 namespace Heidelpay.Payment.Tests.Communication
 {
