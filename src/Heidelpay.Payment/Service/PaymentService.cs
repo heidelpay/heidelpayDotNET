@@ -1,4 +1,5 @@
-﻿using Heidelpay.Payment.Interface;
+﻿using Heidelpay.Payment.Extensions;
+using Heidelpay.Payment.Interface;
 using Heidelpay.Payment.Interfaces;
 using Heidelpay.Payment.PaymentTypes;
 using System;
@@ -34,11 +35,16 @@ namespace Heidelpay.Payment.Service
 
         public async Task<Charge> ChargeAsync(Charge charge)
         {
+            Check.NotNull(charge, nameof(charge));
+
             return await ChargeAsync(charge, new Uri(heidelpay.ApiEndpointUri, charge.TypeResourceUrl()));
         }
 
         public async Task<Charge> ChargeAsync(Charge charge, Uri url)
         {
+            Check.NotNull(charge, nameof(charge));
+            Check.NotNull(url, nameof(url));
+
             return PostProcessResult(await heidelpay.RestClient.HttpPostAsync<Charge>(url, charge));
         }
 

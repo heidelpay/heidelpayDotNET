@@ -12,12 +12,8 @@ namespace Heidelpay.Payment
         public Uri ReturnUrl { get; set; }
         public Uri RedirectUrl { get; set; }
         public string OrderId { get; set; }
-        public string TypeId { get; set; }
-        public string CustomerId { get; set; }
-        public string MetadataId { get; set; }
-        public string PaymentId { get; set; }
-        public string RiskId { get; set; }
-        public string BasketId { get; set; }
+
+        public Resources Resources { get; set; } = new Resources();
         public Processing Processing { get; set; } = new Processing();
 
         public IEnumerable<Cancel> CancelList { get; set; } = Enumerable.Empty<Cancel>();

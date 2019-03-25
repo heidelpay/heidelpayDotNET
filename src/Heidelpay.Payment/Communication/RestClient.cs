@@ -68,6 +68,7 @@ namespace Heidelpay.Payment.Communication
 
         readonly JsonSerializerSettings serializationSettings = new JsonSerializerSettings
         {
+            NullValueHandling = NullValueHandling.Ignore,
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
 

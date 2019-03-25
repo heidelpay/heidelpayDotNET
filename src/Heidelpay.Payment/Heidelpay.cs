@@ -123,7 +123,16 @@ namespace Heidelpay.Payment
 
         internal async Task<Charge> ChargeAsync(decimal amount, string currency, string typeId, Uri returnUrl = null, string customerId = null)
         {
-            return await ChargeAsync(new Charge { Amount = amount, Currency = currency, TypeId = typeId, ReturnUrl = returnUrl, CustomerId = customerId });
+            return await ChargeAsync(new Charge
+            {
+                Amount = amount,
+                Currency = currency, ReturnUrl = returnUrl,
+                Resources = new Resources
+                {
+                    TypeId = typeId,
+                    CustomerId = customerId
+                }
+            });
         }
 
         public async Task<Charge> ChargeAsync(decimal amount, string currency, IPaymentType paymentType)
@@ -133,17 +142,29 @@ namespace Heidelpay.Payment
 
         public async Task<Charge> ChargeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, Customer customer = null)
         {
-            return await ChargeAsync(amount, currency, paymentType, null, customer?.Id);
+            return await ChargeAsync(amount, currency, paymentType, returnUrl, customer?.Id);
         }
 
         public async Task<Charge> ChargeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, string customerId)
         {
             var paymentTypeId = await EnsurePaymentTypeIdCreated(paymentType);
-            return await ChargeAsync(new Charge { Amount = amount, Currency = currency, TypeId = paymentTypeId, ReturnUrl = returnUrl, CustomerId = customerId });
+            return await ChargeAsync(new Charge
+            {
+                Amount = amount,
+                Currency = currency,
+                ReturnUrl = returnUrl,
+                Resources = new Resources
+                {
+                    TypeId = paymentTypeId,
+                    CustomerId = customerId
+                }
+            });
         }
         
         public async Task<Charge> ChargeAsync(Charge charge)
         {
+            Check.NotNull(charge, nameof(charge));
+            
             return await PaymentService.ChargeAsync(charge);
         }
 
