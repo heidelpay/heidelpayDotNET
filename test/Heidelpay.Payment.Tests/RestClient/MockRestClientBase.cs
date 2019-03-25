@@ -10,13 +10,8 @@ namespace Heidelpay.Payment.Tests.Communication
 {
     class MockRestClient : RestClient
     {
-        protected override HttpClient ResolveHttpClient(IHttpClientFactory factory)
-        {
-            return factory.CreateClient("MockHttpMessageHandler");
-        }
-
-        public MockRestClient(IHttpClientFactory factory, ILogger<RestClient> logger)
-            : base(factory, logger)
+        public MockRestClient(IHttpClientFactory factory, IOptions<HeidelpayApiOptions> apiOptions, ILogger<RestClient> logger)
+            : base(factory, apiOptions, logger)
         {
         }
 

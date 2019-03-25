@@ -39,6 +39,8 @@ namespace Heidelpay.Payment.Tests
 
         private MockRestClient BuildMockRestClient(HttpStatusCode code = HttpStatusCode.OK, string response = ValidResponse)
         {
+            var httpClientName = "MockHttpMessageHandler";
+
             var services = new ServiceCollection();
 
             var configBuilder = new ConfigurationBuilder()
@@ -48,7 +50,7 @@ namespace Heidelpay.Payment.Tests
             var config = configBuilder.Build();
 
             services
-                .AddHttpClient<HttpClient>("MockHttpMessageHandler")
+                .AddHttpClient<HttpClient>(httpClientName)
                 .ConfigurePrimaryHttpMessageHandler(() => new MockHttpMessageHandler(code, response));
             services.AddLogging();
 
@@ -56,8 +58,9 @@ namespace Heidelpay.Payment.Tests
 
             var factory = serviceProvider.GetService<IHttpClientFactory>();
             var logger = serviceProvider.GetService<ILogger<RestClient>>();
+            var options = Microsoft.Extensions.Options.Options.Create(new HeidelpayApiOptions { HttpClientName = httpClientName });
 
-            return new MockRestClient(factory, logger);
+            return new MockRestClient(factory, options, logger);
         }
 
         [Fact]

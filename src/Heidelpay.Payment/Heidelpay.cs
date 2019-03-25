@@ -32,7 +32,6 @@ namespace Heidelpay.Payment
 {
     public sealed class Heidelpay
     {
-        public IOptions<HeidelpayApiOptions> Options { get; }
         public IRestClient RestClient { get; }
 
         public Heidelpay(HeidelpayApiOptions options)
@@ -42,21 +41,37 @@ namespace Heidelpay.Payment
 
         public Heidelpay(IOptions<HeidelpayApiOptions> options)
         {
-            Options = options;
-            RestClient = BuildDefaultRestClient();
+            RestClient = BuildRestClient(new SimpleHttpClientFactory(), options);
         }
 
-        public Heidelpay(IOptions<HeidelpayApiOptions> options, IRestClient restClient)
+        public Heidelpay(HeidelpayApiOptions options, HttpClient httpClient)
+        : this(Microsoft.Extensions.Options.Options.Create(options), httpClient)
         {
-            Options = options;
+        }
+
+        public Heidelpay(IOptions<HeidelpayApiOptions> options, HttpClient httpClient)
+        {
+            RestClient = BuildRestClient(new PassthroughHttpClientFactory(httpClient), options);
+        }
+
+        public Heidelpay(HeidelpayApiOptions options, IHttpClientFactory httpClientFactory)
+        : this(Microsoft.Extensions.Options.Options.Create(options), httpClientFactory)
+        {
+        }
+
+        public Heidelpay(IOptions<HeidelpayApiOptions> options, IHttpClientFactory httpClientFactory)
+        {
+            RestClient = BuildRestClient(httpClientFactory, options);
+        }
+
+        public Heidelpay(IRestClient restClient)
+        {
             RestClient = restClient;
         }
 
-        private IRestClient BuildDefaultRestClient()
+        private IRestClient BuildRestClient(IHttpClientFactory httpClientFactory, IOptions<HeidelpayApiOptions> options)
         {
-            //var factory = new IHttpClientFactory();
-
-            return null; // new RestClient(DefaultHttpClientFactory, new NullLogger<RestClient>());
+            return new RestClient(httpClientFactory, options, new NullLogger<RestClient>());
         }
 
         public async Task<Charge> ChargeAuthorizationAsync(string paymentId, decimal? amount = null)

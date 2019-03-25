@@ -16,11 +16,15 @@ namespace Heidelpay.Payment.Communication
     public class RestClient : IRestClient
     {
         private readonly IHttpClientFactory factory;
+        private readonly IOptions<HeidelpayApiOptions> apiOptions;
         private readonly ILogger<RestClient> logger;
 
-        public RestClient(IHttpClientFactory factory, ILogger<RestClient> logger)
+        public HeidelpayApiOptions Options { get => apiOptions?.Value; } 
+
+        public RestClient(IHttpClientFactory factory, IOptions<HeidelpayApiOptions> apiOptions, ILogger<RestClient> logger)
         {
             this.factory = factory;
+            this.apiOptions = apiOptions;
             this.logger = logger;
         }
 
@@ -36,7 +40,11 @@ namespace Heidelpay.Payment.Communication
 
         protected virtual HttpClient ResolveHttpClient(IHttpClientFactory factory)
         {
-            return (factory ?? this.factory).CreateClient();
+            var resolvedFactory = (factory ?? this.factory);
+
+            return !string.IsNullOrWhiteSpace(apiOptions?.Value?.HttpClientName)
+                ? resolvedFactory.CreateClient(apiOptions.Value.HttpClientName)
+                : resolvedFactory.CreateClient();
         }
 
         protected async Task<HttpResponseMessage> SendRequestAsync(HttpRequestMessage request, string privateKey)
