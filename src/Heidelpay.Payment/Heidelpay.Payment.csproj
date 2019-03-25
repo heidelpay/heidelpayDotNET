@@ -23,7 +23,7 @@
 
 
   <ItemGroup>
-    <PackageReference Update="Nerdbank.GitVersioning" Version="2.3.136" />
+    <PackageReference Update="Nerdbank.GitVersioning" Version="2.3.138" />
   </ItemGroup>
   
 </Project>
