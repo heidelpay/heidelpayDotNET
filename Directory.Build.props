@@ -2,6 +2,9 @@
   <PropertyGroup>
     <Authors>Heidelpay</Authors>
   </PropertyGroup>
+  <PropertyGroup>
+    <LangVersion>Latest</LangVersion>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Nerdbank.GitVersioning">
       <Version>2.3.125</Version>

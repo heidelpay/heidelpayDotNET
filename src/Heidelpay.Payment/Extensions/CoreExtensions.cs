@@ -32,7 +32,7 @@ namespace Heidelpay.Payment.Extensions
         {
             if (string.IsNullOrWhiteSpace(value))
             {
-                result = default(DateTime); 
+                result = default; 
                 return false;
             }
 
