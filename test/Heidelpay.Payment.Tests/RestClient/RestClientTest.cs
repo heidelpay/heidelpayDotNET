@@ -1,6 +1,6 @@
 using Heidelpay.Payment.Communication;
-using Heidelpay.Payment.Interfaces;
-using Heidelpay.Payment.Tests.Communication;
+using Heidelpay.Payment.Extensions;
+using Heidelpay.Payment.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -14,13 +14,12 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Heidelpay.Payment.Tests
+namespace Heidelpay.Payment.Tests.Communication
 {
     public class RestClientTest
     {
         readonly Uri TestUri = new Uri("https://heidelpay.com");
         const string PrivateKey = "Samplekey";
-        const string MockHttpClientName = "Mocked";
 
         const string ErrorResponse = 
                 "{" +
@@ -34,40 +33,44 @@ namespace Heidelpay.Payment.Tests
                 "        }" +
                 "    ]" +
                 "}";
+
         const string ValidResponse = "{\"key\": \"value\"}";
 
-        private MockRestClient BuildMockRestClient(HttpStatusCode code = HttpStatusCode.OK, string response = ValidResponse)
+        private MockRestClient BuildMockRestClient(string response, HttpStatusCode code = HttpStatusCode.OK)
         {
+            var httpClientName = "MockHttpMessageHandler";
+
             var services = new ServiceCollection();
 
-            var configBuilder = new ConfigurationBuilder()
-               .SetBasePath(Directory.GetCurrentDirectory())
-               .AddJsonFile("appsettings.json", optional: true);
-
-            var config = configBuilder.Build();
+            services.Configure<HeidelpayApiOptions>(opt =>
+            {
+                opt.HttpClientName = httpClientName;
+                opt.ApiEndpoint = TestUri;
+                opt.ApiVersion = "v1";
+                opt.ApiKey = PrivateKey;
+            });
 
             services
-                .AddHttpClient<HttpClient>(MockHttpClientName)
+                .AddHttpClient<HttpClient>(httpClientName)
                 .ConfigurePrimaryHttpMessageHandler(() => new MockHttpMessageHandler(code, response));
             services.AddLogging();
-            services.Configure<SDKOptions>(config.GetSection("Heidelpay"));
 
             var serviceProvider = services.BuildServiceProvider();
 
             var factory = serviceProvider.GetService<IHttpClientFactory>();
-            var options = serviceProvider.GetService<IOptions<SDKOptions>>();
             var logger = serviceProvider.GetService<ILogger<RestClient>>();
+            var options = serviceProvider.GetService<IOptions<HeidelpayApiOptions>>();
 
-            return new MockRestClient(MockHttpClientName, factory, options, logger);
+            return new MockRestClient(factory, options, logger);
         }
 
         [Fact]
         public async Task Api_Errors_Are_Translated_To_Payment_Exception()
         {
-            var restClient = BuildMockRestClient(code: HttpStatusCode.Conflict, response: ErrorResponse);
+            var restClient = BuildMockRestClient(response: ErrorResponse, code: HttpStatusCode.Conflict);
 
             var exception = await Assert.ThrowsAsync<PaymentException>(
-                () => restClient.HttpGetAsync(TestUri, PrivateKey));
+                () => restClient.HttpGetAsync<ContentTestData>(TestUri));
 
             Assert.NotNull(exception);
             Assert.Equal(DateTime.Parse("2018-09-13 22:47:35"), exception.Timestamp);
@@ -79,7 +82,6 @@ namespace Heidelpay.Payment.Tests
             Assert.Equal("API.410.200.010", error.Code);
             Assert.Equal("Message for the customer.", error.CustomerMessage);
             Assert.Equal("Message for the merchant.", error.MerchantMessage);
-
         }
 
         [Fact]
@@ -87,9 +89,9 @@ namespace Heidelpay.Payment.Tests
         {
             var restClient = BuildMockRestClient(response: ValidResponse);
 
-            var response = await restClient.HttpGetAsync(TestUri, PrivateKey);
+            var response = await restClient.HttpGetAsync<ValidResponseClass>(TestUri);
 
-            Assert.Equal(ValidResponse, response);
+            Assert.Equal(JsonConvert.DeserializeObject<ValidResponseClass>(ValidResponse), response);
             Assert.Equal(HttpStatusCode.OK, restClient.LoggedResponse.StatusCode);
         }
 
@@ -104,11 +106,11 @@ namespace Heidelpay.Payment.Tests
                 TestProperty4 = DateTime.Now,
             };
 
-            var restClient = BuildMockRestClient(code: HttpStatusCode.Created);
+            var restClient = BuildMockRestClient(response: ValidResponse, code: HttpStatusCode.Created);
 
-            var response = await restClient.HttpPostAsync(TestUri, PrivateKey, testContentData);
+            var response = await restClient.HttpPostAsync<ValidResponseClass>(TestUri, testContentData);
 
-            Assert.Equal(ValidResponse, response);
+            Assert.Equal(JsonConvert.DeserializeObject<ValidResponseClass>(ValidResponse), response);
             Assert.Equal(HttpStatusCode.Created, restClient.LoggedResponse.StatusCode);
             Assert.Equal(testContentData, JsonConvert.DeserializeObject<ContentTestData>(
                 await restClient.LoggedRequest.Content.ReadAsStringAsync()));
@@ -125,11 +127,11 @@ namespace Heidelpay.Payment.Tests
                 TestProperty4 = DateTime.Now,
             };
 
-            var restClient = BuildMockRestClient();
+            var restClient = BuildMockRestClient(response: ValidResponse);
 
-            var response = await restClient.HttpPutAsync(TestUri, PrivateKey, testContentData);
+            var response = await restClient.HttpPutAsync<ValidResponseClass>(TestUri, testContentData);
 
-            Assert.Equal(ValidResponse, response);
+            Assert.Equal(JsonConvert.DeserializeObject<ValidResponseClass>(ValidResponse), response);
             Assert.Equal(HttpStatusCode.OK, restClient.LoggedResponse.StatusCode);
             Assert.Equal(testContentData, JsonConvert.DeserializeObject<ContentTestData>(
                 await restClient.LoggedRequest.Content.ReadAsStringAsync()));
@@ -138,12 +140,84 @@ namespace Heidelpay.Payment.Tests
         [Fact]
         public async Task BasicHttpDelete()
         {
-            var restClient = BuildMockRestClient();
+            var restClient = BuildMockRestClient(response: ValidResponse);
 
-            var response = await restClient.HttpDeleteAsync(TestUri, PrivateKey);
+            var response = await restClient.HttpDeleteAsync<ValidResponseClass>(TestUri);
 
-            Assert.Equal(ValidResponse, response);
+            Assert.Equal(JsonConvert.DeserializeObject<ValidResponseClass>(ValidResponse), response);
             Assert.Equal(HttpStatusCode.OK, restClient.LoggedResponse.StatusCode);
+        }
+
+        [Fact]
+        public async Task Auth_And_UserAgent_Header_Are_Set_On_Get_Request()
+        {
+            var restClient = BuildMockRestClient(response: ValidResponse);
+
+            var _ = await restClient.HttpGetAsync<ValidResponseClass>(TestUri);
+
+            AssertUserAgentHeader(restClient);
+            AssertAuthentication(restClient);
+        }
+
+        [Fact]
+        public async Task Auth_ContentType_And_UserAgent_Header_And_Bodies_Content_Encoding_Are_Set_On_Post_Request()
+        {
+            var restClient = BuildMockRestClient(response: ValidResponse);
+
+            var _ = await restClient.HttpPostAsync<ValidResponseClass>(TestUri, new ContentTestData());
+
+            AssertUserAgentHeader(restClient);
+            AssertAuthentication(restClient);
+            AssertContentTypeHeader(restClient);
+            AssertContentBodyEncoding(restClient);
+        }
+
+        [Fact]
+        public async Task Auth_ContentType_And_UserAgent_Header_And_Bodies_Content_Encoding_Are_Set_On_Put_Request()
+        {
+            var restClient = BuildMockRestClient(response: ValidResponse);
+
+            var _ = await restClient.HttpPutAsync<ValidResponseClass>(TestUri, new ContentTestData());
+
+            AssertUserAgentHeader(restClient);
+            AssertAuthentication(restClient);
+            AssertContentTypeHeader(restClient);
+            AssertContentBodyEncoding(restClient);
+        }
+
+        [Fact]
+        public async Task Auth_And_UserAgent_Header_Are_Set_On_Delete_Request()
+        {
+            var restClient = BuildMockRestClient(ValidResponse);
+
+            var _ = await restClient.HttpDeleteAsync<ValidResponseClass>(TestUri);
+
+            AssertUserAgentHeader(restClient);
+            AssertAuthentication(restClient);
+        }
+
+        private static void AssertContentBodyEncoding(MockRestClient restClient)
+        {
+            Assert.Equal("UTF-8",
+                restClient.LoggedRequest.Content.Headers.ContentEncoding.ToString());
+        }
+
+        private static void AssertContentTypeHeader(MockRestClient restClient)
+        {
+            Assert.Equal("application/json; charset=UTF-8",
+                restClient.LoggedRequest.Content.Headers.ContentType.ToString(), ignoreCase: true, ignoreWhiteSpaceDifferences: true);
+        }
+
+        private static void AssertAuthentication(MockRestClient restClient)
+        {
+            Assert.Equal("Basic " + CoreExtensions.EncodeToBase64(PrivateKey + ":"),
+                restClient.LoggedRequest.Headers.Authorization.ToString());
+        }
+
+        private static void AssertUserAgentHeader(MockRestClient restClient)
+        {
+            Assert.Equal($"{RestClientConstants.USER_AGENT_PREFIX}{SDKInfo.Version} - {typeof(MockRestClient).FullName}",
+                restClient.LoggedRequest.Headers.UserAgent.ToString());
         }
 
         class ContentTestData
@@ -165,76 +239,14 @@ namespace Heidelpay.Payment.Tests
             }
         }
 
-        [Fact]
-        public async Task Auth_And_UserAgent_Header_Are_Set_On_Get_Request()
+        class ValidResponseClass
         {
-            var restClient = BuildMockRestClient();
+            public string Key { get; set; }
 
-            var response = await restClient.HttpGetAsync(TestUri, PrivateKey);
-
-            AssertUserAgentHeader(restClient);
-            AssertAuthentication(restClient);
-        }
-
-        [Fact]
-        public async Task Auth_ContentType_And_UserAgent_Header_And_Bodies_Content_Encoding_Are_Set_On_Post_Request()
-        {
-            var restClient = BuildMockRestClient();
-
-            var response = await restClient.HttpPostAsync(TestUri, PrivateKey, new ContentTestData());
-
-            AssertUserAgentHeader(restClient);
-            AssertAuthentication(restClient);
-            AssertContentTypeHeader(restClient);
-            AssertContentBodyEncoding(restClient);
-        }
-
-        [Fact]
-        public async Task Auth_ContentType_And_UserAgent_Header_And_Bodies_Content_Encoding_Are_Set_On_Put_Request()
-        {
-            var restClient = BuildMockRestClient();
-
-            var response = await restClient.HttpPutAsync(TestUri, PrivateKey, new ContentTestData());
-
-            AssertUserAgentHeader(restClient);
-            AssertAuthentication(restClient);
-            AssertContentTypeHeader(restClient);
-            AssertContentBodyEncoding(restClient);
-        }
-
-        [Fact]
-        public async Task Auth_And_UserAgent_Header_Are_Set_On_Delete_Request()
-        {
-            var restClient = BuildMockRestClient();
-
-            var response = await restClient.HttpDeleteAsync(TestUri, PrivateKey);
-
-            AssertUserAgentHeader(restClient);
-            AssertAuthentication(restClient);
-        }
-
-        private static void AssertContentBodyEncoding(MockRestClient restClient)
-        {
-            Assert.Equal("UTF-8",
-                restClient.LoggedRequest.Content.Headers.ContentEncoding.ToString());
-        }
-
-        private static void AssertContentTypeHeader(MockRestClient restClient)
-        {
-            Assert.Equal("application/json; charset=UTF-8",
-                restClient.LoggedRequest.Content.Headers.ContentType.ToString(), ignoreCase: true, ignoreWhiteSpaceDifferences: true);
-        }
-
-        private static void AssertAuthentication(MockRestClient restClient)
-        {
-            Assert.Equal("Basic " + Base64Extensions.EncodeToBase64(PrivateKey + ":"),
-                restClient.LoggedRequest.Headers.Authorization.ToString());
-        }
-
-        private static void AssertUserAgentHeader(MockRestClient restClient)
-        {
-            Assert.Equal($"{RestClientConstants.USER_AGENT_PREFIX}{SDKOptions.SDKVersion} - {typeof(MockRestClient).FullName}",
-                restClient.LoggedRequest.Headers.UserAgent.ToString());
+            public override bool Equals(object obj)
+            {
+                return obj is ValidResponseClass && ((ValidResponseClass)obj).Key == Key;
+            }
         }
     }
 }

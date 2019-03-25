@@ -1,4 +1,5 @@
-﻿using Heidelpay.Payment.PaymentTypes;
+﻿using Heidelpay.Payment.Extensions;
+using Heidelpay.Payment.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,12 +43,12 @@ namespace Heidelpay.Payment
             return await Heidelpay.ChargeAsync(amount, currency, typeId, returnUrl, customerId);
         }
 
-        public async Task<Charge> ChargeAsync(decimal amount, string currency, PaymentType paymentType)
+        public async Task<Charge> ChargeAsync(decimal amount, string currency, IPaymentType paymentType)
         {
             return await Heidelpay.ChargeAsync(amount, currency, paymentType);
         }
 
-        public async Task<Charge> ChargeAsync(decimal amount, string currency, PaymentType paymentType, Uri returnUrl, string customerId)
+        public async Task<Charge> ChargeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, string customerId)
         {
             return await Heidelpay.ChargeAsync(amount, currency, paymentType, returnUrl, customerId);
         }
@@ -57,14 +58,19 @@ namespace Heidelpay.Payment
             return await Heidelpay.AuthorizeAsync(amount, currency, typeId, returnUrl, customerId);
         }
 
-        public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, PaymentType paymentType)
+        public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, IPaymentType paymentType)
         {
             return await Heidelpay.AuthorizeAsync(amount, currency, paymentType);
         }
 
-        public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, PaymentType paymentType, Uri returnUrl, string customerId)
+        public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, string customerId)
         {
             return await Heidelpay.AuthorizeAsync(amount, currency, paymentType, returnUrl, customerId);
+        }
+
+        public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, Customer customer = null)
+        {
+            return await Heidelpay.AuthorizeAsync(amount, currency, paymentType, returnUrl, customer);
         }
 
         public async Task<Cancel> CancelAsync(decimal? amount = null)
@@ -90,16 +96,16 @@ namespace Heidelpay.Payment
         Customer customer;
         public async Task<Customer> GetCustomerAsync()
         {
-            if (customer == null && !string.IsNullOrWhiteSpace(CustomerId))
+            if (customer == null && IsNotEmpty(CustomerId))
                 customer = await Heidelpay.FetchCustomerAsync(CustomerId);
 
             return customer;
         }
 
-        PaymentType paymentType;
-        public async Task<PaymentType> GetPaymentTypeAsync()
+        IPaymentType paymentType;
+        public async Task<IPaymentType> GetPaymentTypeAsync()
         {
-            if (paymentType == null && !string.IsNullOrWhiteSpace(PaymentTypeId))
+            if (paymentType == null && IsNotEmpty(PaymentTypeId))
                 paymentType = await Heidelpay.FetchPaymentTypeAsync(PaymentTypeId);
 
             return paymentType;
@@ -108,7 +114,7 @@ namespace Heidelpay.Payment
         MetaData metaData;
         public async Task<MetaData> GetMetaDataAsync()
         {
-            if (metaData == null && !string.IsNullOrWhiteSpace(MetaDataId))
+            if (metaData == null && IsNotEmpty(MetaDataId))
                 metaData = await Heidelpay.FetchMetaDataAsync(MetaDataId);
 
             return metaData;
@@ -117,11 +123,13 @@ namespace Heidelpay.Payment
         Basket basket;
         public async Task<Basket> GetBasketAsync()
         {
-            if (basket == null && !string.IsNullOrWhiteSpace(BasketId))
+            if (basket == null && IsNotEmpty(BasketId))
                 basket = await Heidelpay.FetchBasketAsync(BasketId);
 
             return basket;
         }
+
+        static readonly Func<string, bool> IsNotEmpty = CoreExtensions.IsNotEmpty;
 
         public override string TypeUrl => "payments";
     }

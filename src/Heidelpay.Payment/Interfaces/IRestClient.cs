@@ -1,16 +1,19 @@
-﻿using System;
+﻿using Heidelpay.Payment.Options;
+using System;
 using System.Threading.Tasks;
 
 namespace Heidelpay.Payment.Interfaces
 {
     public interface IRestClient
     {
-        Task<string> HttpGetAsync(Uri uri, string privateKey);
+        HeidelpayApiOptions Options { get; } 
 
-        Task<string> HttpPostAsync(Uri uri, string privateKey, object content);
+        Task<T> HttpGetAsync<T>(Uri uri);
 
-        Task<string> HttpPutAsync(Uri uri, string privateKey, object content);
+        Task<T> HttpPostAsync<T>(Uri uri, object content);
 
-        Task<string> HttpDeleteAsync(Uri uri, string privateKey);
+        Task<T> HttpPutAsync<T>(Uri uri, object content);
+
+        Task<T> HttpDeleteAsync<T>(Uri uri);
     }
 }

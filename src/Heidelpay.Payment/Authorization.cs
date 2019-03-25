@@ -13,13 +13,8 @@ namespace Heidelpay.Payment
         public Uri RedirectUrl { get; set; }
 
         public string OrderId { get; set; }
-        public string TypeId { get; set; }
-        public string CustomerId { get; set; }
-        public string MetadataId { get; set; }
-        public string PaymentId { get; set; }
-        public string RiskId { get; set; }
-        public string BasketId { get; set; }
 
+        public Resources Resources { get; set; } = new Resources();
         public Processing Processing { get; set; } = new Processing();
         public IEnumerable<Cancel> CancelList { get; set; } = Enumerable.Empty<Cancel>();
 
@@ -34,12 +29,12 @@ namespace Heidelpay.Payment
 
         public async Task<Cancel> CancelAsync(decimal? amount = null)
         {
-            return await Heidelpay.CancelAuthorizationAsync(Payment?.Id ?? PaymentId, amount);
+            return await Heidelpay.CancelAuthorizationAsync(Payment?.Id ?? Resources?.PaymentId, amount);
         }
 
         public async Task<Charge> ChargeAsync(decimal? amount = null)
         {
-            return await Heidelpay.ChargeAuthorizationAsync(Payment?.Id ?? PaymentId, amount);
+            return await Heidelpay.ChargeAuthorizationAsync(Payment?.Id ?? Resources?.PaymentId, amount);
         }
 
         public override string TypeUrl => "payments/<paymentId>/authorize";

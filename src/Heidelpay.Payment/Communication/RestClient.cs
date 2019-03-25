@@ -1,7 +1,10 @@
-﻿using Heidelpay.Payment.Interfaces;
+﻿using Heidelpay.Payment.Extensions;
+using Heidelpay.Payment.Interfaces;
+using Heidelpay.Payment.Options;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Net.Http;
 using System.Text;
@@ -12,24 +15,16 @@ namespace Heidelpay.Payment.Communication
     public class RestClient : IRestClient
     {
         private readonly IHttpClientFactory factory;
+        private readonly IOptions<HeidelpayApiOptions> apiOptions;
         private readonly ILogger<RestClient> logger;
-        private readonly IOptions<SDKOptions> options;
 
-        private readonly string namedHttpClientInstance;
+        public HeidelpayApiOptions Options { get => apiOptions?.Value; } 
 
-        public RestClient(string namedHttpClientInstance, 
-            IHttpClientFactory factory, IOptions<SDKOptions> options, ILogger<RestClient> logger)
-            : this(factory, options, logger)
-        {
-            this.namedHttpClientInstance = namedHttpClientInstance;
-        }
-
-        public RestClient(
-            IHttpClientFactory factory, IOptions<SDKOptions> options, ILogger<RestClient> logger)
+        public RestClient(IHttpClientFactory factory, IOptions<HeidelpayApiOptions> apiOptions, ILogger<RestClient> logger)
         {
             this.factory = factory;
+            this.apiOptions = apiOptions;
             this.logger = logger;
-            this.options = options;
         }
 
         protected virtual void LogRequest(HttpRequestMessage request)
@@ -42,33 +37,40 @@ namespace Heidelpay.Payment.Communication
             logger?.LogDebug(response.ToString());
         }
 
-        protected async Task<HttpResponseMessage> SendRequestAsync(HttpRequestMessage request, string privateKey)
+        protected virtual HttpClient ResolveHttpClient(IHttpClientFactory factory)
         {
+            var resolvedFactory = (factory ?? this.factory);
+
+            return !string.IsNullOrWhiteSpace(apiOptions?.Value?.HttpClientName)
+                ? resolvedFactory.CreateClient(apiOptions.Value.HttpClientName)
+                : resolvedFactory.CreateClient();
+        }
+
+        protected async Task<HttpResponseMessage> SendRequestAsync(HttpRequestMessage request)
+        {
+            Check.NotNull(request, nameof(request));
+
             request.AddUserAgent(GetType().FullName);
-            request.AddAuthentication(privateKey);
+            request.AddAuthentication(apiOptions?.Value?.ApiKey);
 
             LogRequest(request);
 
-            var response = await factory.CreateClient(namedHttpClientInstance)
+            var client = ResolveHttpClient(factory);
+            var response = await client
                 .SendAsync(request);
 
             LogResponse(response);
 
-            if (response.IsError())
-            {
-                await ThrowPaymentExceptionAsync(request, response);
-            }
+            await response.ThrowIfErroneousResponseAsync();
 
             return response;
         }
 
-        protected async Task ThrowPaymentExceptionAsync(HttpRequestMessage request, HttpResponseMessage response)
+        readonly JsonSerializerSettings serializationSettings = new JsonSerializerSettings
         {
-            var responseContent = await response.Content.ReadAsStringAsync();
-            var error = JsonConvert.DeserializeObject<RestClientErrorObject>(responseContent);
-
-		    throw new PaymentException(new Uri(error.Url), response.StatusCode, DateTime.Parse(error.Timestamp), error.Errors);
-        }
+            NullValueHandling = NullValueHandling.Ignore,
+            ContractResolver = new CamelCasePropertyNamesContractResolver()
+        };
 
         private HttpRequestMessage CreateRequest(Uri uri, HttpMethod method, object content = null)
         {
@@ -76,41 +78,43 @@ namespace Heidelpay.Payment.Communication
 
             if (content != null)
             {
-                request.Content = new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, "application/json");
+                request.Content = new StringContent(JsonConvert.SerializeObject(content, serializationSettings), Encoding.UTF8, "application/json");
                 request.Content.Headers.ContentEncoding.Add("UTF-8");
             }
 
             return request;
         }
 
-        //public async Task<TResponse> HttpGetAsync<TResponse>(Uri uri, string privateKey)
-        //{
-        //    var responseContent = await HttpGetAsync(uri, privateKey);
-        //    return JsonConvert.DeserializeObject<TResponse>(responseContent);
-        //}
-
-        public async Task<string> HttpGetAsync(Uri uri, string privateKey)
+        public async Task<T> HttpGetAsync<T>(Uri uri)
         {
-            var response = await SendRequestAsync(CreateRequest(uri, HttpMethod.Get), privateKey);
-            return await response.Content.ReadAsStringAsync();
+            Check.NotNull(uri, nameof(uri));
+
+            var response = await SendRequestAsync(CreateRequest(uri, HttpMethod.Get));
+            return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
         }
 
-        public async Task<string> HttpPostAsync(Uri uri, string privateKey, object data)
+        public async Task<T> HttpPostAsync<T>(Uri uri, object data)
         {
-            var response = await SendRequestAsync(CreateRequest(uri, HttpMethod.Post, data), privateKey);
-            return await response.Content.ReadAsStringAsync();
+            Check.NotNull(uri, nameof(uri));
+
+            var response = await SendRequestAsync(CreateRequest(uri, HttpMethod.Post, data));
+            return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
         }
 
-        public async Task<string> HttpPutAsync(Uri uri, string privateKey, object data)
+        public async Task<T> HttpPutAsync<T>(Uri uri, object data)
         {
-            var response = await SendRequestAsync(CreateRequest(uri, HttpMethod.Put, data), privateKey);
-            return await response.Content.ReadAsStringAsync();
+            Check.NotNull(uri, nameof(uri));
+
+            var response = await SendRequestAsync(CreateRequest(uri, HttpMethod.Put, data));
+            return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
         }
 
-        public async Task<string> HttpDeleteAsync(Uri uri, string privateKey)
+        public async Task<T> HttpDeleteAsync<T>(Uri uri)
         {
-            var response = await SendRequestAsync(CreateRequest(uri, HttpMethod.Delete), privateKey);
-            return await response.Content.ReadAsStringAsync();
+            Check.NotNull(uri, nameof(uri));
+
+            var response = await SendRequestAsync(CreateRequest(uri, HttpMethod.Delete));
+            return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
         }
     }
 }

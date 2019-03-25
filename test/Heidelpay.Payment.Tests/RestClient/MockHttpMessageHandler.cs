@@ -7,6 +7,11 @@ namespace Heidelpay.Payment.Tests.Communication
 {
     class MockHttpMessageHandler : HttpMessageHandler
     {
+        public MockHttpMessageHandler()
+        {
+
+        }
+
         public MockHttpMessageHandler(HttpStatusCode code, string response)
         {
             this.code = code;
