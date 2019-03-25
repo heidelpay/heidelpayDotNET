@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Heidelpay.Payment.Interface;
+using Heidelpay.Payment.Interfaces;
+using Heidelpay.Payment.PaymentTypes;
+using System;
 using System.Threading.Tasks;
 
 namespace Heidelpay.Payment.Service
@@ -17,14 +20,33 @@ namespace Heidelpay.Payment.Service
             this.heidelpay = heidelpay;
         }
 
+        internal async Task<TPaymentBase> CreatePaymentTypeBaseAsync<TPaymentBase>(TPaymentBase paymentType)
+            where TPaymentBase : PaymentTypeBase
+        {
+            return PostProcessResult(await EnsurePaymentTypeAsync(paymentType));
+        }
+
+        internal async Task<TPaymentBase> EnsurePaymentTypeAsync<TPaymentBase>(TPaymentBase paymentType)
+            where TPaymentBase : IPaymentType
+        {
+            return await heidelpay.RestClient.HttpPostAsync<TPaymentBase>(new Uri(heidelpay.ApiEndpointUri, paymentType.TypeResourceUrl()), paymentType);
+        }
+
         public async Task<Charge> ChargeAsync(Charge charge)
         {
-            return await ChargeAsync(charge, new Uri(heidelpay.RestClient.Options.ApiEndpoint, charge.TypeUrl));
+            return await ChargeAsync(charge, new Uri(heidelpay.ApiEndpointUri, charge.TypeResourceUrl()));
         }
 
         public async Task<Charge> ChargeAsync(Charge charge, Uri url)
         {
-            return await heidelpay.RestClient.HttpPostAsync<Charge>(url, charge);
+            return PostProcessResult(await heidelpay.RestClient.HttpPostAsync<Charge>(url, charge));
+        }
+
+        private TPaymentBase PostProcessResult<TPaymentBase>(TPaymentBase payment)
+            where TPaymentBase : IHeidelpayProvider
+        {
+            payment.Heidelpay = heidelpay;
+            return payment;
         }
     }
 }

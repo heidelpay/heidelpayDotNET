@@ -4,6 +4,7 @@ using Heidelpay.Payment.Options;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Net.Http;
 using System.Text;
@@ -65,13 +66,18 @@ namespace Heidelpay.Payment.Communication
             return response;
         }
 
+        readonly JsonSerializerSettings serializationSettings = new JsonSerializerSettings
+        {
+            ContractResolver = new CamelCasePropertyNamesContractResolver()
+        };
+
         private HttpRequestMessage CreateRequest(Uri uri, HttpMethod method, object content = null)
         {
             var request = new HttpRequestMessage(method, uri);
 
             if (content != null)
             {
-                request.Content = new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, "application/json");
+                request.Content = new StringContent(JsonConvert.SerializeObject(content, serializationSettings), Encoding.UTF8, "application/json");
                 request.Content.Headers.ContentEncoding.Add("UTF-8");
             }
 

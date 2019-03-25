@@ -26,7 +26,7 @@ namespace Heidelpay.Payment.Tests.Service
 
             mockedRestClient
                 .SetupGet(x => x.Options)
-                .Returns(new HeidelpayApiOptions { ApiKey = "asd", ApiEndpoint = new Uri("https://heidelpay.com") });
+                .Returns(new HeidelpayApiOptions { ApiKey = "asd", ApiEndpoint = new Uri("https://heidelpay.com"), ApiVersion = "v1" });
 
             mockedRestClient
                 .Setup(x => x.HttpPostAsync<Charge>(It.IsAny<Uri>(), It.IsAny<Charge>()))

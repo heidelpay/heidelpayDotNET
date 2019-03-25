@@ -2,20 +2,21 @@
 
 namespace Heidelpay.Payment.PaymentTypes
 {
-    public abstract class PaymentTypeBase : IPaymentType
+    public abstract class PaymentTypeBase : IPaymentType, IHeidelpayProvider
     {
         public PaymentTypeBase(Heidelpay heidelpay)
         {
-            Heidelpay = heidelpay;
+            ((IHeidelpayProvider)this).Heidelpay = heidelpay;
         }
 
         public PaymentTypeBase()
         {
         }
 
-        internal Heidelpay Heidelpay { get; set; }
-
         public string Id { get; set; }
         public abstract string TypeUrl { get; }
+        Heidelpay IHeidelpayProvider.Heidelpay { get; set; }
+
+        protected Heidelpay Heidelpay { get => ((IHeidelpayProvider)this).Heidelpay; }
     }
 }

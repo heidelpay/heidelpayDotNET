@@ -6,6 +6,8 @@ namespace Heidelpay.Payment.Options
     {
         public Uri ApiEndpoint { get; set; }
 
+        public string ApiVersion { get; set; }
+
         public string ApiKey { get; set; }
 
         public string HttpClientName { get; set; }

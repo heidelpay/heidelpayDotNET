@@ -46,6 +46,7 @@ namespace Heidelpay.Payment.Tests.Communication
             {
                 opt.HttpClientName = httpClientName;
                 opt.ApiEndpoint = TestUri;
+                opt.ApiVersion = "v1";
                 opt.ApiKey = PrivateKey;
             });
 

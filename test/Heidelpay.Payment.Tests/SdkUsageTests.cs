@@ -67,6 +67,7 @@ namespace Heidelpay.Payment.Tests
             var heidelpay = new Heidelpay(new HeidelpayApiOptions
             {
                 ApiEndpoint = new Uri("https://api.heidelpay.com"),
+                ApiVersion = "v1",
                 ApiKey = "Samplekey2",
             }, new HttpClient());
 
@@ -92,6 +93,7 @@ namespace Heidelpay.Payment.Tests
             var heidelpay = new Heidelpay(new HeidelpayApiOptions
             {
                 ApiEndpoint = new Uri("https://api.heidelpay.com"),
+                ApiVersion = "v1",
                 ApiKey = "Samplekey1",
             }, factoryMock.Object);
 

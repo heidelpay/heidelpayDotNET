@@ -2,6 +2,7 @@
 using Heidelpay.Payment.Extensions;
 using Heidelpay.Payment.Interfaces;
 using Heidelpay.Payment.Options;
+using Heidelpay.Payment.PaymentTypes;
 using Heidelpay.Payment.Service;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -36,6 +37,13 @@ namespace Heidelpay.Payment
 {
     public sealed class Heidelpay
     {
+        public Uri ApiEndpointUri
+        {
+            get
+            {
+                return new Uri(RestClient?.Options?.ApiEndpoint, RestClient?.Options?.ApiVersion + "/");
+            }
+        }
         internal IRestClient RestClient { get; }
 
         internal PaymentService PaymentService { get; } 
@@ -88,6 +96,21 @@ namespace Heidelpay.Payment
             return new RestClient(httpClientFactory, options, new NullLogger<RestClient>());
         }
 
+        private async Task<string> EnsurePaymentTypeIdCreated<TPaymentType>(TPaymentType paymentType)
+            where TPaymentType : IPaymentType
+        {
+            if (paymentType == null)
+                return null;
+
+            TPaymentType result = paymentType;
+            if (string.IsNullOrEmpty(paymentType?.Id))
+            {
+                result = await PaymentService.EnsurePaymentTypeAsync(paymentType);
+            }
+
+            return result.Id;
+        }
+
         public async Task<Charge> ChargeAuthorizationAsync(string paymentId, decimal? amount = null)
         {
             throw new NotImplementedException();
@@ -98,42 +121,48 @@ namespace Heidelpay.Payment
             throw new NotImplementedException();
         }
 
-        internal Task<Charge> ChargeAsync(decimal amount, string currency, string typeId, Uri returnUrl = null, string customerId = null)
+        internal async Task<Charge> ChargeAsync(decimal amount, string currency, string typeId, Uri returnUrl = null, string customerId = null)
+        {
+            return await ChargeAsync(new Charge { Amount = amount, Currency = currency, TypeId = typeId, ReturnUrl = returnUrl, CustomerId = customerId });
+        }
+
+        public async Task<Charge> ChargeAsync(decimal amount, string currency, IPaymentType paymentType)
+        {
+            return await ChargeAsync(amount, currency, paymentType, null);
+        }
+
+        public async Task<Charge> ChargeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, Customer customer = null)
+        {
+            return await ChargeAsync(amount, currency, paymentType, null, customer?.Id);
+        }
+
+        public async Task<Charge> ChargeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, string customerId)
+        {
+            var paymentTypeId = await EnsurePaymentTypeIdCreated(paymentType);
+            return await ChargeAsync(new Charge { Amount = amount, Currency = currency, TypeId = paymentTypeId, ReturnUrl = returnUrl, CustomerId = customerId });
+        }
+        
+        public async Task<Charge> ChargeAsync(Charge charge)
+        {
+            return await PaymentService.ChargeAsync(charge);
+        }
+
+        internal async Task<Authorization> AuthorizeAsync(decimal amount, string currency, string typeId, Uri returnUrl = null, string customerId = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Charge> ChargeAsync(decimal amount, string currency, IPaymentType paymentType)
+        public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, IPaymentType paymentType)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Charge> ChargeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, string customerId)
+        public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, string customerId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Charge> ChargeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, Customer customer = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal Task<Authorization> AuthorizeAsync(decimal amount, string currency, string typeId, Uri returnUrl = null, string customerId = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Authorization> AuthorizeAsync(decimal amount, string currency, IPaymentType paymentType)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Authorization> AuthorizeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, string customerId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Authorization> AuthorizeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, Customer customer = null)
+        public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, Customer customer = null)
         {
             throw new NotImplementedException();
         }
