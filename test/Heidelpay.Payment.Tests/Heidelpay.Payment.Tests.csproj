@@ -36,4 +36,8 @@
     <ProjectReference Include="..\..\src\Heidelpay.Payment\Heidelpay.Payment.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Update="Nerdbank.GitVersioning" Version="2.3.138" />
+  </ItemGroup>
+
 </Project>
