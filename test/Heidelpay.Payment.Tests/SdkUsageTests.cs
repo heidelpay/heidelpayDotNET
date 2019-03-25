@@ -45,6 +45,7 @@ namespace Heidelpay.Payment.Tests
             Assert.NotNull(heidelpay);
             Assert.NotNull(heidelpay.RestClient);
             Assert.NotNull(heidelpay.RestClient.Options);
+            Assert.NotNull(heidelpay.PaymentService);
 
             Assert.Equal("SamplekeyFromFile", heidelpay.RestClient.Options.ApiKey);
             Assert.Equal("https://api.heidelpay.com/", heidelpay.RestClient.Options.ApiEndpoint.ToString());
@@ -70,24 +71,6 @@ namespace Heidelpay.Payment.Tests
         }
 
         [Fact]
-        public async Task Heidelpay_Simple_Usage_Test()
-        {
-            var heidelpay = new Heidelpay(new HeidelpayApiOptions
-            {
-                ApiEndpoint = new Uri("https://api.heidelpay.com"),
-                ApiKey = "Samplekey3",
-            });
-
-            Assert.NotNull(heidelpay);
-            Assert.NotNull(heidelpay.RestClient);
-            Assert.NotNull(heidelpay.RestClient.Options);
-
-            Assert.Equal("Samplekey3", heidelpay.RestClient.Options.ApiKey);
-            Assert.Equal("https://api.heidelpay.com/", heidelpay.RestClient.Options.ApiEndpoint.ToString());
-            Assert.Null(heidelpay.RestClient.Options.HttpClientName);
-        }
-
-        [Fact]
         public async Task Heidelpay_Simple_Usage_Test_With_HttpClient()
         {
             var heidelpay = new Heidelpay(new HeidelpayApiOptions
@@ -99,6 +82,7 @@ namespace Heidelpay.Payment.Tests
             Assert.NotNull(heidelpay);
             Assert.NotNull(heidelpay.RestClient);
             Assert.NotNull(heidelpay.RestClient.Options);
+            Assert.NotNull(heidelpay.PaymentService);
 
             Assert.Equal("Samplekey2", heidelpay.RestClient.Options.ApiKey);
             Assert.Equal("https://api.heidelpay.com/", heidelpay.RestClient.Options.ApiEndpoint.ToString());
@@ -123,6 +107,7 @@ namespace Heidelpay.Payment.Tests
             Assert.NotNull(heidelpay);
             Assert.NotNull(heidelpay.RestClient);
             Assert.NotNull(heidelpay.RestClient.Options);
+            Assert.NotNull(heidelpay.PaymentService);
 
             Assert.Equal("Samplekey1", heidelpay.RestClient.Options.ApiKey);
             Assert.Equal("https://api.heidelpay.com/", heidelpay.RestClient.Options.ApiEndpoint.ToString());

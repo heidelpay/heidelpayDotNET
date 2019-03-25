@@ -1,4 +1,5 @@
-﻿using Heidelpay.Payment.Communication;
+﻿using System.Runtime.CompilerServices;
+using Heidelpay.Payment.Communication;
 using Heidelpay.Payment.Interfaces;
 using Heidelpay.Payment.Options;
 using Heidelpay.Payment.PaymentTypes;
@@ -7,6 +8,10 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Heidelpay.Payment.Service;
+using Heidelpay.Payment.Extensions;
+
+[assembly: InternalsVisibleTo("Heidelpay.Payment.Tests")]
 
 /*-
  * #%L
@@ -32,41 +37,51 @@ namespace Heidelpay.Payment
 {
     public sealed class Heidelpay
     {
-        public IRestClient RestClient { get; }
+        internal IRestClient RestClient { get; }
 
-        public Heidelpay(HeidelpayApiOptions options)
-            : this(Microsoft.Extensions.Options.Options.Create(options))
-        {
-        }
-
-        public Heidelpay(IOptions<HeidelpayApiOptions> options)
-        {
-            RestClient = BuildRestClient(new SimpleHttpClientFactory(), options);
-        }
-
+        internal PaymentService PaymentService { get; } 
+       
         public Heidelpay(HeidelpayApiOptions options, HttpClient httpClient)
-        : this(Microsoft.Extensions.Options.Options.Create(options), httpClient)
+            : this(Microsoft.Extensions.Options.Options.Create(options), httpClient)
         {
+            Check.NotNull(options, nameof(options));
+            Check.NotNull(httpClient, nameof(httpClient));
         }
 
         public Heidelpay(IOptions<HeidelpayApiOptions> options, HttpClient httpClient)
+            : this()
         {
-            RestClient = BuildRestClient(new PassthroughHttpClientFactory(httpClient), options);
+            Check.NotNull(options, nameof(options));
+            Check.NotNull(httpClient, nameof(httpClient));
+
+            RestClient = BuildRestClient(new WrappedHttpClientFactory(httpClient), options);
         }
 
         public Heidelpay(HeidelpayApiOptions options, IHttpClientFactory httpClientFactory)
-        : this(Microsoft.Extensions.Options.Options.Create(options), httpClientFactory)
+            : this(Microsoft.Extensions.Options.Options.Create(options), httpClientFactory)
         {
+            Check.NotNull(options, nameof(options));
+            Check.NotNull(httpClientFactory, nameof(httpClientFactory));
         }
 
         public Heidelpay(IOptions<HeidelpayApiOptions> options, IHttpClientFactory httpClientFactory)
+            : this()
         {
+            Check.NotNull(options, nameof(options));
+            Check.NotNull(httpClientFactory, nameof(httpClientFactory));
+
             RestClient = BuildRestClient(httpClientFactory, options);
         }
 
         public Heidelpay(IRestClient restClient)
+            : this()
         {
             RestClient = restClient;
+        }
+
+        private Heidelpay()
+        {
+            PaymentService = new PaymentService(this);
         }
 
         private IRestClient BuildRestClient(IHttpClientFactory httpClientFactory, IOptions<HeidelpayApiOptions> options)
@@ -89,12 +104,17 @@ namespace Heidelpay.Payment
             throw new NotImplementedException();
         }
 
-        public Task<Charge> ChargeAsync(decimal amount, string currency, PaymentType paymentType)
+        public Task<Charge> ChargeAsync(decimal amount, string currency, IPaymentType paymentType)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Charge> ChargeAsync(decimal amount, string currency, PaymentType paymentType, Uri returnUrl, string customerId)
+        public Task<Charge> ChargeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, string customerId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Charge> ChargeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, Customer customer = null)
         {
             throw new NotImplementedException();
         }
@@ -104,12 +124,17 @@ namespace Heidelpay.Payment
             throw new NotImplementedException();
         }
 
-        public Task<Authorization> AuthorizeAsync(decimal amount, string currency, PaymentType paymentType)
+        public Task<Authorization> AuthorizeAsync(decimal amount, string currency, IPaymentType paymentType)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Authorization> AuthorizeAsync(decimal amount, string currency, PaymentType paymentType, Uri returnUrl, string customerId)
+        public Task<Authorization> AuthorizeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, string customerId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Authorization> AuthorizeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, Customer customer = null)
         {
             throw new NotImplementedException();
         }
@@ -124,7 +149,7 @@ namespace Heidelpay.Payment
             throw new NotImplementedException();
         }
 
-        public async Task<PaymentType> FetchPaymentTypeAsync(string paymentTypeId)
+        public async Task<IPaymentType> FetchPaymentTypeAsync(string paymentTypeId)
         {
             throw new NotImplementedException();
         }
