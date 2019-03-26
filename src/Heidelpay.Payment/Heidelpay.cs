@@ -38,7 +38,6 @@ namespace Heidelpay.Payment
     public sealed class Heidelpay
     {
         internal IRestClient RestClient { get; }
-
         internal PaymentService PaymentService { get; } 
        
         public Heidelpay(HeidelpayApiOptions options, HttpClient httpClient)
@@ -84,26 +83,6 @@ namespace Heidelpay.Payment
             PaymentService = new PaymentService(this);
         }
 
-        private IRestClient BuildRestClient(IHttpClientFactory httpClientFactory, IOptions<HeidelpayApiOptions> options)
-        {
-            return new RestClient(httpClientFactory, options, new NullLogger<RestClient>());
-        }
-
-        private async Task<string> EnsurePaymentTypeIdCreated<TPaymentType>(TPaymentType paymentType)
-            where TPaymentType : IPaymentType
-        {
-            if (paymentType == null)
-                return null;
-
-            TPaymentType result = paymentType;
-            if (string.IsNullOrEmpty(paymentType?.Id))
-            {
-                result = await PaymentService.EnsurePaymentTypeAsync(paymentType);
-            }
-
-            return result.Id;
-        }
-
         public async Task<Charge> ChargeAuthorizationAsync(string paymentId, decimal? amount = null)
         {
             throw new NotImplementedException();
@@ -114,7 +93,7 @@ namespace Heidelpay.Payment
             throw new NotImplementedException();
         }
 
-        internal async Task<Charge> ChargeAsync(decimal amount, string currency, string typeId, Uri returnUrl = null, string customerId = null)
+        public async Task<Charge> ChargeAsync(decimal amount, string currency, string typeId, Uri returnUrl = null, string customerId = null)
         {
             return await ChargeAsync(new Charge
             {
@@ -140,7 +119,7 @@ namespace Heidelpay.Payment
 
         public async Task<Charge> ChargeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, string customerId)
         {
-            var paymentTypeId = await EnsurePaymentTypeIdCreated(paymentType);
+            var typeId = await EnsureTypeIdCreated(paymentType);
             return await ChargeAsync(new Charge
             {
                 Amount = amount,
@@ -148,7 +127,7 @@ namespace Heidelpay.Payment
                 ReturnUrl = returnUrl,
                 Resources = new Resources
                 {
-                    TypeId = paymentTypeId,
+                    TypeId = typeId,
                     CustomerId = customerId
                 }
             });
@@ -161,7 +140,7 @@ namespace Heidelpay.Payment
             return await PaymentService.ChargeAsync(charge);
         }
 
-        internal async Task<Authorization> AuthorizeAsync(decimal amount, string currency, string typeId, Uri returnUrl = null, string customerId = null)
+        public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, string typeId, Uri returnUrl = null, string customerId = null)
         {
             return await AuthorizeAsync(new Authorization
             {
@@ -178,16 +157,16 @@ namespace Heidelpay.Payment
 
         public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, IPaymentType paymentType)
         {
-            var paymentTypeId = await EnsurePaymentTypeIdCreated(paymentType);
+            var typeId = await EnsureTypeIdCreated(paymentType);
 
-            return await AuthorizeAsync(amount, currency, typeId: paymentTypeId);
+            return await AuthorizeAsync(amount, currency, typeId: typeId);
         }
 
         public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, string customerId)
         {
-            var paymentTypeId = await EnsurePaymentTypeIdCreated(paymentType);
+            var typeId = await EnsureTypeIdCreated(paymentType);
 
-            return await AuthorizeAsync(amount, currency, typeId: paymentTypeId, returnUrl: returnUrl, customerId: customerId);
+            return await AuthorizeAsync(amount, currency, typeId: typeId, returnUrl: returnUrl, customerId: customerId);
         }
 
         public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, Customer customer = null)
@@ -195,7 +174,7 @@ namespace Heidelpay.Payment
             throw new NotImplementedException();
         }
 
-        internal async Task<Authorization> AuthorizeAsync(Authorization authorization)
+        public async Task<Authorization> AuthorizeAsync(Authorization authorization)
         {
             return await PaymentService.AuthorizeAsync(authorization);
         }
@@ -210,12 +189,11 @@ namespace Heidelpay.Payment
             throw new NotImplementedException();
         }
 
-        public async Task<IPaymentType> FetchPaymentTypeAsync(string paymentTypeId)
+        public async Task<PaymentTypeBase> FetchPaymentTypeAsync(string typeId)
         {
-            throw new NotImplementedException();
+            return await PaymentService.FetchPaymentTypeAsync<PaymentTypeBase>(typeId);
         }
-
-
+        
         public async Task<MetaData> FetchMetaDataAsync(string metaDataId)
         {
             throw new NotImplementedException();
@@ -224,6 +202,37 @@ namespace Heidelpay.Payment
         public async Task<Basket> FetchBasketAsync(string basketId)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<Authorization> FetchAuthorizationAsync(string paymentId)
+        {
+            return await PaymentService.FetchAuthorizationAsync(paymentId);
+        }
+
+        public async Task<TPaymentBase> CreatePaymentTypeAsync<TPaymentBase>(TPaymentBase paymentType)
+             where TPaymentBase : PaymentTypeBase
+        {
+            return await PaymentService.CreatePaymentTypeBaseAsync(paymentType);
+        }
+
+        private IRestClient BuildRestClient(IHttpClientFactory httpClientFactory, IOptions<HeidelpayApiOptions> options)
+        {
+            return new RestClient(httpClientFactory, options, new NullLogger<RestClient>());
+        }
+
+        private async Task<string> EnsureTypeIdCreated<TPaymentType>(TPaymentType paymentType)
+            where TPaymentType : IPaymentType
+        {
+            if (paymentType == null)
+                return null;
+
+            TPaymentType result = paymentType;
+            if (string.IsNullOrEmpty(paymentType?.Id))
+            {
+                result = await PaymentService.EnsurePaymentTypeAsync(paymentType);
+            }
+
+            return result.Id;
         }
     }
 }

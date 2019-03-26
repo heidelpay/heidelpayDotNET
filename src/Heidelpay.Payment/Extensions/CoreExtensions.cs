@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Text;
 
-namespace Heidelpay.Payment.Extensions
+namespace System
 {
     public static class CoreExtensions
     {
@@ -42,6 +42,17 @@ namespace Heidelpay.Payment.Extensions
         public static bool IsNotEmpty(string value)
         {
             return !string.IsNullOrWhiteSpace(value);
+        }
+
+        public static string EnsureTrailingSlash(this string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return value;
+
+            if (value.EndsWith("/"))
+                return value;
+
+            return value + "/";
         }
     }
 }

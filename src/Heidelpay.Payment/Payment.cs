@@ -1,4 +1,5 @@
-﻿using Heidelpay.Payment.Extensions;
+﻿using Heidelpay.Payment.Communication.Internal;
+using Heidelpay.Payment.Extensions;
 using Heidelpay.Payment.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -9,26 +10,32 @@ namespace Heidelpay.Payment
 {
     public class Payment : PaymentBase
     {
-        public State PaymentState { get; set; }
-        public decimal AmountTotal { get; set; }
-        public decimal AmountCharged { get; set; }
-        public decimal AmountCanceled { get; set; }
-        public decimal AmountRemaining { get; set; }
+        public State State { get; set; }
 
         public string Currency { get; set; }
         public string OrderId { get; set; }
-
-        public string CustomerId { get; set; }
-        public string PaymentTypeId { get; set; }
-        public string MetaDataId { get; set; }
-        public string BasketId { get; set; }
 
         public Authorization Authorization { get; set; }
         public IEnumerable<Charge> ChargesList { get; set; } = Enumerable.Empty<Charge>();
         public IEnumerable<Cancel> CancelList { get; set; } = Enumerable.Empty<Cancel>();
 
+        public Resources Resources { get; set; } = new Resources();
+
+        public decimal AmountTotal { get => Amount.Total; }
+        public decimal AmountCharged { get => Amount.Charged; }
+        public decimal AmountCanceled { get => Amount.Canceled; }
+        public decimal AmountRemaining { get => Amount.Remaining; }
+
+        internal Amount Amount { get; set; } = new Amount();
+        internal IEnumerable<Transaction> Transactions { get; set; } = Enumerable.Empty<Transaction>();
+
         public Payment(Heidelpay heidelpay)
             : base(heidelpay)
+        {
+
+        }
+
+        internal Payment()
         {
 
         }
@@ -96,8 +103,8 @@ namespace Heidelpay.Payment
         Customer customer;
         public async Task<Customer> GetCustomerAsync()
         {
-            if (customer == null && IsNotEmpty(CustomerId))
-                customer = await Heidelpay.FetchCustomerAsync(CustomerId);
+            if (customer == null && IsNotEmpty(Resources?.CustomerId))
+                customer = await Heidelpay.FetchCustomerAsync(Resources?.CustomerId);
 
             return customer;
         }
@@ -105,8 +112,8 @@ namespace Heidelpay.Payment
         IPaymentType paymentType;
         public async Task<IPaymentType> GetPaymentTypeAsync()
         {
-            if (paymentType == null && IsNotEmpty(PaymentTypeId))
-                paymentType = await Heidelpay.FetchPaymentTypeAsync(PaymentTypeId);
+            if (paymentType == null && IsNotEmpty(Resources?.TypeId))
+                paymentType = await Heidelpay.FetchPaymentTypeAsync(Resources?.TypeId);
 
             return paymentType;
         }
@@ -114,8 +121,8 @@ namespace Heidelpay.Payment
         MetaData metaData;
         public async Task<MetaData> GetMetaDataAsync()
         {
-            if (metaData == null && IsNotEmpty(MetaDataId))
-                metaData = await Heidelpay.FetchMetaDataAsync(MetaDataId);
+            if (metaData == null && IsNotEmpty(Resources?.MetadataId))
+                metaData = await Heidelpay.FetchMetaDataAsync(Resources?.MetadataId);
 
             return metaData;
         }
@@ -123,8 +130,8 @@ namespace Heidelpay.Payment
         Basket basket;
         public async Task<Basket> GetBasketAsync()
         {
-            if (basket == null && IsNotEmpty(BasketId))
-                basket = await Heidelpay.FetchBasketAsync(BasketId);
+            if (basket == null && IsNotEmpty(Resources?.BasketId))
+                basket = await Heidelpay.FetchBasketAsync(Resources?.BasketId);
 
             return basket;
         }
@@ -136,11 +143,11 @@ namespace Heidelpay.Payment
 
     public enum State
     {
-        Completed,
-        Pending,
-        Canceled,
-        Partly,
-        Payment_review,
-        Chargeback,
+        Pending = 0,
+        Completed = 1,
+        Canceled = 2,
+        Partly = 3,
+        Payment_review = 4,
+        Chargeback = 5,
     }
 }

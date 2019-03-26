@@ -1,7 +1,7 @@
 ﻿using System;
 
-namespace Heidelpay.Payment.Extensions
-{
+namespace System
+{ 
     public static class Check
     {
         public static void NotNull(object obj, string parameterName)

@@ -6,7 +6,9 @@ namespace Heidelpay.Payment.Interfaces
 {
     public interface IRestClient
     {
-        HeidelpayApiOptions Options { get; } 
+        HeidelpayApiOptions Options { get; }
+
+        Task<object> HttpGetAsync(Uri uri, Type type);
 
         Task<T> HttpGetAsync<T>(Uri uri);
 

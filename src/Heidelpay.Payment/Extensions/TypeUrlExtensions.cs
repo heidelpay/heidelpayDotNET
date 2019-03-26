@@ -15,7 +15,9 @@ namespace Heidelpay.Payment.Interface
 
         public static string TypeResourceUrl(this IRestResource value)
         {
-            return value.TypeUrl.Replace(PLACEHOLDER_PAYMENT_ID + "/", string.Empty);
+            return value.TypeUrl
+                .Replace(PLACEHOLDER_PAYMENT_ID + "/", string.Empty)
+                .EnsureTrailingSlash();
         }
     }
 }

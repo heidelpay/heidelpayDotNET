@@ -15,6 +15,11 @@ namespace Heidelpay.Payment
         public Uri Uri { get; }
         public HttpStatusCode StatusCode { get; }
 
+        public PaymentException(string message)
+            : base(message)
+        {
+
+        }
         public PaymentException(Uri uri, HttpStatusCode statusCode, DateTime timestamp, IEnumerable<PaymentError> errors)
             : base(ToMessage(uri, statusCode, errors))
         {

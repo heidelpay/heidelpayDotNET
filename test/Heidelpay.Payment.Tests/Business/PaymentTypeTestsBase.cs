@@ -30,11 +30,6 @@ namespace Heidelpay.Payment.Tests.Business
             return serviceProvider.GetService<Heidelpay>();
         }
 
-        protected async Task<Card> CreatePaymentTypeCard(Heidelpay heidelpay)
-        {
-            return await heidelpay.PaymentService.CreatePaymentTypeBaseAsync(PaymentTypeCard);
-        }
-
         protected Authorization GetAuthorization(string typeId, string customerId = null, string orderId = null, string metadataId = null, string basketId = null) 
         {
             return new Authorization

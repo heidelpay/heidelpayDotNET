@@ -1,4 +1,5 @@
-﻿using Heidelpay.Payment.Extensions;
+﻿using Heidelpay.Payment.Communication.Internal;
+using Heidelpay.Payment.Extensions;
 using Heidelpay.Payment.Interfaces;
 using System;
 
@@ -16,6 +17,8 @@ namespace Heidelpay.Payment
 
         public Uri ResourceUri { get; set; }
         Heidelpay IHeidelpayProvider.Heidelpay { get; set; }
+
+        internal Message Message { get; set; }
 
         public PaymentBase()
         {

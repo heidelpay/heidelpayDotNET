@@ -12,7 +12,7 @@ namespace Heidelpay.Payment.Tests.Business
         public async Task Charge_With_TypeId()
         {
             var heidelpay = BuildHeidelpay();
-            var card = await CreatePaymentTypeCard(heidelpay);
+            var card = await heidelpay.CreatePaymentTypeAsync(PaymentTypeCard);
             
             var charge = await heidelpay.ChargeAsync(decimal.One, "EUR", card, new Uri("https://www.google.at"));
 
