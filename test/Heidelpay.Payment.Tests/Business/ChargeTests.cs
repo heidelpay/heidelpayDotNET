@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Heidelpay.Payment.Tests.Business
 {
-    public class ChargeTest : PaymentTypeTestBase
+    public class ChargeTests : PaymentTypeTestsBase
     {
         [Fact]
         public async Task Charge_With_TypeId()

@@ -37,13 +37,6 @@ namespace Heidelpay.Payment
 {
     public sealed class Heidelpay
     {
-        public Uri ApiEndpointUri
-        {
-            get
-            {
-                return new Uri(RestClient?.Options?.ApiEndpoint, RestClient?.Options?.ApiVersion + "/");
-            }
-        }
         internal IRestClient RestClient { get; }
 
         internal PaymentService PaymentService { get; } 
@@ -170,22 +163,41 @@ namespace Heidelpay.Payment
 
         internal async Task<Authorization> AuthorizeAsync(decimal amount, string currency, string typeId, Uri returnUrl = null, string customerId = null)
         {
-            throw new NotImplementedException();
+            return await AuthorizeAsync(new Authorization
+            {
+                Amount = amount,
+                Currency = currency,
+                Type = typeId,
+                ReturnUrl = returnUrl,
+                Resources = new Resources
+                {
+                    CustomerId = customerId,
+                }
+            });
         }
 
         public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, IPaymentType paymentType)
         {
-            throw new NotImplementedException();
+            var paymentTypeId = await EnsurePaymentTypeIdCreated(paymentType);
+
+            return await AuthorizeAsync(amount, currency, typeId: paymentTypeId);
         }
 
         public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, string customerId)
         {
-            throw new NotImplementedException();
+            var paymentTypeId = await EnsurePaymentTypeIdCreated(paymentType);
+
+            return await AuthorizeAsync(amount, currency, typeId: paymentTypeId, returnUrl: returnUrl, customerId: customerId);
         }
 
         public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, Customer customer = null)
         {
             throw new NotImplementedException();
+        }
+
+        internal async Task<Authorization> AuthorizeAsync(Authorization authorization)
+        {
+            return await PaymentService.AuthorizeAsync(authorization);
         }
 
         public async Task<Cancel> CancelChargeAsync(string paymentId, string chargeId, decimal? amount = null)

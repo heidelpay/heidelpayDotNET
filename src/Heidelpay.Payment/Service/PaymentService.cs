@@ -3,6 +3,7 @@ using Heidelpay.Payment.Interface;
 using Heidelpay.Payment.Interfaces;
 using Heidelpay.Payment.PaymentTypes;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Heidelpay.Payment.Service
@@ -18,41 +19,65 @@ namespace Heidelpay.Payment.Service
 
         public PaymentService(Heidelpay heidelpay)
         {
+            Check.NotNull(heidelpay, nameof(heidelpay));
+
             this.heidelpay = heidelpay;
+        }
+
+        public async Task<Charge> ChargeAsync(Charge charge, Uri url = null)
+        {
+            Check.NotNull(charge, nameof(charge));
+
+            return await ApiPostAsync(charge, url);
+        }
+
+        public async Task<Authorization> AuthorizeAsync(Authorization authorization)
+        {
+            Check.NotNull(authorization, nameof(authorization));
+
+            return await ApiPostAsync(authorization);
         }
 
         internal async Task<TPaymentBase> CreatePaymentTypeBaseAsync<TPaymentBase>(TPaymentBase paymentType)
             where TPaymentBase : PaymentTypeBase
         {
-            return PostProcessResult(await EnsurePaymentTypeAsync(paymentType));
+            return await ApiPostAsync(paymentType);
         }
 
         internal async Task<TPaymentBase> EnsurePaymentTypeAsync<TPaymentBase>(TPaymentBase paymentType)
             where TPaymentBase : IPaymentType
         {
-            return await heidelpay.RestClient.HttpPostAsync<TPaymentBase>(new Uri(heidelpay.ApiEndpointUri, paymentType.TypeResourceUrl()), paymentType);
+            return await ApiPostAsync(paymentType);
         }
 
-        public async Task<Charge> ChargeAsync(Charge charge)
+        private async Task<T> ApiPostAsync<T>(T resource, Uri uri = null)
+           where T : IRestResource
         {
-            Check.NotNull(charge, nameof(charge));
+            var result = await heidelpay.RestClient.HttpPostAsync<T>(uri ?? BuildApiPostEndpointUri(resource), resource);
 
-            return await ChargeAsync(charge, new Uri(heidelpay.ApiEndpointUri, charge.TypeResourceUrl()));
+            if(result is IHeidelpayProvider provider)
+            {
+                provider.Heidelpay = heidelpay;
+            }
+
+            return result;
         }
 
-        public async Task<Charge> ChargeAsync(Charge charge, Uri url)
+        private Uri BuildApiPostEndpointUri(IRestResource resource)
         {
-            Check.NotNull(charge, nameof(charge));
-            Check.NotNull(url, nameof(url));
-
-            return PostProcessResult(await heidelpay.RestClient.HttpPostAsync<Charge>(url, charge));
+            return BuildApiPostEndpointUri(resource.TypeResourceUrl());
         }
 
-        private TPaymentBase PostProcessResult<TPaymentBase>(TPaymentBase payment)
-            where TPaymentBase : IHeidelpayProvider
+        private Uri BuildApiPostEndpointUri(params string[] paths)
         {
-            payment.Heidelpay = heidelpay;
-            return payment;
+            var combinedPaths = new Uri(heidelpay.RestClient?.Options?.ApiEndpoint, heidelpay.RestClient?.Options?.ApiVersion + "/");
+
+            foreach (string extendedPath in paths)
+            {
+                combinedPaths = new Uri(combinedPaths, extendedPath);
+            }
+
+            return combinedPaths;
         }
     }
 }

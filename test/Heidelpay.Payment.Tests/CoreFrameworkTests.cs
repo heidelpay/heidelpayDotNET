@@ -10,6 +10,8 @@ namespace Heidelpay.Payment.Tests
         [Fact]
         public async Task Test_Payment_Checks_IsNotEmpty()
         {
+            // These tests exist in the reference Java code, aren't really required in .NET since it is base functionality
+            // Initially everything is being ported over from Java, so this might get removed at some point
             Assert.False(CoreExtensions.IsNotEmpty(""));
             Assert.False(CoreExtensions.IsNotEmpty("   "));
             Assert.False(CoreExtensions.IsNotEmpty(null));

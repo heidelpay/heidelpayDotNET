@@ -16,7 +16,7 @@ using Xunit;
 
 namespace Heidelpay.Payment.Tests.Communication
 {
-    public class RestClientTest
+    public class RestClientTests
     {
         readonly Uri TestUri = new Uri("https://heidelpay.com");
         const string PrivateKey = "Samplekey";

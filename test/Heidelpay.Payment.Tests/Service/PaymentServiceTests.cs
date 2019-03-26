@@ -22,15 +22,13 @@ namespace Heidelpay.Payment.Tests.Service
         {
             var mockedRestClient = new Mock<IRestClient>();
 
-            var error = JsonConvert.DeserializeObject<RestClientErrorObject>(ErrorJson());
-
             mockedRestClient
                 .SetupGet(x => x.Options)
                 .Returns(new HeidelpayApiOptions { ApiKey = "asd", ApiEndpoint = new Uri("https://heidelpay.com"), ApiVersion = "v1" });
 
             mockedRestClient
                 .Setup(x => x.HttpPostAsync<Charge>(It.IsAny<Uri>(), It.IsAny<Charge>()))
-                .Throws(HttpResponseExtensions.AsException(error, HttpStatusCode.InternalServerError));
+                .Throws(HttpResponseExtensions.AsException(ErrorJsonObject(), HttpStatusCode.InternalServerError));
 
             var heidelpay = new Heidelpay(mockedRestClient.Object);
 
@@ -45,6 +43,11 @@ namespace Heidelpay.Payment.Tests.Service
             Assert.Equal("COR.400.100.101", paymentError.Code);
             Assert.Equal("Address untraceable", paymentError.MerchantMessage);
             Assert.Equal("The provided address is invalid. Please check your input and try agian.", paymentError.CustomerMessage);
+        }
+
+        private static RestClientErrorObject ErrorJsonObject()
+        {
+            return JsonConvert.DeserializeObject<RestClientErrorObject>(ErrorJson());
         }
 
         private static string ErrorJson()
