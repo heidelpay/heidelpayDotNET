@@ -137,11 +137,11 @@ namespace Heidelpay.Payment.Internal.Tests.Communication
         [Fact]
         public async Task BasicHttpDelete()
         {
-            var restClient = BuildMockRestClient(response: ValidResponse);
+            var restClient = BuildMockRestClient(response: "true");
 
             var response = await restClient.HttpDeleteAsync<ValidResponseClass>(TestUri);
 
-            Assert.Equal(JsonConvert.DeserializeObject<ValidResponseClass>(ValidResponse), response);
+            Assert.True(response);
             Assert.Equal(HttpStatusCode.OK, restClient.LoggedResponse.StatusCode);
         }
 
@@ -185,7 +185,7 @@ namespace Heidelpay.Payment.Internal.Tests.Communication
         [Fact]
         public async Task Auth_And_UserAgent_Header_Are_Set_On_Delete_Request()
         {
-            var restClient = BuildMockRestClient(ValidResponse);
+            var restClient = BuildMockRestClient("true");
 
             var _ = await restClient.HttpDeleteAsync<ValidResponseClass>(TestUri);
 

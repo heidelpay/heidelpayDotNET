@@ -115,14 +115,35 @@ namespace Heidelpay.Payment.Internal.Tests.Business.Errors
         {
             var heidelpay = BuildHeidelpay();
 
-            var exception = await Assert.ThrowsAsync<PaymentException>(() => heidelpay.FetchAuthorizationAsync(""));
+            var exception = await Assert.ThrowsAsync<PaymentException>(() => heidelpay.FetchAuthorizationAsync("213"));
 
             Assert.NotNull(exception);
             Assert.Single(exception.PaymentErrorList);
 
             var error = exception.PaymentErrorList.First();
 
-            Assert.Equal("API.310.000.006", error.Code);
+            // This is different from the Java equivalent, as we do not allow to pass in empty strings as paymentId, like the Java SDK does
+            // Therefore we actually call the API with an invalid but not null code and receive a different error code
+            Assert.Equal("API.310.100.003", error.Code);
+            Assert.Equal("Payment not found with key 213", error.MerchantMessage);
+            Assert.Equal("Payment is not found. Please contact us for more information.", error.CustomerMessage);
+        }
+
+        [Fact]
+        public async Task Fetch_Non_Existing_Charge()
+        {
+            var heidelpay = BuildHeidelpay();
+            var card = await heidelpay.CreatePaymentTypeAsync(PaymentTypeCard);
+            var charge = await heidelpay.ChargeAsync(BuildCharge(typeId: card.Id));
+
+            var exception = await Assert.ThrowsAsync<PaymentException>(() => heidelpay.FetchChargeAsync(charge.Resources.PaymentId, "s-chg-200"));
+
+            Assert.NotNull(exception);
+            Assert.Single(exception.PaymentErrorList);
+
+            var error = exception.PaymentErrorList.First();
+
+            Assert.Equal("API.310.100.006", error.Code);
             Assert.Equal("Http GET method is not supported", error.MerchantMessage);
         }
     }

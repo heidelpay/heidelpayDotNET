@@ -2,7 +2,7 @@
 {
     public class Processing
     {
-        public string UniqueId { get; set; }
-        public string ShortId { get; set; }
+        public string UniqueId { get; internal set; }
+        public string ShortId { get; internal set; }
     }
 }

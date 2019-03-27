@@ -3,10 +3,9 @@ using System.Collections.Generic;
 
 namespace Heidelpay.Payment
 {
-    public class MetaData : IRestResource
+    public class MetaData : IRestResource, IHeidelpayProvider
     {
         public string Id { get; set; }
-        public Heidelpay Heidelpay { get; set; }
 
         public IDictionary<string, string> MetadataMap { get; set; } = new Dictionary<string, string>();
 
@@ -24,5 +23,7 @@ namespace Heidelpay.Payment
         }
 
         public string TypeUrl => "metadata";
+
+        Heidelpay IHeidelpayProvider.Heidelpay { get; set; }
     }
 }

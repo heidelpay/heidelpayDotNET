@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -89,8 +90,9 @@ namespace Heidelpay.Payment.Communication
             Check.NotNull(uri, nameof(uri));
 
             var response = await SendRequestAsync(CreateRequest(uri, HttpMethod.Get));
+            var content = await response.Content.ReadAsStringAsync();
 
-            return JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), type);
+            return JsonConvert.DeserializeObject(content, type);
         }
 
         public async Task<T> HttpGetAsync<T>(Uri uri)
@@ -98,8 +100,9 @@ namespace Heidelpay.Payment.Communication
             Check.NotNull(uri, nameof(uri));
 
             var response = await SendRequestAsync(CreateRequest(uri, HttpMethod.Get));
+            var content = await response.Content.ReadAsStringAsync();
 
-            return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
+            return JsonConvert.DeserializeObject<T>(content);
         }
 
         public async Task<T> HttpPostAsync<T>(Uri uri, object data)
@@ -115,15 +118,22 @@ namespace Heidelpay.Payment.Communication
             Check.NotNull(uri, nameof(uri));
 
             var response = await SendRequestAsync(CreateRequest(uri, HttpMethod.Put, data));
-            return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
+            var content = await response.Content.ReadAsStringAsync();
+
+            return JsonConvert.DeserializeObject<T>(content);
         }
 
-        public async Task<T> HttpDeleteAsync<T>(Uri uri)
+        public async Task<bool> HttpDeleteAsync<T>(Uri uri)
         {
             Check.NotNull(uri, nameof(uri));
 
             var response = await SendRequestAsync(CreateRequest(uri, HttpMethod.Delete));
-            return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
+            var content = await response.Content.ReadAsStringAsync();
+
+            Check.ThrowIfTrue(!string.Equals("true", content, StringComparison.InvariantCultureIgnoreCase),
+                $"{typeof(T).Name} '{uri.Segments.Last()}' cannot be deleted");
+
+            return true;
         }
     }
 }

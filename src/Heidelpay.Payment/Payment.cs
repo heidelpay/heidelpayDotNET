@@ -1,5 +1,6 @@
 ﻿using Heidelpay.Payment.Communication.Internal;
 using Heidelpay.Payment.Interfaces;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,17 @@ namespace Heidelpay.Payment
 {
     public class Payment : PaymentBase
     {
-        public State State { get; set; }
+        [JsonProperty(PropertyName = "State")]
+        internal StateValue StateValue { get; set; }
+
+        [JsonIgnore]
+        public State State
+        {
+            get
+            {
+                return (State)StateValue.Id;
+            }
+        }
 
         public string Currency { get; set; }
         public string OrderId { get; set; }
@@ -81,10 +92,9 @@ namespace Heidelpay.Payment
 
         public async Task<Cancel> CancelAsync(decimal? amount = null)
         {
-            if(Authorization == null)
-            {
-                throw new PaymentException("Cancel is only possible for an Authorization", "Payment cancelation not possible", null, null);
-            }
+            Check.ThrowIfTrue(Authorization == null, 
+                merchantMessage: "Cancel is only possible for an Authorization", 
+                customerMessage: "Payment cancelation not possible");
 
             return await Authorization.CancelAsync(amount);
         }
@@ -148,5 +158,11 @@ namespace Heidelpay.Payment
         Partly = 3,
         Payment_review = 4,
         Chargeback = 5,
+    }
+
+    internal class StateValue
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

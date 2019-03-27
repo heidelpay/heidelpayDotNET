@@ -44,6 +44,24 @@ namespace Heidelpay.Payment.Internal.Tests.Business
             };
 	    }
 
+        protected Charge BuildCharge(string typeId = null, string customerId = null, string orderId = null, string metadataId = null, string basketId = null)
+        {
+            return new Charge
+            {
+                Amount = decimal.One,
+                Currency = "EUR",
+                ReturnUrl = new Uri("https://www.google.at"),
+                OrderId = orderId,
+                Resources = new Resources
+                {
+                    TypeId = typeId,
+                    CustomerId = customerId,
+                    MetadataId = metadataId,
+                    BasketId = basketId,
+                }
+            };
+        }
+
         protected Card PaymentTypeCard { get; } = new Card { Number = "4444333322221111", ExpiryDate = "03/20", CVC = "123" };
     }
 }
