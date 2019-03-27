@@ -1,20 +1,17 @@
 using Heidelpay.Payment.Communication;
-using Heidelpay.Payment.Extensions;
 using Heidelpay.Payment.Options;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Heidelpay.Payment.Tests.Communication
+namespace Heidelpay.Payment.Internal.Tests.Communication
 {
     public class RestClientTests
     {

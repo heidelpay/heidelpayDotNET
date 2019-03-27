@@ -1,5 +1,4 @@
 ﻿using Heidelpay.Payment.Communication;
-using Heidelpay.Payment.Extensions;
 using Heidelpay.Payment.Interfaces;
 using Heidelpay.Payment.Options;
 using Heidelpay.Payment.PaymentTypes;
@@ -8,10 +7,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using System;
 using System.Net.Http;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-
-[assembly: InternalsVisibleTo("Heidelpay.Payment.Tests")]
 
 /*-
  * #%L

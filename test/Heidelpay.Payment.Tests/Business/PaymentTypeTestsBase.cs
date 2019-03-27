@@ -1,13 +1,9 @@
 ﻿using Heidelpay.Payment.Extensions;
-using Heidelpay.Payment.Options;
 using Heidelpay.Payment.PaymentTypes;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Heidelpay.Payment.Tests.Business
+namespace Heidelpay.Payment.Internal.Tests.Business
 {
     public abstract class PaymentTypeTestsBase
     {

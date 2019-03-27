@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Heidelpay.Payment.Communication.Internal
+﻿namespace Heidelpay.Payment.Communication.Internal
 {
     internal class Amount
     {

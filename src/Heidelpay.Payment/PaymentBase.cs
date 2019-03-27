@@ -1,5 +1,4 @@
 ﻿using Heidelpay.Payment.Communication.Internal;
-using Heidelpay.Payment.Extensions;
 using Heidelpay.Payment.Interfaces;
 using System;
 

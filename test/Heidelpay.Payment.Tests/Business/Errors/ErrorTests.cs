@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Heidelpay.Payment.Tests.Business.Errors
+namespace Heidelpay.Payment.Internal.Tests.Business.Errors
 {
     public class ErrorTests : PaymentTypeTestsBase
     {

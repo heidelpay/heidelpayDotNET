@@ -1,9 +1,8 @@
-using Heidelpay.Payment.Extensions;
 using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Heidelpay.Payment.Tests
+namespace Heidelpay.Payment.Internal.Tests
 {
     public class CoreFrameworkTests
     {

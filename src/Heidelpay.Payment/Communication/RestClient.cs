@@ -1,5 +1,4 @@
-﻿using Heidelpay.Payment.Extensions;
-using Heidelpay.Payment.Interfaces;
+﻿using Heidelpay.Payment.Interfaces;
 using Heidelpay.Payment.Options;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;

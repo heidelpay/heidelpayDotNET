@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Heidelpay.Payment.Tests.Business
+namespace Heidelpay.Payment.Internal.Tests.Business
 {
     public class ChargeTests : PaymentTypeTestsBase
     {

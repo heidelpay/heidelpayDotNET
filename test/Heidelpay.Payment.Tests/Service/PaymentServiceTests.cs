@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Heidelpay.Payment.Tests.Service
+namespace Heidelpay.Payment.Internal.Tests.Service
 {
     public class PaymentServiceTests
     {

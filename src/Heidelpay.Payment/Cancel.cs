@@ -1,6 +1,4 @@
-﻿using Heidelpay.Payment.Communication.Internal;
-
-namespace Heidelpay.Payment
+﻿namespace Heidelpay.Payment
 {
     public class Cancel : PaymentBase
     {

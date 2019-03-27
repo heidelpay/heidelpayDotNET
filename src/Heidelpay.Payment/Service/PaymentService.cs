@@ -1,9 +1,7 @@
 ﻿using Heidelpay.Payment.Communication.Internal;
-using Heidelpay.Payment.Extensions;
 using Heidelpay.Payment.Interface;
 using Heidelpay.Payment.Interfaces;
 using Heidelpay.Payment.PaymentTypes;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
