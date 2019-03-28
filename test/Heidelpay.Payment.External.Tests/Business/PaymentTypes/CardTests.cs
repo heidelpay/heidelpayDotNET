@@ -1,7 +1,5 @@
 ﻿using Heidelpay.Payment.PaymentTypes;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -10,24 +8,22 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
     public class CardTests : PaymentTypeTestsBase
     {
         [Fact]
-        public async Task Create_Card_With_Merchant_Not_PCIDSS_Compliant()
+        public async Task Create_PaymentType()
         {
             var result = await BuildHeidelpay().CreatePaymentTypeAsync(TestCard);
-            Assert.NotNull(result);
-            Assert.NotNull(result.Id);
+            Assert.NotNull(result?.Id);
         }
 
         [Fact]
-        public async Task Authorize_Card_Type()
+        public async Task Authorize_PaymentType()
         {
             var card = await BuildHeidelpay().CreatePaymentTypeAsync(TestCard);
             var authorization = await card.AuthorizeAsync(decimal.One, "EUR", new Uri("https://www.meinShop.de"));
-            Assert.NotNull(authorization);
-            Assert.NotNull(authorization.Id);
+            Assert.NotNull(authorization?.Id);
         }
 
         [Fact]
-        public async Task Authorize_And_Payment_Card_Type()
+        public async Task Authorize_And_Payment_PaymentType()
         {
             var card = await BuildHeidelpay().CreatePaymentTypeAsync(TestCard);
             var authorization = await card.AuthorizeAsync(decimal.One, "EUR", new Uri("https://www.meinShop.de"));
@@ -37,7 +33,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         }
 
         [Fact]
-        public async Task Charge_Card_Type()
+        public async Task Charge_PaymentType()
         {
             var card = await BuildHeidelpay().CreatePaymentTypeAsync(TestCard);
             var charge = await card.ChargeAsync(decimal.One, "EUR", new Uri("https://www.meinShop.de"));
@@ -48,7 +44,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         }
 
         [Fact]
-        public async Task Fetch_Card_Type()
+        public async Task Fetch_PaymentType()
         {
             var createdCard = await BuildHeidelpay().CreatePaymentTypeAsync(TestCard);
 
@@ -57,7 +53,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             Assert.Equal("03/2020", createdCard.ExpiryDate);
             Assert.Equal("444433******1111", createdCard.Number);
 
-            var fetchedCard = await BuildHeidelpay().FetchPaymentTypeAsync(createdCard.Id) as Card;
+            var fetchedCard = await BuildHeidelpay().FetchPaymentTypeAsync<Card>(createdCard.Id);
 
             Assert.NotNull(fetchedCard?.Id);
             Assert.NotNull(fetchedCard.CVC);

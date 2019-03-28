@@ -9,7 +9,7 @@ namespace Heidelpay.Payment.PaymentTypes
 
         }
 
-        public Giropay(Heidelpay heidelpay)
+        internal Giropay(Heidelpay heidelpay)
             : base(heidelpay)
         {
 

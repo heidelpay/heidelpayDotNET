@@ -1,5 +1,6 @@
 ﻿using Heidelpay.Payment.Communication.Internal;
 using Heidelpay.Payment.Interfaces;
+using Heidelpay.Payment.PaymentTypes;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -42,7 +43,7 @@ namespace Heidelpay.Payment
         [JsonProperty]
         internal IEnumerable<Transaction> Transactions { get; set; } = Enumerable.Empty<Transaction>();
 
-        public Payment(Heidelpay heidelpay)
+        internal Payment(Heidelpay heidelpay)
             : base(heidelpay)
         {
 
@@ -125,7 +126,7 @@ namespace Heidelpay.Payment
         public async Task<IPaymentType> GetPaymentTypeAsync()
         {
             if (paymentType == null && IsNotEmpty(Resources?.TypeId))
-                paymentType = await Heidelpay.FetchPaymentTypeAsync(Resources?.TypeId);
+                paymentType = await Heidelpay.FetchPaymentTypeAsync<PaymentTypeBase>(Resources?.TypeId);
 
             return paymentType;
         }

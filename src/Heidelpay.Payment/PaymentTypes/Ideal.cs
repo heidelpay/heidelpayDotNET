@@ -11,7 +11,7 @@ namespace Heidelpay.Payment.PaymentTypes
 
         }
 
-        public Ideal(Heidelpay heidelpay)
+        internal Ideal(Heidelpay heidelpay)
             : base(heidelpay)
         {
 

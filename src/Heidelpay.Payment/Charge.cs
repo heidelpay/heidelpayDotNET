@@ -54,7 +54,7 @@ namespace Heidelpay.Payment
         {
         }
 
-        public Charge(Heidelpay heidelpay)
+        internal Charge(Heidelpay heidelpay)
             : base(heidelpay)
         {
         }

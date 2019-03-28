@@ -260,11 +260,12 @@ namespace Heidelpay.Payment
             throw new NotImplementedException();
         }
 
-        public async Task<PaymentTypeBase> FetchPaymentTypeAsync(string typeId)
+        public async Task<TPaymentType> FetchPaymentTypeAsync<TPaymentType>(string typeId)
+            where TPaymentType : PaymentTypeBase
         {
             Check.NotNullOrEmpty(typeId, nameof(typeId));
 
-            return await PaymentService.FetchPaymentTypeAsync<PaymentTypeBase>(typeId);
+            return await PaymentService.FetchPaymentTypeAsync<TPaymentType>(typeId);
         }
         
         public async Task<MetaData> FetchMetaDataAsync(string metaDataId)
@@ -294,6 +295,11 @@ namespace Heidelpay.Payment
             Check.NotNull(paymentType, nameof(paymentType));
 
             return await PaymentService.CreatePaymentTypeAsync(paymentType);
+        }
+
+        public async Task<Shipment> ShipmentAsync(Authorization auth)
+        {
+            throw new NotImplementedException();
         }
 
         private IRestClient BuildRestClient(IHttpClientFactory httpClientFactory, IOptions<HeidelpayApiOptions> options)

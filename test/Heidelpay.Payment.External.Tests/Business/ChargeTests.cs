@@ -14,8 +14,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             
             var charge = await heidelpay.ChargeAsync(decimal.One, "EUR", card, new Uri("https://www.google.at"));
 
-            Assert.NotNull(charge);
-            Assert.NotNull(charge.Id);
+            Assert.NotNull(charge?.Id);
         }
 
         [Fact]
@@ -26,8 +25,7 @@ namespace Heidelpay.Payment.External.Tests.Business
 
             var charge = await heidelpay.ChargeAsync(decimal.One, "EUR", card, new Uri("https://www.google.at"));
 
-            Assert.NotNull(charge);
-            Assert.NotNull(charge.Id);
+            Assert.NotNull(charge?.Id);
         }
     }
 }

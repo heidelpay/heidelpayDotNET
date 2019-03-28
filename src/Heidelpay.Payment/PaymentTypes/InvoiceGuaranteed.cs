@@ -13,7 +13,7 @@ namespace Heidelpay.Payment.PaymentTypes
 
         }
 
-        public InvoiceGuaranteed(Heidelpay heidelpay)
+        internal InvoiceGuaranteed(Heidelpay heidelpay)
             : base(heidelpay)
         {
 

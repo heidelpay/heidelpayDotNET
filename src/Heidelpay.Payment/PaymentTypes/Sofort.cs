@@ -13,7 +13,7 @@ namespace Heidelpay.Payment.PaymentTypes
 
         }
 
-        public Sofort(Heidelpay heidelpay)
+        internal Sofort(Heidelpay heidelpay)
             : base(heidelpay)
         {
 

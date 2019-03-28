@@ -18,7 +18,7 @@ namespace Heidelpay.Payment
         {
         }
 
-        public Basket(Heidelpay heidelpay)
+        internal Basket(Heidelpay heidelpay)
             : base(heidelpay)
         {
         }

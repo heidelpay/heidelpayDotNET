@@ -9,7 +9,7 @@
         {
         }
 
-        public Cancel(Heidelpay heidelpay)
+        internal Cancel(Heidelpay heidelpay)
             : base(heidelpay)
         {
         }

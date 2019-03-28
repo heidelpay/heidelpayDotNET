@@ -27,7 +27,7 @@ namespace Heidelpay.Payment
         {
         }
 
-        public PaymentBase(Heidelpay heidelpay)
+        internal PaymentBase(Heidelpay heidelpay)
         {
             ((IHeidelpayProvider)this).Heidelpay = heidelpay;
         }

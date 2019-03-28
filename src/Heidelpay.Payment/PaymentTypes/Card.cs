@@ -14,7 +14,7 @@ namespace Heidelpay.Payment.PaymentTypes
 
         }
 
-        public Card(Heidelpay heidelpay)
+        internal Card(Heidelpay heidelpay)
             : base(heidelpay)
         {
 

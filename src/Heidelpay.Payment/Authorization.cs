@@ -22,7 +22,7 @@ namespace Heidelpay.Payment
         {
         }
 
-        public Authorization(Heidelpay heidelpay)
+        internal Authorization(Heidelpay heidelpay)
             : base(heidelpay)
         {
         }

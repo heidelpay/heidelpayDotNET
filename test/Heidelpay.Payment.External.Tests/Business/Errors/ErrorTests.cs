@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Heidelpay.Payment.PaymentTypes;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -63,7 +64,7 @@ namespace Heidelpay.Payment.External.Tests.Business.Errors
 
             var heidelpay = BuildHeidelpay("s-priv-2a1095rIVXy4IrNFXG6yQiguSAqNjciC");
             var exception = await Assert.ThrowsAsync<PaymentException>(
-                () => heidelpay.FetchPaymentTypeAsync(card.Id));
+                () => heidelpay.FetchPaymentTypeAsync<PaymentTypeBase>(card.Id));
 
             Assert.NotNull(exception);
             Assert.Single(exception.PaymentErrorList);

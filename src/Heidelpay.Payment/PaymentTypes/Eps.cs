@@ -11,7 +11,7 @@ namespace Heidelpay.Payment.PaymentTypes
 
         }
 
-        public Eps(Heidelpay heidelpay)
+        internal Eps(Heidelpay heidelpay)
             : base(heidelpay)
         {
 
