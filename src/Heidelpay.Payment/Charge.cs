@@ -14,6 +14,8 @@ namespace Heidelpay.Payment
         public Uri ReturnUrl { get; set; }
         public Uri RedirectUrl { get; set; }
         public string OrderId { get; set; }
+        public string InvoiceId { get; set; }
+        public bool? Card3ds { get; set; }
 
         [JsonProperty]
         internal bool IsSuccess { get; set; }

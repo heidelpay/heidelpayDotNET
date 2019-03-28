@@ -20,7 +20,7 @@ namespace Heidelpay.Payment
         [JsonProperty]
         internal Message Message { get; set; }
 
-        [JsonProperty(propertyName: "type")]
+        [JsonProperty(PropertyName = "type")]
         internal string TransactionType { get; set; }
 
         public PaymentBase()

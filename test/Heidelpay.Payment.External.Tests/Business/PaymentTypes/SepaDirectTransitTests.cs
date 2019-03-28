@@ -49,7 +49,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             Assert.NotNull(actual);
             Assert.Equal(expected.Bic, actual.Bic);
             Assert.Equal(expected.Holder, actual.Holder);
-            Assert.Equal("DE8937040044******3000", actual.Iban);
+            Assert.Equal("DE8937************3000", actual.Iban);
         }
     }
 }

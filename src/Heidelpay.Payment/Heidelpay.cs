@@ -172,7 +172,33 @@ namespace Heidelpay.Payment
                 }
             });
         }
-        
+
+        public async Task<Charge> ChargeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, Customer customer, Basket basket, string invoiceId = null)
+        {
+            Check.NotNullOrEmpty(currency, nameof(currency));
+            Check.NotNull(paymentType, nameof(paymentType));
+            Check.NotNull(returnUrl, nameof(returnUrl));
+            Check.NotNull(basket, nameof(basket));
+
+            var typeId = await EnsureRestResourceCreatedAsync(paymentType);
+            var customerId = await EnsureRestResourceCreatedAsync(customer);
+            var basketId = await EnsureRestResourceCreatedAsync(basket);
+
+            return await ChargeAsync(new Charge
+            {
+                Amount = amount,
+                Currency = currency,
+                ReturnUrl = returnUrl,
+                InvoiceId = invoiceId,
+                Resources = new Resources
+                {
+                    TypeId = typeId,
+                    CustomerId = customerId,
+                    BasketId = basketId,
+                }
+            });
+        }
+
         public async Task<Charge> ChargeAsync(Charge charge)
         {
             Check.NotNull(charge, nameof(charge));

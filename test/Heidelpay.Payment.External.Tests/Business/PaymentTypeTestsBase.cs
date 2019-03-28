@@ -87,7 +87,7 @@ namespace Heidelpay.Payment.External.Tests.Business
 
         protected Customer GetMaximumCustomerSameAddress(String customerId)
         {
-            TryParseDateTime("03.10.1974", out DateTime dt);
+            TryParseDateTime("1974-03-10", out DateTime dt);
 
             return new Customer("Max", "Musterperson")
             {

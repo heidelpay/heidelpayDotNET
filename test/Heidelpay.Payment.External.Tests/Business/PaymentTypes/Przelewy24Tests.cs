@@ -18,7 +18,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         public async Task Charge_PaymentType()
         {
             var result = await BuildHeidelpay().CreatePaymentTypeAsync(new Przelewy24());
-            var charge = await BuildHeidelpay().ChargeAsync(decimal.One, "EUR", result, new Uri("https://www.google.at"));
+            var charge = await BuildHeidelpay().ChargeAsync(decimal.One, "PLN", result, new Uri("https://www.google.at"));
             Assert.NotNull(charge?.Id);
             Assert.NotNull(charge?.RedirectUrl);
         }
