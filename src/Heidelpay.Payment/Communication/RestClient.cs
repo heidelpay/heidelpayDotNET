@@ -33,57 +33,52 @@ namespace Heidelpay.Payment.Communication
             this.logger = logger;
         }
 
-        public async Task<object> HttpGetAsync(Uri uri, Type type)
+        public async Task<object> HttpGetAsync(Uri uri, Type responseType)
         {
-            Check.NotNull(uri, nameof(uri));
-
-            var response = await SendRequestAsync(CreateRequest(uri, HttpMethod.Get));
-            var content = await response.Content.ReadAsStringAsync();
-
-            return JsonConvert.DeserializeObject(content, type);
+            return JsonConvert.DeserializeObject(await HttpExecute(HttpMethod.Get, uri), responseType); 
         }
 
         public async Task<T> HttpGetAsync<T>(Uri uri)
+            where T : class
         {
-            Check.NotNull(uri, nameof(uri));
-
-            var response = await SendRequestAsync(CreateRequest(uri, HttpMethod.Get));
-            var content = await response.Content.ReadAsStringAsync();
-
-            return JsonConvert.DeserializeObject<T>(content);
+            return JsonConvert.DeserializeObject<T>(await HttpExecute(HttpMethod.Get, uri));
         }
 
         public async Task<T> HttpPostAsync<T>(Uri uri, object data)
+            where T : class
         {
-            Check.NotNull(uri, nameof(uri));
+            return JsonConvert.DeserializeObject<T>(await HttpExecute(HttpMethod.Post, uri, data));
+        }
 
-            var response = await SendRequestAsync(CreateRequest(uri, HttpMethod.Post, data));
-            var content = await response.Content.ReadAsStringAsync();
-
-            return JsonConvert.DeserializeObject<T>(content);
+        public async Task<object> HttpPostAsync(Uri uri, object data, Type responseType)
+        {
+            return JsonConvert.DeserializeObject(await HttpExecute(HttpMethod.Post, uri, data), responseType);
         }
 
         public async Task<T> HttpPutAsync<T>(Uri uri, object data)
+            where T : class
         {
-            Check.NotNull(uri, nameof(uri));
-
-            var response = await SendRequestAsync(CreateRequest(uri, HttpMethod.Put, data));
-            var content = await response.Content.ReadAsStringAsync();
-
-            return JsonConvert.DeserializeObject<T>(content);
+            return JsonConvert.DeserializeObject<T>(await HttpExecute(HttpMethod.Put, uri, data));
         }
 
         public async Task<bool> HttpDeleteAsync<T>(Uri uri)
+            where T : class
+        {
+            var content = await HttpExecute(HttpMethod.Delete, uri);
+
+            Check.ThrowIfTrue(!bool.TryParse(content, out bool bl) || !bl, $"{typeof(T).Name} '{uri.Segments.Last()}' cannot be deleted");
+
+            return true;
+        }
+
+        private async Task<string> HttpExecute(HttpMethod method, Uri uri, object data = null)
         {
             Check.NotNull(uri, nameof(uri));
 
-            var response = await SendRequestAsync(CreateRequest(uri, HttpMethod.Delete));
+            var response = await SendRequestAsync(CreateRequest(uri, method, data));
             var content = await response.Content.ReadAsStringAsync();
 
-            Check.ThrowIfTrue(!string.Equals("true", content, StringComparison.InvariantCultureIgnoreCase),
-                $"{typeof(T).Name} '{uri.Segments.Last()}' cannot be deleted");
-
-            return true;
+            return content; 
         }
 
         protected virtual void LogRequest(HttpRequestMessage request)
@@ -124,8 +119,6 @@ namespace Heidelpay.Payment.Communication
 
             return response;
         }
-
-        
 
         private HttpRequestMessage CreateRequest(Uri uri, HttpMethod method, object content = null)
         {

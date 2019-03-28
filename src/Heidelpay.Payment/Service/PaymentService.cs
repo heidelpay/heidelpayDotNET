@@ -137,9 +137,10 @@ namespace Heidelpay.Payment.Service
         }
 
         public async Task<string> EnsureRestResourceIdAsync<T>(T resource)
-            where T : IRestResource
+            where T : class, IRestResource
         {
-            return (await ApiPostAsync(resource, false))?.Id;
+            var response = (await heidelpay.RestClient.HttpPostAsync(BuildApiEndpointUri(resource), resource, typeof(IdResponse))) as IdResponse;
+            return response?.Id;
         }
 
         private async Task<IEnumerable<Cancel>> FetchCancelListAsync(Payment payment)
@@ -190,14 +191,14 @@ namespace Heidelpay.Payment.Service
         }
 
         private async Task<T> ApiGetAsync<T>(T resource)
-             where T : IRestResource
+             where T : class, IRestResource
         {
             var result = await heidelpay.RestClient.HttpGetAsync<T>(BuildApiEndpointUri(resource, resource.Id));
             return PostProcessApiResource(result);
         }
 
         private async Task<T> ApiPostAsync<T>(T resource, bool getAfterPost = true)
-           where T : IRestResource
+           where T : class, IRestResource
         {
             var posted = await heidelpay.RestClient.HttpPostAsync<T>(BuildApiEndpointUri(resource), resource);
             return getAfterPost 
@@ -205,14 +206,8 @@ namespace Heidelpay.Payment.Service
                 : PostProcessApiResource(posted);
         }
 
-        private async Task<T> ApiPutAsync<T>(T resource, bool getAfterPut = true)
-           where T : IRestResource
-        {
-            return await ApiPutAsync<T>(resource.Id, resource, getAfterPut);
-        }
-
         private async Task<T> ApiPutAsync<T>(string id, T resource, bool getAfterPut = false)
-           where T : IRestResource
+           where T : class, IRestResource
         {
             var putted = await heidelpay.RestClient.HttpPutAsync<T>(BuildApiEndpointUri(resource, id), resource);
             return getAfterPut
@@ -221,7 +216,7 @@ namespace Heidelpay.Payment.Service
         }
 
         private async Task ApiDeleteAsync<T>(string id)
-           where T : IRestResource
+           where T : class, IRestResource
         {
             await heidelpay.RestClient.HttpDeleteAsync<T>(BuildApiEndpointUri(default(T), id));
         }
@@ -280,5 +275,11 @@ namespace Heidelpay.Payment.Service
 
             return resource;
         }
+    }
+    internal class IdResponse : IRestResource
+    {
+        public string TypeUrl => null;
+
+        public string Id { get; set; }
     }
 }

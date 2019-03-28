@@ -8,14 +8,13 @@ namespace Heidelpay.Payment.Interfaces
     {
         HeidelpayApiOptions Options { get; }
 
-        Task<object> HttpGetAsync(Uri uri, Type type);
+        Task<object> HttpGetAsync(Uri uri, Type responseType);
+        Task<object> HttpPostAsync(Uri uri, object content, Type responseType);
 
-        Task<T> HttpGetAsync<T>(Uri uri);
+        Task<T> HttpGetAsync<T>(Uri uri) where T : class;
+        Task<T> HttpPostAsync<T>(Uri uri, object content) where T : class;
+        Task<T> HttpPutAsync<T>(Uri uri, object content) where T : class;
 
-        Task<T> HttpPostAsync<T>(Uri uri, object content);
-
-        Task<T> HttpPutAsync<T>(Uri uri, object content);
-
-        Task<bool> HttpDeleteAsync<T>(Uri uri);
+        Task<bool> HttpDeleteAsync<T>(Uri uri) where T : class;
     }
 }

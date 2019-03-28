@@ -17,5 +17,17 @@ namespace Heidelpay.Payment.External.Tests.Business
             Assert.NotNull(charge);
             Assert.NotNull(charge.Id);
         }
+
+        [Fact]
+        public async Task Charge_With_TypeId_Ensure_Payment_Type()
+        {
+            var heidelpay = BuildHeidelpay();
+            var card = PaymentTypeCard;
+
+            var charge = await heidelpay.ChargeAsync(decimal.One, "EUR", card, new Uri("https://www.google.at"));
+
+            Assert.NotNull(charge);
+            Assert.NotNull(charge.Id);
+        }
     }
 }

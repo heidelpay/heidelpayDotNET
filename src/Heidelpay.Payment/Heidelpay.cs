@@ -147,9 +147,9 @@ namespace Heidelpay.Payment
             Check.NotNull(paymentType, nameof(paymentType));
             Check.NotNull(returnUrl, nameof(returnUrl));
 
-            var customerId = EnsureRestResourceCreatedAsync(customer);
+            var customerId = await EnsureRestResourceCreatedAsync(customer);
 
-            return await ChargeAsync(amount, currency, paymentType, returnUrl, customer?.Id);
+            return await ChargeAsync(amount, currency, paymentType,  returnUrl, customerId);
         }
 
         public async Task<Charge> ChargeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, string customerId)
