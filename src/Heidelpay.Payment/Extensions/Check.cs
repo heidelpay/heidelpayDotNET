@@ -3,7 +3,7 @@ using System;
 
 namespace System
 { 
-    public static class Check
+    internal static class Check
     {
         public static void NotNull(object obj, string parameterName)
         {

@@ -3,7 +3,7 @@ using System;
 
 namespace Heidelpay.Payment.Interface
 {
-    public static class TypeUrlExtensions
+    internal static class TypeUrlExtensions
     {
         private const string PLACEHOLDER_CHARGE_ID = "<chargeId>";
 

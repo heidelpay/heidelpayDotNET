@@ -3,7 +3,7 @@ using System.Text;
 
 namespace System
 {
-    public static class CoreExtensions
+    internal static class CoreExtensions
     {
         public static string EncodeToBase64(this string plainText)
         {

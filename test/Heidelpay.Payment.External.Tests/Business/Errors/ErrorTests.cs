@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -163,7 +164,36 @@ namespace Heidelpay.Payment.External.Tests.Business.Errors
         [Fact]
         public async Task Create_Invalid_Customer()
         {
+            TryParseDateTime("1944-01-01", out DateTime dt);
+            var customer = new Customer(
+                "This is a very long first name because someone put the wrong content into the field",
+                "This is a very long last name because someone put the wrong content into the field")
+            {
+                BirthDate = dt,
+                Email = "max",
+                Mobile = "xxx",
+            };
 
+            var heidelpay = BuildHeidelpay();
+
+            var exception = await Assert.ThrowsAsync<PaymentException>(() => heidelpay.CreateCustomerAsync(customer));
+
+            Assert.NotNull(exception);
+            Assert.Equal(4, exception.PaymentErrorList.Count());
+
+            var ex1 = exception.PaymentErrorList.FirstOrDefault(x => x.Code == "API.410.200.005");
+            var ex2 = exception.PaymentErrorList.FirstOrDefault(x => x.Code == "API.410.200.002");
+            var ex3 = exception.PaymentErrorList.FirstOrDefault(x => x.Code == "API.410.200.015");
+            var ex4 = exception.PaymentErrorList.FirstOrDefault(x => x.Code == "API.410.200.013");
+
+            Assert.NotNull(ex1);
+            Assert.Equal("First name This is a very long first name because someone put the wrong content into the field has invalid length", ex1.MerchantMessage);
+            Assert.NotNull(ex2);
+            Assert.Equal("Last name This is a very long last name because someone put the wrong content into the field has invalid length", ex2.MerchantMessage);
+            Assert.NotNull(ex3);
+            Assert.Equal("Phone xxx has invalid format", ex3.MerchantMessage);
+            Assert.NotNull(ex4);
+            Assert.Equal("Email max has invalid format", ex4.MerchantMessage);
         }
     }
 }

@@ -3,6 +3,7 @@ using Heidelpay.Payment.Extensions;
 using Heidelpay.Payment.PaymentTypes;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace Heidelpay.Payment.External.Tests.Business
@@ -81,14 +82,14 @@ namespace Heidelpay.Payment.External.Tests.Business
 
         protected Customer GetMinimumCustomer()
         {
-            return new Customer("Rene", "Felder");
+            return new Customer("Max", "Musterperson");
         }
 
         protected Customer GetMaximumCustomerSameAddress(String customerId)
         {
-            CoreExtensions.TryParseDateTime("03.10.1974", out DateTime dt);
+            TryParseDateTime("03.10.1974", out DateTime dt);
 
-            return new Customer("Rene", "Felder")
+            return new Customer("Max", "Musterperson")
             {
                 CustomerId = customerId,
                 Salutation = Salutation.Mr,
@@ -101,9 +102,9 @@ namespace Heidelpay.Payment.External.Tests.Business
         }
         protected Customer GetMaximumCustomer(String customerId)
         {
-            CoreExtensions.TryParseDateTime("1974-03-10", out DateTime dt);
+            TryParseDateTime("1974-03-10", out DateTime dt);
 
-            return new Customer("Rene", "Felder")
+            return new Customer("Max", "Musterperson")
             {
                 CustomerId = customerId,
                 Salutation = Salutation.Mr,
@@ -118,5 +119,25 @@ namespace Heidelpay.Payment.External.Tests.Business
         protected MetaData TestMetaData { get; } = new MetaData { ["invoice-nr"] = "Rg-2018-11-1", ["shop-id"] = "4711", ["delivery-date"] = "24.12.2018", ["reason"] = "X-mas present" };
         protected Address TestAddress { get; } = new Address { Name = "Mozart", Street = "Grüngasse 16", City = "Vienna", State = "Vienna", Zip = "1010", Country = "AT" };
         protected Card PaymentTypeCard { get; } = new Card { Number = "4444333322221111", ExpiryDate = "03/20", CVC = "123" };
+
+        static readonly string[] AllowedDateTimeFormats = new[]
+        {
+            DateTimeFormat,
+            DateOnlyFormat,
+        };
+
+        public const string DateOnlyFormat = "yyyy-MM-dd";
+        public const string DateTimeFormat = "yyyy-MM-dd HH:mm:ss";
+
+        public static bool TryParseDateTime(string value, out DateTime result)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                result = default;
+                return false;
+            }
+
+            return DateTime.TryParseExact(value, AllowedDateTimeFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out result);
+        }
     }
 }

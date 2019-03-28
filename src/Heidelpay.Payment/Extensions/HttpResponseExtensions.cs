@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace System.Net.Http
 {
-    public static class HttpResponseExtensions
+    internal static class HttpResponseExtensions
     {
         public static readonly HttpStatusCode[] SuccessStatusCodes = new[]
         {

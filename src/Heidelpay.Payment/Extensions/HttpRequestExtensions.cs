@@ -3,7 +3,7 @@ using Heidelpay.Payment.Communication;
 
 namespace System.Net.Http
 {
-    public static class HttpRequestMessageExtensions
+    internal static class HttpRequestMessageExtensions
     {
         public static void AddAuthentication(this HttpRequestMessage request, string privateKey)
         {
