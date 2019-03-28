@@ -68,7 +68,11 @@ namespace Heidelpay.Payment.Service
         {
             Check.NotNull(authorization, nameof(authorization));
 
-            return await ApiPostAsync(authorization, false);
+            var result = await ApiPostAsync(authorization, false);
+
+            result.Payment = await FetchPaymentAsync(result.Resources.PaymentId);
+
+            return result;
         }
 
         public async Task<TPaymentBase> FetchPaymentTypeAsync<TPaymentBase>(string paymentTypeId)

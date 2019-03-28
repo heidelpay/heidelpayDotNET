@@ -26,6 +26,45 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             Assert.NotNull(authorization.Id);
         }
 
+        [Fact]
+        public async Task Authorize_And_Payment_Card_Type()
+        {
+            var card = await BuildHeidelpay().CreatePaymentTypeAsync(TestCard);
+            var authorization = await card.AuthorizeAsync(decimal.One, "EUR", new Uri("https://www.meinShop.de"));
+            var payment = authorization.Payment;
+            Assert.NotNull(authorization?.Id);
+            Assert.NotNull(payment?.Id);
+        }
+
+        [Fact]
+        public async Task Charge_Card_Type()
+        {
+            var card = await BuildHeidelpay().CreatePaymentTypeAsync(TestCard);
+            var charge = await card.ChargeAsync(decimal.One, "EUR", new Uri("https://www.meinShop.de"));
+            Assert.NotNull(charge?.Id);
+            Assert.Equal(decimal.One, charge.Amount);
+            Assert.Equal("EUR", charge.Currency);
+            Assert.Equal(card.Id, charge.Resources.TypeId);
+        }
+
+        [Fact]
+        public async Task Fetch_Card_Type()
+        {
+            var createdCard = await BuildHeidelpay().CreatePaymentTypeAsync(TestCard);
+
+            Assert.NotNull(createdCard?.Id);
+            Assert.NotNull(createdCard.CVC);
+            Assert.Equal("03/2020", createdCard.ExpiryDate);
+            Assert.Equal("444433******1111", createdCard.Number);
+
+            var fetchedCard = await BuildHeidelpay().FetchPaymentTypeAsync(createdCard.Id) as Card;
+
+            Assert.NotNull(fetchedCard?.Id);
+            Assert.NotNull(fetchedCard.CVC);
+            Assert.Equal("03/2020", fetchedCard.ExpiryDate);
+            Assert.Equal("444433******1111", fetchedCard.Number);
+        }
+
         private static Card TestCard { get; } = new Card { Number = "4444333322221111", ExpiryDate = "03/20", CVC = "123" };
     }
 }
