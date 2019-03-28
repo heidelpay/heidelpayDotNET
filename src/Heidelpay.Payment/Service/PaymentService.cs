@@ -25,6 +25,12 @@ namespace Heidelpay.Payment.Service
             this.heidelpay = heidelpay;
         }
 
+        public async Task<TPaymentBase> CreatePaymentTypeAsync<TPaymentBase>(TPaymentBase paymentType)
+            where TPaymentBase : PaymentTypeBase
+        {
+            return await ApiPostAsync(paymentType);
+        }
+
         public async Task<Customer> CreateCustomerAsync(Customer customer)
         {
             Check.NotNull(customer, nameof(customer));
@@ -62,7 +68,7 @@ namespace Heidelpay.Payment.Service
         {
             Check.NotNull(authorization, nameof(authorization));
 
-            return await ApiPostAsync(authorization);
+            return await ApiPostAsync(authorization, false);
         }
 
         public async Task<TPaymentBase> FetchPaymentTypeAsync<TPaymentBase>(string paymentTypeId)
@@ -130,17 +136,10 @@ namespace Heidelpay.Payment.Service
             return result;
         }
 
-        public async Task<TPaymentBase> CreatePaymentTypeAsync<TPaymentBase>(TPaymentBase paymentType)
-            where TPaymentBase : PaymentTypeBase
+        public async Task<string> EnsureRestResourceIdAsync<T>(T resource)
+            where T : IRestResource
         {
-            return await ApiPostAsync(paymentType);
-        }
-
-        public async Task<string> EnsurePaymentTypeIdAsync<TPaymentBase>(TPaymentBase paymentType)
-            where TPaymentBase : IPaymentType
-        {
-            var result = await ApiPostAsync(paymentType);
-            return result.Id;
+            return (await ApiPostAsync(resource, false))?.Id;
         }
 
         private async Task<IEnumerable<Cancel>> FetchCancelListAsync(Payment payment)
@@ -151,14 +150,14 @@ namespace Heidelpay.Payment.Service
         private IEnumerable<Cancel> GetCancelsForAuthorization(IEnumerable<Cancel> cancelList)
         {
             return cancelList?
-                .Where(x => TRANSACTION_TYPE_CANCEL_AUTHORIZE.Equals(x.Type, StringComparison.InvariantCultureIgnoreCase))
+                .Where(x => TRANSACTION_TYPE_CANCEL_AUTHORIZE.Equals(x.TransactionType, StringComparison.InvariantCultureIgnoreCase))
                 .ToList();
         }
 
         private IEnumerable<Cancel> GetCancelsForCharge(IEnumerable<Cancel> cancelList)
         {
             return cancelList?
-                .Where(x => TRANSACTION_TYPE_CANCEL_CHARGE.Equals(x.Type, StringComparison.InvariantCultureIgnoreCase))
+                .Where(x => TRANSACTION_TYPE_CANCEL_CHARGE.Equals(x.TransactionType, StringComparison.InvariantCultureIgnoreCase))
                 .ToList();
         }
 
@@ -281,12 +280,5 @@ namespace Heidelpay.Payment.Service
 
             return resource;
         }
-    }
-
-    internal class IdResponse : IRestResource
-    {
-        public string TypeUrl => null;
-
-        public string Id { get; set; }
     }
 }

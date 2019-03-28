@@ -147,6 +147,8 @@ namespace Heidelpay.Payment
             Check.NotNull(paymentType, nameof(paymentType));
             Check.NotNull(returnUrl, nameof(returnUrl));
 
+            var customerId = EnsureRestResourceCreatedAsync(customer);
+
             return await ChargeAsync(amount, currency, paymentType, returnUrl, customer?.Id);
         }
 
@@ -156,7 +158,8 @@ namespace Heidelpay.Payment
             Check.NotNull(paymentType, nameof(paymentType));
             Check.NotNull(returnUrl, nameof(returnUrl));
 
-            var typeId = await EnsureTypeIdCreated(paymentType);
+            var typeId = await EnsureRestResourceCreatedAsync(paymentType);
+
             return await ChargeAsync(new Charge
             {
                 Amount = amount,
@@ -186,10 +189,10 @@ namespace Heidelpay.Payment
             {
                 Amount = amount,
                 Currency = currency,
-                Type = typeId,
                 ReturnUrl = returnUrl,
                 Resources = new Resources
                 {
+                    TypeId = typeId,
                     CustomerId = customerId,
                 }
             });
@@ -200,7 +203,7 @@ namespace Heidelpay.Payment
             Check.NotNullOrEmpty(currency, nameof(currency));
             Check.NotNull(paymentType, nameof(paymentType));
 
-            var typeId = await EnsureTypeIdCreated(paymentType);
+            var typeId = await EnsureRestResourceCreatedAsync(paymentType);
 
             return await AuthorizeAsync(amount, currency, typeId: typeId);
         }
@@ -212,7 +215,7 @@ namespace Heidelpay.Payment
             Check.NotNullOrEmpty(customerId, nameof(customerId));
             Check.NotNull(returnUrl, nameof(returnUrl));
 
-            var typeId = await EnsureTypeIdCreated(paymentType);
+            var typeId = await EnsureRestResourceCreatedAsync(paymentType);
 
             return await AuthorizeAsync(amount, currency, typeId: typeId, returnUrl: returnUrl, customerId: customerId);
         }
@@ -223,7 +226,10 @@ namespace Heidelpay.Payment
             Check.NotNull(paymentType, nameof(paymentType));
             Check.NotNull(returnUrl, nameof(returnUrl));
 
-            throw new NotImplementedException();
+            var typeId = await EnsureRestResourceCreatedAsync(paymentType);
+            var customerId = await EnsureRestResourceCreatedAsync(customer);
+
+            return await AuthorizeAsync(amount, currency, typeId: typeId, returnUrl: returnUrl, customerId: customerId);
         }
 
         public async Task<Authorization> AuthorizeAsync(Authorization authorization)
@@ -295,16 +301,16 @@ namespace Heidelpay.Payment
             return new RestClient(httpClientFactory, options, new NullLogger<RestClient>());
         }
 
-        private async Task<string> EnsureTypeIdCreated<TPaymentType>(TPaymentType paymentType)
-            where TPaymentType : IPaymentType
+        private async Task<string> EnsureRestResourceCreatedAsync<T>(T restResource)
+            where T : class, IRestResource
         {
-            if (paymentType == null)
+            if (restResource == null)
                 return null;
 
-            string resultId = paymentType?.Id;
+            string resultId = restResource?.Id;
             if (string.IsNullOrEmpty(resultId))
             {
-                resultId = await PaymentService.EnsurePaymentTypeIdAsync(paymentType);
+                resultId = await PaymentService.EnsureRestResourceIdAsync(restResource);
             }
 
             return resultId;

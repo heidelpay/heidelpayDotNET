@@ -14,13 +14,14 @@ namespace Heidelpay.Payment
 
         public string Id { get; set; }
 
-        public string Type { get; set; }
-
         public Uri ResourceUri { get; set; }
         Heidelpay IHeidelpayProvider.Heidelpay { get; set; }
 
         [JsonProperty]
         internal Message Message { get; set; }
+
+        [JsonProperty(propertyName: "type")]
+        internal string TransactionType { get; set; }
 
         public PaymentBase()
         {
