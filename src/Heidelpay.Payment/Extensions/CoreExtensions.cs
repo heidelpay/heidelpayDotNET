@@ -23,9 +23,12 @@ namespace System
 
         static readonly string[] AllowedDateTimeFormats = new[] 
         {
-            "yyyy-MM-dd HH:mm:ss",
-            "yyyy-MM-dd",
+            DateTimeFormat,
+            DateOnlyFormat,
         };
+
+        public const string DateOnlyFormat = "yyyy-MM-dd";
+        public const string DateTimeFormat = "yyyy-MM-dd HH:mm:ss";
 
         public static bool TryParseDateTime(this string value, out DateTime result)
         {

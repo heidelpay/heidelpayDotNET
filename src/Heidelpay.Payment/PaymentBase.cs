@@ -1,5 +1,6 @@
 ﻿using Heidelpay.Payment.Communication.Internal;
 using Heidelpay.Payment.Interfaces;
+using Newtonsoft.Json;
 using System;
 
 namespace Heidelpay.Payment
@@ -8,6 +9,7 @@ namespace Heidelpay.Payment
     {
         public Payment Payment { get; set; }
 
+        [JsonIgnore]
         public abstract string TypeUrl { get; }
 
         public string Id { get; set; }
@@ -17,6 +19,7 @@ namespace Heidelpay.Payment
         public Uri ResourceUri { get; set; }
         Heidelpay IHeidelpayProvider.Heidelpay { get; set; }
 
+        [JsonProperty]
         internal Message Message { get; set; }
 
         public PaymentBase()

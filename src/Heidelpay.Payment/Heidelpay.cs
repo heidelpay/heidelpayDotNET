@@ -82,7 +82,7 @@ namespace Heidelpay.Payment
         public async Task<Customer> CreateCustomerAsync(Customer customer)
         {
             Check.NotNull(customer, nameof(customer));
-            Check.ThrowIfTrue(string.IsNullOrEmpty(customer.Id),
+            Check.ThrowIfTrue(!string.IsNullOrEmpty(customer.Id),
                 "Customer has an id set. createCustomer can only be called without Customer.id. Please use updateCustomer or remove the id from Customer.");
 
             return await PaymentService.CreateCustomerAsync(customer);
@@ -287,7 +287,7 @@ namespace Heidelpay.Payment
         {
             Check.NotNull(paymentType, nameof(paymentType));
 
-            return await PaymentService.CreatePaymentTypeBaseAsync(paymentType);
+            return await PaymentService.CreatePaymentTypeAsync(paymentType);
         }
 
         private IRestClient BuildRestClient(IHttpClientFactory httpClientFactory, IOptions<HeidelpayApiOptions> options)
@@ -301,13 +301,13 @@ namespace Heidelpay.Payment
             if (paymentType == null)
                 return null;
 
-            TPaymentType result = paymentType;
-            if (string.IsNullOrEmpty(paymentType?.Id))
+            string resultId = paymentType?.Id;
+            if (string.IsNullOrEmpty(resultId))
             {
-                result = await PaymentService.EnsurePaymentTypeAsync(paymentType);
+                resultId = await PaymentService.EnsurePaymentTypeIdAsync(paymentType);
             }
 
-            return result.Id;
+            return resultId;
         }
     }
 }

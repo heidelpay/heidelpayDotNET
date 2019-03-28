@@ -36,7 +36,10 @@ namespace Heidelpay.Payment
         public decimal AmountCanceled { get => Amount.Canceled; }
         public decimal AmountRemaining { get => Amount.Remaining; }
 
+        [JsonProperty]
         internal Amount Amount { get; set; } = new Amount();
+
+        [JsonProperty]
         internal IEnumerable<Transaction> Transactions { get; set; } = Enumerable.Empty<Transaction>();
 
         public Payment(Heidelpay heidelpay)

@@ -14,6 +14,12 @@ namespace Heidelpay.Payment.Communication
 {
     public class RestClient : IRestClient
     {
+        private readonly JsonSerializerSettings serializationSettings = new JsonSerializerSettings
+        {
+            NullValueHandling = NullValueHandling.Ignore,
+            ContractResolver = new CamelCasePropertyNamesContractResolver(),
+        };
+
         private readonly IHttpClientFactory factory;
         private readonly IOptions<HeidelpayApiOptions> apiOptions;
         private readonly ILogger<RestClient> logger;
@@ -25,6 +31,59 @@ namespace Heidelpay.Payment.Communication
             this.factory = factory;
             this.apiOptions = apiOptions;
             this.logger = logger;
+        }
+
+        public async Task<object> HttpGetAsync(Uri uri, Type type)
+        {
+            Check.NotNull(uri, nameof(uri));
+
+            var response = await SendRequestAsync(CreateRequest(uri, HttpMethod.Get));
+            var content = await response.Content.ReadAsStringAsync();
+
+            return JsonConvert.DeserializeObject(content, type);
+        }
+
+        public async Task<T> HttpGetAsync<T>(Uri uri)
+        {
+            Check.NotNull(uri, nameof(uri));
+
+            var response = await SendRequestAsync(CreateRequest(uri, HttpMethod.Get));
+            var content = await response.Content.ReadAsStringAsync();
+
+            return JsonConvert.DeserializeObject<T>(content);
+        }
+
+        public async Task<T> HttpPostAsync<T>(Uri uri, object data)
+        {
+            Check.NotNull(uri, nameof(uri));
+
+            var response = await SendRequestAsync(CreateRequest(uri, HttpMethod.Post, data));
+            var content = await response.Content.ReadAsStringAsync();
+
+            return JsonConvert.DeserializeObject<T>(content);
+        }
+
+        public async Task<T> HttpPutAsync<T>(Uri uri, object data)
+        {
+            Check.NotNull(uri, nameof(uri));
+
+            var response = await SendRequestAsync(CreateRequest(uri, HttpMethod.Put, data));
+            var content = await response.Content.ReadAsStringAsync();
+
+            return JsonConvert.DeserializeObject<T>(content);
+        }
+
+        public async Task<bool> HttpDeleteAsync<T>(Uri uri)
+        {
+            Check.NotNull(uri, nameof(uri));
+
+            var response = await SendRequestAsync(CreateRequest(uri, HttpMethod.Delete));
+            var content = await response.Content.ReadAsStringAsync();
+
+            Check.ThrowIfTrue(!string.Equals("true", content, StringComparison.InvariantCultureIgnoreCase),
+                $"{typeof(T).Name} '{uri.Segments.Last()}' cannot be deleted");
+
+            return true;
         }
 
         protected virtual void LogRequest(HttpRequestMessage request)
@@ -66,11 +125,7 @@ namespace Heidelpay.Payment.Communication
             return response;
         }
 
-        readonly JsonSerializerSettings serializationSettings = new JsonSerializerSettings
-        {
-            NullValueHandling = NullValueHandling.Ignore,
-            ContractResolver = new CamelCasePropertyNamesContractResolver()
-        };
+        
 
         private HttpRequestMessage CreateRequest(Uri uri, HttpMethod method, object content = null)
         {
@@ -78,62 +133,12 @@ namespace Heidelpay.Payment.Communication
 
             if (content != null)
             {
-                request.Content = new StringContent(JsonConvert.SerializeObject(content, serializationSettings), Encoding.UTF8, "application/json");
+                var serializedContent = JsonConvert.SerializeObject(content, serializationSettings);
+                request.Content = new StringContent(serializedContent, Encoding.UTF8, "application/json");
                 request.Content.Headers.ContentEncoding.Add("UTF-8");
             }
 
             return request;
-        }
-
-        public async Task<object> HttpGetAsync(Uri uri, Type type)
-        {
-            Check.NotNull(uri, nameof(uri));
-
-            var response = await SendRequestAsync(CreateRequest(uri, HttpMethod.Get));
-            var content = await response.Content.ReadAsStringAsync();
-
-            return JsonConvert.DeserializeObject(content, type);
-        }
-
-        public async Task<T> HttpGetAsync<T>(Uri uri)
-        {
-            Check.NotNull(uri, nameof(uri));
-
-            var response = await SendRequestAsync(CreateRequest(uri, HttpMethod.Get));
-            var content = await response.Content.ReadAsStringAsync();
-
-            return JsonConvert.DeserializeObject<T>(content);
-        }
-
-        public async Task<T> HttpPostAsync<T>(Uri uri, object data)
-        {
-            Check.NotNull(uri, nameof(uri));
-
-            var response = await SendRequestAsync(CreateRequest(uri, HttpMethod.Post, data));
-            return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
-        }
-
-        public async Task<T> HttpPutAsync<T>(Uri uri, object data)
-        {
-            Check.NotNull(uri, nameof(uri));
-
-            var response = await SendRequestAsync(CreateRequest(uri, HttpMethod.Put, data));
-            var content = await response.Content.ReadAsStringAsync();
-
-            return JsonConvert.DeserializeObject<T>(content);
-        }
-
-        public async Task<bool> HttpDeleteAsync<T>(Uri uri)
-        {
-            Check.NotNull(uri, nameof(uri));
-
-            var response = await SendRequestAsync(CreateRequest(uri, HttpMethod.Delete));
-            var content = await response.Content.ReadAsStringAsync();
-
-            Check.ThrowIfTrue(!string.Equals("true", content, StringComparison.InvariantCultureIgnoreCase),
-                $"{typeof(T).Name} '{uri.Segments.Last()}' cannot be deleted");
-
-            return true;
         }
     }
 }

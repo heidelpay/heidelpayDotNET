@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Heidelpay.Payment.Internal.Tests.Business.Errors
+namespace Heidelpay.Payment.External.Tests.Business.Errors
 {
     public class ErrorTests : PaymentTypeTestsBase
     {
@@ -134,6 +134,36 @@ namespace Heidelpay.Payment.Internal.Tests.Business.Errors
         public async Task Fetch_Non_Existing_Charge()
         {
             Assert.True(true);
+        }
+
+        [Fact]
+        public async Task Invalid_PUT_Customer()
+        {
+            var heidelpay = BuildHeidelpay();
+            var customer = await heidelpay.CreateCustomerAsync(GetMaximumCustomer(GetRandomId()));
+
+            Assert.NotNull(customer.Id);
+
+            var customerUpdate = new Customer(customer.Firstname, customer.Lastname)
+            {
+                Email = "max",
+            };
+
+            var exception = await Assert.ThrowsAsync<PaymentException>(() => heidelpay.UpdateCustomerAsync(customer.Id, customerUpdate));
+
+            Assert.NotNull(exception);
+            Assert.Single(exception.PaymentErrorList);
+
+            var error = exception.PaymentErrorList.First();
+
+            Assert.Equal("API.410.200.013", error.Code);
+            Assert.Equal("Email max has invalid format", error.MerchantMessage);
+        }
+
+        [Fact]
+        public async Task Create_Invalid_Customer()
+        {
+
         }
     }
 }

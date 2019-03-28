@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,11 +15,19 @@ namespace Heidelpay.Payment
         public Uri RedirectUrl { get; set; }
         public string OrderId { get; set; }
 
+        [JsonProperty]
         internal bool IsSuccess { get; set; }
-        internal bool IsPending { get; set; }
-        internal bool IsError { get; set; }
-        internal DateTime Date { get; set; }
 
+        [JsonProperty]
+        internal bool IsPending { get; set; }
+
+        [JsonProperty]
+        internal bool IsError { get; set; }
+
+        [JsonProperty]
+        internal DateTime? Date { get; set; }
+
+        [JsonIgnore]
         public Status Status
         {
             get

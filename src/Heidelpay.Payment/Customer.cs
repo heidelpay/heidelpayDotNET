@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
+using System.Runtime.Serialization;
 
 namespace Heidelpay.Payment
 {
@@ -6,9 +9,12 @@ namespace Heidelpay.Payment
     {
         public string Firstname { get; set; }
         public string Lastname { get; set; }
-        public Salutation Salutation { get; set; }
+        public Salutation? Salutation { get; set; }
         public string CustomerId { get; set; }
-        public DateTime BirthDate { get; set; }
+
+        [JsonConverter(typeof(JsonOnlyDateConverter))]
+        public DateTime? BirthDate { get; set; }
+
         public string Email { get; set; }
         public string Phone { get; set; }
         public string Mobile { get; set; }
@@ -21,13 +27,22 @@ namespace Heidelpay.Payment
             this.Lastname = lastName;
         }
 
+        internal Customer()
+        {
+
+        }
+
         public override string TypeUrl => "customers";
     }
 
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum Salutation
     {
+        [EnumMember(Value="mr")]
         Mr,
+        [EnumMember(Value = "ms")]
         Ms,
+        [EnumMember(Value = "unknown")]
         Unknown,
     };
 }

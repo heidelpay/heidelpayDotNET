@@ -37,7 +37,7 @@ namespace Heidelpay.Payment.Service
             Check.NotNullOrEmpty(id, nameof(id));
             Check.NotNull(customer, nameof(customer));
 
-            return await ApiPutAsync(customer);
+            return await ApiPutAsync(id, customer);
         }
 
         public async Task DeleteCustomerAsync(string id)
@@ -47,11 +47,11 @@ namespace Heidelpay.Payment.Service
             await ApiDeleteAsync<Customer>(id);
         }
 
-        public async Task<Charge> ChargeAsync(Charge charge, Uri url = null)
+        public async Task<Charge> ChargeAsync(Charge charge)
         {
             Check.NotNull(charge, nameof(charge));
 
-            var result = await ApiPostAsync(charge, url);
+            var result = await ApiPostAsync(charge, false);
 
             result.Payment = await FetchPaymentAsync(result.Resources.PaymentId);
 
@@ -65,13 +65,13 @@ namespace Heidelpay.Payment.Service
             return await ApiPostAsync(authorization);
         }
 
-        public async Task<TPaymentBase> FetchPaymentTypeAsync<TPaymentBase>(string typeId)
+        public async Task<TPaymentBase> FetchPaymentTypeAsync<TPaymentBase>(string paymentTypeId)
             where TPaymentBase : PaymentTypeBase
         {
-            Check.NotNullOrEmpty(typeId, nameof(typeId));
-            var paymentTypeBase = ResolvePaymentTypeFromTypeId(typeId);
+            Check.NotNullOrEmpty(paymentTypeId, nameof(paymentTypeId));
+            var paymentType = ResolvePaymentTypeFromTypeId(paymentTypeId);
 
-            return await ApiGetAsync(paymentTypeBase, typeId) as TPaymentBase;
+            return await ApiGetAsync(paymentTypeId, paymentType) as TPaymentBase;
         }
 
         public async Task<Authorization> FetchAuthorizationAsync(string paymentId)
@@ -130,17 +130,17 @@ namespace Heidelpay.Payment.Service
             return result;
         }
 
-        public async Task<TPaymentBase> CreatePaymentTypeBaseAsync<TPaymentBase>(TPaymentBase paymentType)
+        public async Task<TPaymentBase> CreatePaymentTypeAsync<TPaymentBase>(TPaymentBase paymentType)
             where TPaymentBase : PaymentTypeBase
         {
-            var result = await ApiPostAsync(paymentType);
-            return await FetchPaymentTypeAsync<TPaymentBase>(result.Id);
+            return await ApiPostAsync(paymentType);
         }
 
-        public async Task<TPaymentBase> EnsurePaymentTypeAsync<TPaymentBase>(TPaymentBase paymentType)
+        public async Task<string> EnsurePaymentTypeIdAsync<TPaymentBase>(TPaymentBase paymentType)
             where TPaymentBase : IPaymentType
         {
-            return await ApiPostAsync(paymentType);
+            var result = await ApiPostAsync(paymentType);
+            return result.Id;
         }
 
         private async Task<IEnumerable<Cancel>> FetchCancelListAsync(Payment payment)
@@ -184,9 +184,9 @@ namespace Heidelpay.Payment.Service
                 .ToList();
         }
 
-        private async Task<object> ApiGetAsync(IRestResource resource, string id = null)
+        private async Task<object> ApiGetAsync(string id, IRestResource resource)
         {
-            var result = await heidelpay.RestClient.HttpGetAsync(BuildApiEndpointUri(resource, id ?? resource.Id), resource.GetType());
+            var result = await heidelpay.RestClient.HttpGetAsync(BuildApiEndpointUri(resource, id), resource.GetType());
             return PostProcessApiResource(result);
         }
 
@@ -197,18 +197,28 @@ namespace Heidelpay.Payment.Service
             return PostProcessApiResource(result);
         }
 
-        private async Task<T> ApiPostAsync<T>(T resource, Uri uri = null)
+        private async Task<T> ApiPostAsync<T>(T resource, bool getAfterPost = true)
            where T : IRestResource
         {
-            var result = await heidelpay.RestClient.HttpPostAsync<T>(uri ?? BuildApiEndpointUri(resource), resource);
-            return PostProcessApiResource(result);
+            var posted = await heidelpay.RestClient.HttpPostAsync<T>(BuildApiEndpointUri(resource), resource);
+            return getAfterPost 
+                ? await ApiGetAsync(posted) 
+                : PostProcessApiResource(posted);
         }
 
-        private async Task<T> ApiPutAsync<T>(T resource, Uri uri = null)
+        private async Task<T> ApiPutAsync<T>(T resource, bool getAfterPut = true)
            where T : IRestResource
         {
-            var putted = await heidelpay.RestClient.HttpPutAsync<T>(uri ?? BuildApiEndpointUri(resource), resource);
-            return await ApiGetAsync(putted);
+            return await ApiPutAsync<T>(resource.Id, resource, getAfterPut);
+        }
+
+        private async Task<T> ApiPutAsync<T>(string id, T resource, bool getAfterPut = false)
+           where T : IRestResource
+        {
+            var putted = await heidelpay.RestClient.HttpPutAsync<T>(BuildApiEndpointUri(resource, id), resource);
+            return getAfterPut
+                ? await ApiGetAsync(putted)
+                : PostProcessApiResource(putted);
         }
 
         private async Task ApiDeleteAsync<T>(string id)
@@ -271,5 +281,12 @@ namespace Heidelpay.Payment.Service
 
             return resource;
         }
+    }
+
+    internal class IdResponse : IRestResource
+    {
+        public string TypeUrl => null;
+
+        public string Id { get; set; }
     }
 }
