@@ -256,6 +256,7 @@ namespace Heidelpay.Payment.Service
                 case "gro": result = new Giropay(); break;
                 case "idl": result = new Ideal(); break;
                 case "ivc": result = new Invoice(); break;
+                case "ivf": result = new InvoiceFactoring(); break;
                 case "ivg": result = new InvoiceGuaranteed(); break;
                 case "ppl": result = new Paypal(); break;
                 case "ppy": result = new Prepayment(); break;

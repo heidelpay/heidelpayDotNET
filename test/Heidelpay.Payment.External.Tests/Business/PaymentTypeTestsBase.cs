@@ -65,9 +65,18 @@ namespace Heidelpay.Payment.External.Tests.Business
             };
         }
 
-        protected string GetRandomId()
+        protected static string GetRandomId()
         {
-            return Guid.NewGuid().ToString("B").ToUpper();
+            return Guid.NewGuid().ToString("B")
+                .Replace("{", "")
+                .Replace("}", "")
+                .Replace("-", "")
+                .ToUpper();
+        }
+
+        protected static string GetRandomInvoiceId()
+        {
+            return GetRandomId().Substring(0, 5);
         }
 
         protected async Task<Customer> CreateMaximumCustomer(Heidelpay heidelpay)
@@ -114,6 +123,32 @@ namespace Heidelpay.Payment.External.Tests.Business
                 BillingAddress = TestAddress,
                 ShippingAddress = new Address { Name = "Schubert", Street = "Vangerowstraße 18", City = "Heidelberg", Country = "BW", Zip = "69115", State = "DE" },
             };
+        }
+
+        protected Basket FilledBasket()
+        {
+            var basket = new Basket
+            {
+                AmountTotal = 500.05m,
+                AmountTotalDiscount = 10m,
+                CurrencyCode = "EUR",
+                Note = "Mystery Shopping",
+                OrderId = GetRandomInvoiceId(),
+            };
+            basket.AddBasketItem(new BasketItem
+            {
+                BasketItemReferenceId = "Artikelnummer4711",
+                AmountDiscount = decimal.One,
+                AmountGross = 500.5m,
+                AmountNet = 420.1m,
+                AmountPerUnit = 100.1m,
+                AmountVat = 80.4m,
+                Quantity = 5,
+                Title = "Apple iPhone",
+                Unit = "Pc.",
+                Vat = 19,
+            });
+            return basket;
         }
 
         protected MetaData TestMetaData { get; } = new MetaData { ["invoice-nr"] = "Rg-2018-11-1", ["shop-id"] = "4711", ["delivery-date"] = "24.12.2018", ["reason"] = "X-mas present" };

@@ -15,22 +15,14 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         }
 
         [Fact]
-        public async Task Authorize_PaymentType()
-        {
-            var paymentType = await BuildHeidelpay().CreatePaymentTypeAsync(new InvoiceGuaranteed());
-            var authorization = await paymentType.AuthorizeAsync(decimal.One, "EUR", new Uri("https://www.meinShop.de"), GetMaximumCustomerSameAddress(GetRandomId()));
-            Assert.NotNull(authorization?.Id);
-        }
-
-        [Fact]
         public async Task Authorize_PaymentType_Different_Address()
         {
             var paymentType = await BuildHeidelpay().CreatePaymentTypeAsync(new InvoiceGuaranteed());
 
-            await Assert.ThrowsAsync<PaymentException>(() => paymentType.AuthorizeAsync(decimal.One, "EUR", new Uri("https://www.meinShop.de"), GetMaximumCustomer(GetRandomId())));
+            await Assert.ThrowsAsync<PaymentException>(() => paymentType.ChargeAsync(decimal.One, "EUR", new Uri("https://www.meinShop.de"), GetMaximumCustomer(GetRandomId())));
         }
 
-        [Fact]
+        [Fact(Skip = "Shipments in work")]
         public async Task Shipment_PaymentType()
         {
             var auth = await BuildHeidelpay().AuthorizeAsync(decimal.One, "EUR", new InvoiceGuaranteed(), new Uri("https://www.meinShop.de"), GetMaximumCustomerSameAddress(GetRandomId()));

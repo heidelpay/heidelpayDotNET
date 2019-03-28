@@ -20,7 +20,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             var result = await BuildHeidelpay().CreatePaymentTypeAsync(new Prepayment());
             var charge = await BuildHeidelpay().ChargeAsync(decimal.One, "EUR", result, new Uri("https://www.google.at"));
             Assert.NotNull(charge?.Id);
-            Assert.NotNull(charge?.RedirectUrl);
+            Assert.NotNull(charge?.ReturnUrl);
         }
 
         [Fact]

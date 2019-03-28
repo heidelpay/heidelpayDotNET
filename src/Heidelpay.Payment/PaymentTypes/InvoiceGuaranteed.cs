@@ -2,7 +2,7 @@
 
 namespace Heidelpay.Payment.PaymentTypes
 {
-    public sealed class InvoiceGuaranteed : PaymentTypeBase, IPaymentAuthorize
+    public sealed class InvoiceGuaranteed : PaymentTypeBase, IPaymentCharge
     {
         public InvoiceGuaranteed()
         {
@@ -16,6 +16,6 @@ namespace Heidelpay.Payment.PaymentTypes
         }
         public override string TypeUrl => "types/invoice-guaranteed";
 
-        Heidelpay IPaymentAuthorize.Heidelpay => Heidelpay;
+        Heidelpay IPaymentCharge.Heidelpay => Heidelpay;
     }
 }

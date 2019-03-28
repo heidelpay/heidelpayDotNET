@@ -16,7 +16,8 @@ namespace Heidelpay.Payment.PaymentTypes
 
         }
 
-        public async Task<Charge> ChargeAsync(decimal amount, string currency, Uri returnUrl, Customer customer, Basket basket, string invoiceId = null)
+        public async Task<Charge> ChargeAsync(decimal amount, string currency, Uri returnUrl, Customer customer, 
+            Basket basket, string invoiceId = null)
         {
             return await Heidelpay.ChargeAsync(amount, currency, this, returnUrl, customer, basket, invoiceId);
         }
