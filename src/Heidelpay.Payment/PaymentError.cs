@@ -2,9 +2,9 @@
 {
     public class PaymentError
     {
-        public string MerchantMessage { get; set; }
-        public string CustomerMessage { get; set; }
-        public string Code { get; set; }
+        public string MerchantMessage { get; internal set; }
+        public string CustomerMessage { get; internal set; }
+        public string Code { get; internal set; }
 
         public PaymentError()
         {

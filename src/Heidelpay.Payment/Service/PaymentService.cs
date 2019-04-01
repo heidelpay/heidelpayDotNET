@@ -57,7 +57,7 @@ namespace Heidelpay.Payment.Service
         {
             Check.NotNull(charge, nameof(charge));
 
-            var result = await ApiPostAsync(charge, false);
+            var result = await ApiPostAsync(charge, getAfterPost: false);
 
             result.Payment = await FetchPaymentAsync(result.Resources.PaymentId);
 
@@ -68,7 +68,7 @@ namespace Heidelpay.Payment.Service
         {
             Check.NotNull(authorization, nameof(authorization));
 
-            var result = await ApiPostAsync(authorization, false);
+            var result = await ApiPostAsync(authorization, getAfterPost: false);
 
             result.Payment = await FetchPaymentAsync(result.Resources.PaymentId);
 
@@ -147,6 +147,18 @@ namespace Heidelpay.Payment.Service
             return response?.Id;
         }
 
+        public async Task<Shipment> ShipmentAsync(string paymentId, string invoiceId = null)
+        {
+            var shipment = new Shipment { InvoiceId = invoiceId };
+
+            var paymentUri = BuildApiEndpointUri(shipment, shipment.ResolvePaymentUrl(paymentId), null);
+            var result = await ApiPostAsync(shipment, paymentUri, false);
+
+            result.Payment = await FetchPaymentAsync(result.Resources.PaymentId);
+
+            return result;
+        }
+
         private async Task<IEnumerable<Cancel>> FetchCancelListAsync(Payment payment)
         {
             return Enumerable.Empty<Cancel>();
@@ -201,10 +213,10 @@ namespace Heidelpay.Payment.Service
             return PostProcessApiResource(result);
         }
 
-        private async Task<T> ApiPostAsync<T>(T resource, bool getAfterPost = true)
+        private async Task<T> ApiPostAsync<T>(T resource, Uri uri = null, bool getAfterPost = true)
            where T : class, IRestResource
         {
-            var posted = await heidelpay.RestClient.HttpPostAsync<T>(BuildApiEndpointUri(resource), resource);
+            var posted = await heidelpay.RestClient.HttpPostAsync<T>(uri ?? BuildApiEndpointUri(resource), resource);
             return getAfterPost 
                 ? await ApiGetAsync(posted) 
                 : PostProcessApiResource(posted);
@@ -225,14 +237,19 @@ namespace Heidelpay.Payment.Service
             await heidelpay.RestClient.HttpDeleteAsync<T>(BuildApiEndpointUri(default(T), id));
         }
 
-        private Uri BuildApiEndpointUri(IRestResource resource, params string[] paths)
+        private Uri BuildApiEndpointUri(IRestResource resource, string id = null)
+        {
+            return BuildApiEndpointUri(resource, resource.ResolveResourceUrl(), id);
+        }
+
+        private Uri BuildApiEndpointUri(IRestResource resource, string resourceUrl, string id)
         {
             var rootPath = new Uri(heidelpay.RestClient?.Options?.ApiEndpoint, heidelpay.RestClient?.Options?.ApiVersion.EnsureTrailingSlash());
-            var combinedPaths = new Uri(rootPath, resource.TypeResourceUrl());
+            var combinedPaths = new Uri(rootPath, resourceUrl);
 
-            foreach (string extendedPath in paths)
+            if(!string.IsNullOrEmpty(id))
             {
-                combinedPaths = new Uri(combinedPaths, extendedPath.EnsureTrailingSlash());
+                combinedPaths = new Uri(combinedPaths, id.EnsureTrailingSlash());
             }
 
             return combinedPaths;

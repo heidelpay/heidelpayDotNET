@@ -31,6 +31,7 @@ namespace Heidelpay.Payment
             : base(merchantMessage)
         {
             PaymentErrorList = new[] { new PaymentError(merchantMessage, customerMessage, code) };
+            Uri = uri;
         }
 
         private static string ToMessage(Uri uri, HttpStatusCode statusCode, IEnumerable<PaymentError> errors)

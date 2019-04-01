@@ -13,7 +13,7 @@ namespace Heidelpay.Payment.External.Tests.Business.Errors
         {
             var heidelpay = BuildHeidelpay("");
             var exception = await Assert.ThrowsAsync<PaymentException>(
-                () => heidelpay.AuthorizeAsync(GetAuthorization("")));
+                () => heidelpay.AuthorizeAsync(InternalsHelper.GetAuthorization("")));
 
             Assert.NotNull(exception);
             Assert.Single(exception.PaymentErrorList);
@@ -29,7 +29,7 @@ namespace Heidelpay.Payment.External.Tests.Business.Errors
         {
             var heidelpay = BuildHeidelpay("s-priv-123");
             var exception = await Assert.ThrowsAsync<PaymentException>(
-                () => heidelpay.AuthorizeAsync(GetAuthorization("")));
+                () => heidelpay.AuthorizeAsync(InternalsHelper.GetAuthorization("")));
 
             Assert.NotNull(exception);
             Assert.Single(exception.PaymentErrorList);
@@ -81,7 +81,7 @@ namespace Heidelpay.Payment.External.Tests.Business.Errors
             var heidelpay = BuildHeidelpay();
             var card = await heidelpay.CreatePaymentTypeAsync(PaymentTypeCard);
 
-            var auth = GetAuthorization(card.Id);
+            var auth = InternalsHelper.GetAuthorization(card.Id);
             auth.ReturnUrl = null;
 
             var exception = await Assert.ThrowsAsync<PaymentException>(() => heidelpay.AuthorizeAsync(auth));
@@ -99,7 +99,7 @@ namespace Heidelpay.Payment.External.Tests.Business.Errors
         public async Task PaymentTypeId_Missing()
         {
             var heidelpay = BuildHeidelpay();
-            var auth = GetAuthorization("");
+            var auth = InternalsHelper.GetAuthorization("");
 
             var exception = await Assert.ThrowsAsync<PaymentException>(() => heidelpay.AuthorizeAsync(auth));
 

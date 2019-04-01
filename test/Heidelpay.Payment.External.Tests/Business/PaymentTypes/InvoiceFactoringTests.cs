@@ -22,7 +22,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
                 GetMaximumCustomerSameAddress(GetRandomInvoiceId()), FilledBasket());
 
             Assert.NotNull(result?.Id);
-            Assert.NotNull(charge?.Resources?.PaymentId);
+            Assert.NotNull(charge?.PaymentId);
         }
 
         [Fact]

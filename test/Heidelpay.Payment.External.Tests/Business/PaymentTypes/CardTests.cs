@@ -40,7 +40,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             Assert.NotNull(charge?.Id);
             Assert.Equal(decimal.One, charge.Amount);
             Assert.Equal("EUR", charge.Currency);
-            Assert.Equal(card.Id, charge.Resources.TypeId);
+            Assert.Equal(card.Id, charge.TypeId);
         }
 
         [Fact]

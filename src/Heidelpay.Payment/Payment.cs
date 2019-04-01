@@ -30,7 +30,8 @@ namespace Heidelpay.Payment
         public IEnumerable<Charge> ChargesList { get; set; } = Enumerable.Empty<Charge>();
         public IEnumerable<Cancel> CancelList { get; set; } = Enumerable.Empty<Cancel>();
 
-        public Resources Resources { get; set; } = new Resources();
+        [JsonProperty]
+        internal Resources Resources { get; set; } = new Resources();
 
         public decimal AmountTotal { get => Amount.Total; }
         public decimal AmountCharged { get => Amount.Charged; }

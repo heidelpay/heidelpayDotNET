@@ -11,7 +11,7 @@ namespace Heidelpay.Payment
         public string OrderId { get; set; }
         public string Note { get; set; }
 
-        private List<BasketItem> basketItems = new List<BasketItem>();
+        readonly List<BasketItem> basketItems = new List<BasketItem>();
         public IEnumerable<BasketItem> BasketItems { get => basketItems; } 
 
         public Basket()

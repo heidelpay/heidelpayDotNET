@@ -34,6 +34,7 @@
   
   <ItemGroup>
     <ProjectReference Include="..\..\src\Heidelpay.Payment\Heidelpay.Payment.csproj" />
+    <ProjectReference Include="..\Heidelpay.Payment.Tests\Heidelpay.Payment.Internal.Tests.csproj" />
   </ItemGroup>
   
 </Project>

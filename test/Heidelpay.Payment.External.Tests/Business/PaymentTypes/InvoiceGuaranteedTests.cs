@@ -15,6 +15,15 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         }
 
         [Fact]
+        public async Task Charge_PaymentType()
+        {
+            var result = await BuildHeidelpay().CreatePaymentTypeAsync(new InvoiceGuaranteed());
+            var charge = await result.ChargeAsync(10.0m, "EUR", new Uri("https://www.meinShop.de"), GetMaximumCustomerSameAddress(GetRandomId()));
+            Assert.NotNull(result?.Id);
+            Assert.NotNull(charge?.Id);
+        }
+
+        [Fact]
         public async Task Authorize_PaymentType_Different_Address()
         {
             var paymentType = await BuildHeidelpay().CreatePaymentTypeAsync(new InvoiceGuaranteed());
@@ -22,11 +31,13 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             await Assert.ThrowsAsync<PaymentException>(() => paymentType.ChargeAsync(decimal.One, "EUR", new Uri("https://www.meinShop.de"), GetMaximumCustomer(GetRandomId())));
         }
 
-        [Fact(Skip = "Shipments in work")]
+        [Fact]
         public async Task Shipment_PaymentType()
         {
-            var auth = await BuildHeidelpay().AuthorizeAsync(decimal.One, "EUR", new InvoiceGuaranteed(), new Uri("https://www.meinShop.de"), GetMaximumCustomerSameAddress(GetRandomId()));
-            var shipment = await BuildHeidelpay().ShipmentAsync(auth);
+            var result = await BuildHeidelpay().CreatePaymentTypeAsync(new InvoiceGuaranteed());
+            var charge = await result.ChargeAsync(10.0m, "EUR", new Uri("https://www.meinShop.de"), GetMaximumCustomerSameAddress(GetRandomId()));
+            var shipment = await BuildHeidelpay().ShipmentAsync(charge?.PaymentId);
+
             Assert.NotNull(shipment?.Id);
         }
 

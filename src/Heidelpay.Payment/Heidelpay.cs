@@ -323,9 +323,11 @@ namespace Heidelpay.Payment
             return await PaymentService.CreatePaymentTypeAsync(paymentType);
         }
 
-        public async Task<Shipment> ShipmentAsync(Authorization auth)
+        public async Task<Shipment> ShipmentAsync(string paymentId, string invoiceId = null)
         {
-            throw new NotImplementedException();
+            Check.NotNullOrEmpty(paymentId, nameof(paymentId));
+
+            return await PaymentService.ShipmentAsync(paymentId, invoiceId);
         }
 
         private IRestClient BuildRestClient(IHttpClientFactory httpClientFactory, IOptions<HeidelpayApiOptions> options)

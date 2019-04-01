@@ -1,9 +1,13 @@
-﻿namespace Heidelpay.Payment
+﻿using Newtonsoft.Json;
+
+namespace Heidelpay.Payment
 {
     public class Cancel : PaymentBase
     {
         public decimal Amount { get; set; }
-        public Processing Processing { get; set; } = new Processing();
+
+        [JsonProperty]
+        internal Processing Processing { get; set; } = new Processing();
 
         public Cancel()
         {

@@ -26,9 +26,6 @@ namespace Heidelpay.Payment
         [JsonProperty]
         internal bool IsError { get; set; }
 
-        [JsonProperty]
-        internal DateTime? Date { get; set; }
-
         [JsonIgnore]
         public Status Status
         {
@@ -47,8 +44,27 @@ namespace Heidelpay.Payment
             }
         }
 
-        public Resources Resources { get; set; } = new Resources();
-        public Processing Processing { get; set; } = new Processing();
+        public string PaymentId
+        {
+            get
+            {
+                return Payment?.Id ?? Resources?.PaymentId;
+            }
+        }
+
+        public string TypeId
+        {
+            get
+            {
+                return Resources?.TypeId;
+            }
+        }
+
+        [JsonProperty]
+        internal Resources Resources { get; set; } = new Resources();
+
+        [JsonProperty]
+        internal Processing Processing { get; set; } = new Processing();
 
         public IEnumerable<Cancel> CancelList { get; set; } = Enumerable.Empty<Cancel>();
 
