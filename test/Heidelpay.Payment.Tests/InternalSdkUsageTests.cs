@@ -20,7 +20,7 @@ namespace Heidelpay.Payment.Internal.Tests
 
             var configBuilder = new ConfigurationBuilder()
                .SetBasePath(Directory.GetCurrentDirectory())
-               .AddJsonFile("appsettings.json", optional: true);
+               .AddJsonFile("appsettings.internal.json", optional: true);
 
             var config = configBuilder.Build();
 

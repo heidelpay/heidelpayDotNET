@@ -20,7 +20,7 @@ namespace Heidelpay.Payment.External.Tests
 
             var configBuilder = new ConfigurationBuilder()
                .SetBasePath(Directory.GetCurrentDirectory())
-               .AddJsonFile("appsettings.json", optional: true);
+               .AddJsonFile("appsettings.external.json", optional: true);
 
             var config = configBuilder.Build();
 
@@ -70,7 +70,7 @@ namespace Heidelpay.Payment.External.Tests
 
             var configBuilder = new ConfigurationBuilder()
               .SetBasePath(Directory.GetCurrentDirectory())
-              .AddJsonFile("appsettings.json", optional: true);
+              .AddJsonFile("appsettings.external.json", optional: true);
 
             var config = configBuilder.Build();
 

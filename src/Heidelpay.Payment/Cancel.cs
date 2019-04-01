@@ -9,7 +9,7 @@ namespace Heidelpay.Payment
         [JsonProperty]
         internal Processing Processing { get; set; } = new Processing();
 
-        public Cancel()
+        internal Cancel()
         {
         }
 
