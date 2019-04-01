@@ -6,7 +6,7 @@ namespace Heidelpay.Payment.External.Tests
 {
     public static class InternalsHelper
     {
-        public static Authorization GetAuthorization(string typeId, string customerId = null, string orderId = null, string metadataId = null, string basketId = null)
+        public static Authorization BuildAuthorization(string typeId, string customerId = null, string orderId = null, string metadataId = null, string basketId = null)
         {
             return new Authorization
             {

@@ -7,6 +7,7 @@ namespace Heidelpay.Payment
 {
     public abstract class PaymentBase : IRestResource, IHeidelpayProvider
     {
+        [JsonProperty]
         public Payment Payment { get; internal set; }
 
         [JsonIgnore]

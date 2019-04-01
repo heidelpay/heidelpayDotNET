@@ -13,7 +13,7 @@ namespace Heidelpay.Payment.External.Tests.Business.Errors
         {
             var heidelpay = BuildHeidelpay("");
             var exception = await Assert.ThrowsAsync<PaymentException>(
-                () => heidelpay.AuthorizeAsync(InternalsHelper.GetAuthorization("")));
+                () => heidelpay.AuthorizeAsync(InternalsHelper.BuildAuthorization("")));
 
             Assert.NotNull(exception);
             Assert.Single(exception.PaymentErrorList);
@@ -29,7 +29,7 @@ namespace Heidelpay.Payment.External.Tests.Business.Errors
         {
             var heidelpay = BuildHeidelpay("s-priv-123");
             var exception = await Assert.ThrowsAsync<PaymentException>(
-                () => heidelpay.AuthorizeAsync(InternalsHelper.GetAuthorization("")));
+                () => heidelpay.AuthorizeAsync(InternalsHelper.BuildAuthorization("")));
 
             Assert.NotNull(exception);
             Assert.Single(exception.PaymentErrorList);
@@ -81,7 +81,7 @@ namespace Heidelpay.Payment.External.Tests.Business.Errors
             var heidelpay = BuildHeidelpay();
             var card = await heidelpay.CreatePaymentTypeAsync(PaymentTypeCard);
 
-            var auth = InternalsHelper.GetAuthorization(card.Id);
+            var auth = InternalsHelper.BuildAuthorization(card.Id);
             auth.ReturnUrl = null;
 
             var exception = await Assert.ThrowsAsync<PaymentException>(() => heidelpay.AuthorizeAsync(auth));
@@ -99,7 +99,7 @@ namespace Heidelpay.Payment.External.Tests.Business.Errors
         public async Task PaymentTypeId_Missing()
         {
             var heidelpay = BuildHeidelpay();
-            var auth = InternalsHelper.GetAuthorization("");
+            var auth = InternalsHelper.BuildAuthorization("");
 
             var exception = await Assert.ThrowsAsync<PaymentException>(() => heidelpay.AuthorizeAsync(auth));
 
@@ -132,10 +132,13 @@ namespace Heidelpay.Payment.External.Tests.Business.Errors
         }
 
         [Fact]
-        // This test from the Java SDK does not actually work and has been removed
         public async Task Fetch_Non_Existing_Charge()
         {
-            Assert.True(true);
+            var heidelpay = BuildHeidelpay();
+            var card = await heidelpay.CreatePaymentTypeAsync(PaymentTypeCard);
+            var charge = await heidelpay.ChargeAsync(InternalsHelper.BuildCharge(typeId: card.Id));
+            var chargeFetched = await heidelpay.FetchChargeAsync(charge.PaymentId, "s-chg-200");
+            Assert.Null(chargeFetched);
         }
 
         [Fact]
