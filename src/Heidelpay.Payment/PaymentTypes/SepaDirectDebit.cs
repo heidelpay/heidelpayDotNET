@@ -13,7 +13,7 @@ namespace Heidelpay.Payment.PaymentTypes
 
         }
 
-        public SepaDirectDebit(Heidelpay heidelpay)
+        internal SepaDirectDebit(Heidelpay heidelpay)
             : base(heidelpay)
         {
 

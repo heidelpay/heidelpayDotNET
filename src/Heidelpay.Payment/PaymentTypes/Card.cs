@@ -1,4 +1,5 @@
 ﻿using Heidelpay.Payment.Interfaces;
+using Newtonsoft.Json;
 
 namespace Heidelpay.Payment.PaymentTypes
 {
@@ -9,12 +10,15 @@ namespace Heidelpay.Payment.PaymentTypes
         public string ExpiryDate { get; set; }
         public string Brand { get; set; }
 
+        [JsonProperty(PropertyName = "3ds")]
+        public bool? ThreeDs { get; set; }
+
         public Card()
         {
 
         }
 
-        public Card(Heidelpay heidelpay)
+        internal Card(Heidelpay heidelpay)
             : base(heidelpay)
         {
 

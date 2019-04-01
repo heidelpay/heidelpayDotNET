@@ -1,10 +1,9 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text;
 
-namespace Heidelpay.Payment.Extensions
+namespace System
 {
-    public static class CoreExtensions
+    internal static class CoreExtensions
     {
         public static string EncodeToBase64(this string plainText)
         {
@@ -24,9 +23,12 @@ namespace Heidelpay.Payment.Extensions
 
         static readonly string[] AllowedDateTimeFormats = new[] 
         {
-            "yyyy-MM-dd HH:mm:ss",
-            "yyyy-MM-dd",
+            DateTimeFormat,
+            DateOnlyFormat,
         };
+
+        public const string DateOnlyFormat = "yyyy-MM-dd";
+        public const string DateTimeFormat = "yyyy-MM-dd HH:mm:ss";
 
         public static bool TryParseDateTime(this string value, out DateTime result)
         {
@@ -42,6 +44,17 @@ namespace Heidelpay.Payment.Extensions
         public static bool IsNotEmpty(string value)
         {
             return !string.IsNullOrWhiteSpace(value);
+        }
+
+        public static string EnsureTrailingSlash(this string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return value;
+
+            if (value.EndsWith("/"))
+                return value;
+
+            return value + "/";
         }
     }
 }

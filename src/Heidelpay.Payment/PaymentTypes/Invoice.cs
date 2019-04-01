@@ -1,8 +1,4 @@
 ﻿using Heidelpay.Payment.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Heidelpay.Payment.PaymentTypes
 {
@@ -13,7 +9,7 @@ namespace Heidelpay.Payment.PaymentTypes
 
         }
 
-        public Invoice(Heidelpay heidelpay)
+        internal Invoice(Heidelpay heidelpay)
             : base(heidelpay)
         {
 

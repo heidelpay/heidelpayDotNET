@@ -1,5 +1,4 @@
 ﻿using Heidelpay.Payment.Communication;
-using Heidelpay.Payment.Extensions;
 using Heidelpay.Payment.Interfaces;
 using Heidelpay.Payment.Options;
 using Heidelpay.Payment.PaymentTypes;
@@ -8,10 +7,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using System;
 using System.Net.Http;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-
-[assembly: InternalsVisibleTo("Heidelpay.Payment.Tests")]
 
 /*-
  * #%L
@@ -37,15 +33,7 @@ namespace Heidelpay.Payment
 {
     public sealed class Heidelpay
     {
-        public Uri ApiEndpointUri
-        {
-            get
-            {
-                return new Uri(RestClient?.Options?.ApiEndpoint, RestClient?.Options?.ApiVersion + "/");
-            }
-        }
         internal IRestClient RestClient { get; }
-
         internal PaymentService PaymentService { get; } 
        
         public Heidelpay(HeidelpayApiOptions options, HttpClient httpClient)
@@ -91,42 +79,54 @@ namespace Heidelpay.Payment
             PaymentService = new PaymentService(this);
         }
 
-        private IRestClient BuildRestClient(IHttpClientFactory httpClientFactory, IOptions<HeidelpayApiOptions> options)
+        public async Task<Customer> CreateCustomerAsync(Customer customer)
         {
-            return new RestClient(httpClientFactory, options, new NullLogger<RestClient>());
+            Check.NotNull(customer, nameof(customer));
+            Check.ThrowIfTrue(!string.IsNullOrEmpty(customer.Id),
+                "Customer has an id set. createCustomer can only be called without Customer.id. Please use updateCustomer or remove the id from Customer.");
+
+            return await PaymentService.CreateCustomerAsync(customer);
         }
 
-        private async Task<string> EnsurePaymentTypeIdCreated<TPaymentType>(TPaymentType paymentType)
-            where TPaymentType : IPaymentType
+        public async Task<Customer> UpdateCustomerAsync(string id, Customer customer)
         {
-            if (paymentType == null)
-                return null;
+            Check.NotNullOrEmpty(id, nameof(id));
+            Check.NotNull(customer, nameof(customer));
 
-            TPaymentType result = paymentType;
-            if (string.IsNullOrEmpty(paymentType?.Id))
-            {
-                result = await PaymentService.EnsurePaymentTypeAsync(paymentType);
-            }
+            return await PaymentService.UpdateCustomerAsync(id, customer);
+        }
 
-            return result.Id;
+        public async Task DeleteCustomerAsync(string id)
+        {
+            Check.NotNullOrEmpty(id, nameof(id));
+
+            await PaymentService.DeleteCustomerAsync(id);
         }
 
         public async Task<Charge> ChargeAuthorizationAsync(string paymentId, decimal? amount = null)
         {
+            Check.NotNullOrEmpty(paymentId, nameof(paymentId));
+
             throw new NotImplementedException();
         }
 
         public async Task<Cancel> CancelAuthorizationAsync(string paymentId, decimal? amount = null)
         {
+            Check.NotNullOrEmpty(paymentId, nameof(paymentId));
+
             throw new NotImplementedException();
         }
 
-        internal async Task<Charge> ChargeAsync(decimal amount, string currency, string typeId, Uri returnUrl = null, string customerId = null)
+        public async Task<Charge> ChargeAsync(decimal amount, string currency, string typeId, Uri returnUrl = null, string customerId = null, bool? card3ds = null)
         {
+            Check.NotNullOrEmpty(currency, nameof(currency));
+            Check.NotNullOrEmpty(typeId, nameof(typeId));
+
             return await ChargeAsync(new Charge
             {
                 Amount = amount,
                 Currency = currency, ReturnUrl = returnUrl,
+                Card3ds = card3ds,
                 Resources = new Resources
                 {
                     TypeId = typeId,
@@ -135,32 +135,73 @@ namespace Heidelpay.Payment
             });
         }
 
-        public async Task<Charge> ChargeAsync(decimal amount, string currency, IPaymentType paymentType)
+        public async Task<Charge> ChargeAsync(decimal amount, string currency, IPaymentType paymentType, bool? card3ds = null)
         {
-            return await ChargeAsync(amount, currency, paymentType, null);
+            Check.NotNullOrEmpty(currency, nameof(currency));
+
+            return await ChargeAsync(amount, currency, paymentType, returnUrl: null, customerId: null, card3ds: card3ds);
         }
 
-        public async Task<Charge> ChargeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, Customer customer = null)
+        public async Task<Charge> ChargeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, Customer customer = null, bool? card3ds = null)
         {
-            return await ChargeAsync(amount, currency, paymentType, returnUrl, customer?.Id);
+            Check.NotNullOrEmpty(currency, nameof(currency));
+            Check.NotNull(paymentType, nameof(paymentType));
+            Check.NotNull(returnUrl, nameof(returnUrl));
+
+            var customerId = await EnsureRestResourceCreatedAsync(customer);
+
+            return await ChargeAsync(amount, currency, paymentType,  returnUrl, customerId, card3ds);
         }
 
-        public async Task<Charge> ChargeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, string customerId)
+        public async Task<Charge> ChargeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, string customerId, bool? card3ds = null)
         {
-            var paymentTypeId = await EnsurePaymentTypeIdCreated(paymentType);
+            Check.NotNullOrEmpty(currency, nameof(currency));
+            Check.NotNull(paymentType, nameof(paymentType));
+            Check.NotNull(returnUrl, nameof(returnUrl));
+
+            var typeId = await EnsureRestResourceCreatedAsync(paymentType);
+
             return await ChargeAsync(new Charge
             {
                 Amount = amount,
                 Currency = currency,
                 ReturnUrl = returnUrl,
+                Card3ds = card3ds,
                 Resources = new Resources
                 {
-                    TypeId = paymentTypeId,
+                    TypeId = typeId,
                     CustomerId = customerId
                 }
             });
         }
-        
+
+        public async Task<Charge> ChargeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, Customer customer, Basket basket, string invoiceId = null, bool? card3ds = null)
+        {
+            Check.NotNullOrEmpty(currency, nameof(currency));
+            Check.NotNull(paymentType, nameof(paymentType));
+            Check.NotNull(returnUrl, nameof(returnUrl));
+            Check.NotNull(basket, nameof(basket));
+
+            var typeId = await EnsureRestResourceCreatedAsync(paymentType);
+            var customerId = await EnsureRestResourceCreatedAsync(customer);
+            var basketId = await EnsureRestResourceCreatedAsync(basket);
+
+            return await ChargeAsync(new Charge
+            {
+                Amount = amount,
+                Currency = currency,
+                ReturnUrl = returnUrl,
+                InvoiceId = invoiceId,
+                Card3ds = card3ds,
+                Resources = new Resources
+                {
+                    TypeId = typeId,
+                    CustomerId = customerId,
+                    BasketId = basketId,
+                }
+            });
+        }
+
         public async Task<Charge> ChargeAsync(Charge charge)
         {
             Check.NotNull(charge, nameof(charge));
@@ -168,50 +209,155 @@ namespace Heidelpay.Payment
             return await PaymentService.ChargeAsync(charge);
         }
 
-        internal async Task<Authorization> AuthorizeAsync(decimal amount, string currency, string typeId, Uri returnUrl = null, string customerId = null)
+        public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, string typeId, Uri returnUrl = null, string customerId = null)
         {
-            throw new NotImplementedException();
+            Check.NotNullOrEmpty(currency, nameof(currency));
+            Check.NotNullOrEmpty(typeId, nameof(typeId));
+
+            return await AuthorizeAsync(new Authorization
+            {
+                Amount = amount,
+                Currency = currency,
+                ReturnUrl = returnUrl,
+                Resources = new Resources
+                {
+                    TypeId = typeId,
+                    CustomerId = customerId,
+                }
+            });
         }
 
         public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, IPaymentType paymentType)
         {
-            throw new NotImplementedException();
+            Check.NotNullOrEmpty(currency, nameof(currency));
+            Check.NotNull(paymentType, nameof(paymentType));
+
+            var typeId = await EnsureRestResourceCreatedAsync(paymentType);
+
+            return await AuthorizeAsync(amount, currency, typeId: typeId);
         }
 
         public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, string customerId)
         {
-            throw new NotImplementedException();
+            Check.NotNullOrEmpty(currency, nameof(currency));
+            Check.NotNull(paymentType, nameof(paymentType));
+            Check.NotNullOrEmpty(customerId, nameof(customerId));
+            Check.NotNull(returnUrl, nameof(returnUrl));
+
+            var typeId = await EnsureRestResourceCreatedAsync(paymentType);
+
+            return await AuthorizeAsync(amount, currency, typeId: typeId, returnUrl: returnUrl, customerId: customerId);
         }
 
         public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, Customer customer = null)
         {
-            throw new NotImplementedException();
+            Check.NotNullOrEmpty(currency, nameof(currency));
+            Check.NotNull(paymentType, nameof(paymentType));
+            Check.NotNull(returnUrl, nameof(returnUrl));
+
+            var typeId = await EnsureRestResourceCreatedAsync(paymentType);
+            var customerId = await EnsureRestResourceCreatedAsync(customer);
+
+            return await AuthorizeAsync(amount, currency, typeId: typeId, returnUrl: returnUrl, customerId: customerId);
+        }
+
+        public async Task<Authorization> AuthorizeAsync(Authorization authorization)
+        {
+            return await PaymentService.AuthorizeAsync(authorization);
         }
 
         public async Task<Cancel> CancelChargeAsync(string paymentId, string chargeId, decimal? amount = null)
         {
+            Check.NotNullOrEmpty(paymentId, nameof(paymentId));
+            Check.NotNullOrEmpty(chargeId, nameof(chargeId));
+
             throw new NotImplementedException();
+        }
+
+        public async Task<Charge> FetchChargeAsync(string paymentId, string chargeId)
+        {
+            Check.NotNullOrEmpty(paymentId, nameof(paymentId));
+            Check.NotNullOrEmpty(chargeId, nameof(chargeId));
+
+            return await PaymentService.FetchChargeAsync(paymentId, chargeId);
         }
 
         public async Task<Customer> FetchCustomerAsync(string customerId)
         {
-            throw new NotImplementedException();
+            Check.NotNullOrEmpty(customerId, nameof(customerId));
+
+            return await PaymentService.FetchCustomerAsync(customerId);
         }
 
-        public async Task<IPaymentType> FetchPaymentTypeAsync(string paymentTypeId)
+        public async Task<TPaymentType> FetchPaymentTypeAsync<TPaymentType>(string typeId)
+            where TPaymentType : PaymentTypeBase
         {
-            throw new NotImplementedException();
+            Check.NotNullOrEmpty(typeId, nameof(typeId));
+
+            return await PaymentService.FetchPaymentTypeAsync<TPaymentType>(typeId);
         }
-
-
+        
         public async Task<MetaData> FetchMetaDataAsync(string metaDataId)
         {
-            throw new NotImplementedException();
+            Check.NotNullOrEmpty(metaDataId, nameof(metaDataId));
+
+            return await PaymentService.FetchMetaDataAsync(metaDataId);
         }
 
         public async Task<Basket> FetchBasketAsync(string basketId)
         {
-            throw new NotImplementedException();
+            Check.NotNullOrEmpty(basketId, nameof(basketId));
+
+            return await PaymentService.FetchBasketAsync(basketId);
+        }
+
+        public async Task<Authorization> FetchAuthorizationAsync(string paymentId)
+        {
+            Check.NotNullOrEmpty(paymentId, nameof(paymentId));
+
+            return await PaymentService.FetchAuthorizationAsync(paymentId);
+        }
+
+        public async Task<Payment> FetchPaymentAsync(string paymentId)
+        {
+            Check.NotNullOrEmpty(paymentId, nameof(paymentId));
+
+            return await PaymentService.FetchPaymentAsync(paymentId);
+        }
+
+        public async Task<TPaymentBase> CreatePaymentTypeAsync<TPaymentBase>(TPaymentBase paymentType)
+             where TPaymentBase : PaymentTypeBase
+        {
+            Check.NotNull(paymentType, nameof(paymentType));
+
+            return await PaymentService.CreatePaymentTypeAsync(paymentType);
+        }
+
+        public async Task<Shipment> ShipmentAsync(string paymentId, string invoiceId = null)
+        {
+            Check.NotNullOrEmpty(paymentId, nameof(paymentId));
+
+            return await PaymentService.ShipmentAsync(paymentId, invoiceId);
+        }
+
+        private IRestClient BuildRestClient(IHttpClientFactory httpClientFactory, IOptions<HeidelpayApiOptions> options)
+        {
+            return new RestClient(httpClientFactory, options, new NullLogger<RestClient>());
+        }
+
+        private async Task<string> EnsureRestResourceCreatedAsync<T>(T restResource)
+            where T : class, IRestResource
+        {
+            if (restResource == null)
+                return null;
+
+            string resultId = restResource?.Id;
+            if (string.IsNullOrEmpty(resultId))
+            {
+                resultId = await PaymentService.EnsureRestResourceIdAsync(restResource);
+            }
+
+            return resultId;
         }
     }
 }

@@ -1,10 +1,17 @@
-﻿namespace Heidelpay.Payment
+﻿using Newtonsoft.Json;
+
+namespace Heidelpay.Payment
 {
     public class PaymentError
     {
-        public string MerchantMessage { get; set; }
-        public string CustomerMessage { get; set; }
-        public string Code { get; set; }
+        [JsonProperty]
+        public string MerchantMessage { get; internal set; }
+
+        [JsonProperty]
+        public string CustomerMessage { get; internal set; }
+
+        [JsonProperty]
+        public string Code { get; internal set; }
 
         public PaymentError()
         {

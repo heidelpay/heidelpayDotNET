@@ -9,7 +9,7 @@ namespace Heidelpay.Payment.PaymentTypes
 
         }
 
-        public Prepayment(Heidelpay heidelpay)
+        internal Prepayment(Heidelpay heidelpay)
             : base(heidelpay)
         {
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,15 +15,19 @@ namespace Heidelpay.Payment
 
         public string OrderId { get; set; }
 
-        public Resources Resources { get; set; } = new Resources();
-        public Processing Processing { get; set; } = new Processing();
+        [JsonProperty]
+        internal Resources Resources { get; set; } = new Resources();
+
+        [JsonProperty]
+        internal Processing Processing { get; set; } = new Processing();
+
         public IEnumerable<Cancel> CancelList { get; set; } = Enumerable.Empty<Cancel>();
 
         public Authorization()
         {
         }
 
-        public Authorization(Heidelpay heidelpay)
+        internal Authorization(Heidelpay heidelpay)
             : base(heidelpay)
         {
         }

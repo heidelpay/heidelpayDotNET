@@ -13,7 +13,7 @@ namespace Heidelpay.Payment.PaymentTypes
 
         }
 
-        public SepaDirectDebitGuaranteed(Heidelpay heidelpay)
+        internal SepaDirectDebitGuaranteed(Heidelpay heidelpay)
             : base(heidelpay)
         {
 

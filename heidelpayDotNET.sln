@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Heidelpay.Payment", "src\He
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{25D17B03-71FC-4365-9D7D-7B749254014B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Heidelpay.Payment.Tests", "test\Heidelpay.Payment.Tests\Heidelpay.Payment.Tests.csproj", "{F17331EB-BD81-4A79-81E9-15A4E4357177}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Heidelpay.Payment.Internal.Tests", "test\Heidelpay.Payment.Tests\Heidelpay.Payment.Internal.Tests.csproj", "{F17331EB-BD81-4A79-81E9-15A4E4357177}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F5695996-4AD3-4DF1-A010-BC9D4DF1CF6B}"
 	ProjectSection(SolutionItems) = preProject
@@ -18,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 		version.json = version.json
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Heidelpay.Payment.External.Tests", "test\Heidelpay.Payment.External.Tests\Heidelpay.Payment.External.Tests.csproj", "{7A780CED-DE94-4A16-AAEA-9642F4DF0FDF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +55,18 @@ Global
 		{F17331EB-BD81-4A79-81E9-15A4E4357177}.Release|x64.Build.0 = Release|Any CPU
 		{F17331EB-BD81-4A79-81E9-15A4E4357177}.Release|x86.ActiveCfg = Release|Any CPU
 		{F17331EB-BD81-4A79-81E9-15A4E4357177}.Release|x86.Build.0 = Release|Any CPU
+		{7A780CED-DE94-4A16-AAEA-9642F4DF0FDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A780CED-DE94-4A16-AAEA-9642F4DF0FDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A780CED-DE94-4A16-AAEA-9642F4DF0FDF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7A780CED-DE94-4A16-AAEA-9642F4DF0FDF}.Debug|x64.Build.0 = Debug|Any CPU
+		{7A780CED-DE94-4A16-AAEA-9642F4DF0FDF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7A780CED-DE94-4A16-AAEA-9642F4DF0FDF}.Debug|x86.Build.0 = Debug|Any CPU
+		{7A780CED-DE94-4A16-AAEA-9642F4DF0FDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A780CED-DE94-4A16-AAEA-9642F4DF0FDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A780CED-DE94-4A16-AAEA-9642F4DF0FDF}.Release|x64.ActiveCfg = Release|Any CPU
+		{7A780CED-DE94-4A16-AAEA-9642F4DF0FDF}.Release|x64.Build.0 = Release|Any CPU
+		{7A780CED-DE94-4A16-AAEA-9642F4DF0FDF}.Release|x86.ActiveCfg = Release|Any CPU
+		{7A780CED-DE94-4A16-AAEA-9642F4DF0FDF}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +74,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{3D4A6B73-5794-4545-9BF1-0AEA75DC200C} = {2B4DC1AF-F9BA-4ED5-93E1-9F1270CE401D}
 		{F17331EB-BD81-4A79-81E9-15A4E4357177} = {25D17B03-71FC-4365-9D7D-7B749254014B}
+		{7A780CED-DE94-4A16-AAEA-9642F4DF0FDF} = {25D17B03-71FC-4365-9D7D-7B749254014B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D0C6B3D6-BD90-4019-92B3-23ACFA010CB5}

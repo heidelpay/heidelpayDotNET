@@ -9,7 +9,7 @@ namespace Heidelpay.Payment.PaymentTypes
 
         }
 
-        public Paypal(Heidelpay heidelpay)
+        internal Paypal(Heidelpay heidelpay)
             : base(heidelpay)
         {
 

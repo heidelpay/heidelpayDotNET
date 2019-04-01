@@ -9,7 +9,7 @@ namespace Heidelpay.Payment.PaymentTypes
 
         }
 
-        public Pis(Heidelpay heidelpay)
+        internal Pis(Heidelpay heidelpay)
             : base(heidelpay)
         {
 

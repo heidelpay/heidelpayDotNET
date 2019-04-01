@@ -1,16 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Newtonsoft.Json;
 
 namespace Heidelpay.Payment
 {
     public class Resources
     {
-        public string TypeId { get; set; }
-        public string CustomerId { get; set; }
-        public string MetadataId { get; set; }
-        public string PaymentId { get; set; }
-        public string RiskId { get; set; }
-        public string BasketId { get; set; }
+        internal Resources()
+        {
+
+        }
+
+        [JsonProperty]
+        public string TypeId { get; internal set; }
+
+        [JsonProperty]
+        public string CustomerId { get; internal set; }
+
+        [JsonProperty]
+        public string MetadataId { get; internal set; }
+
+        [JsonProperty]
+        public string PaymentId { get; internal set; }
+
+        [JsonProperty]
+        public string RiskId { get; internal set; }
+
+        [JsonProperty]
+        public string BasketId { get; internal set; }
     }
 }

@@ -1,8 +1,18 @@
-﻿namespace Heidelpay.Payment
+﻿using Newtonsoft.Json;
+
+namespace Heidelpay.Payment
 {
     public class Processing
     {
-        public string UniqueId { get; set; }
-        public string ShortId { get; set; }
+        internal Processing()
+        {
+
+        }
+
+        [JsonProperty]
+        public string UniqueId { get; internal set; }
+
+        [JsonProperty]
+        public string ShortId { get; internal set; }
     }
 }

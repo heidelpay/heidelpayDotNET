@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
+using System.Linq;
 using System.Net.Http;
 
 namespace Heidelpay.Payment.Extensions
@@ -36,11 +37,16 @@ namespace Heidelpay.Payment.Extensions
 
         private static IServiceCollection AddHeidelpay(this IServiceCollection serviceCollection)
         {
+            if(!serviceCollection.Any(x => x.ServiceType == typeof(IHttpClientFactory)))
+            {
+                serviceCollection.AddHttpClient();
+            }
+
             return serviceCollection
                 .AddTransient<IRestClient, RestClient>(sp => new RestClient(
                     sp.GetRequiredService<IHttpClientFactory>(), 
                     sp.GetRequiredService<IOptions<HeidelpayApiOptions>>(),
-                    sp.GetRequiredService<ILogger<RestClient>>()))
+                    sp.GetService<ILogger<RestClient>>()))
                 .AddTransient(sp => new Heidelpay(sp.GetRequiredService<IRestClient>()));
         }
     }

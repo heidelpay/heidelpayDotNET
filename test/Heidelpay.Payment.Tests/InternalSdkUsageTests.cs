@@ -9,9 +9,9 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Heidelpay.Payment.Tests
+namespace Heidelpay.Payment.Internal.Tests
 {
-    public class SdkUsageTests
+    public class InternalSdkUsageTests
     {
         [Fact]
         public async Task Heidelpay_DI_Usage_Test_With_User_Setup()
@@ -20,7 +20,7 @@ namespace Heidelpay.Payment.Tests
 
             var configBuilder = new ConfigurationBuilder()
                .SetBasePath(Directory.GetCurrentDirectory())
-               .AddJsonFile("appsettings.json", optional: true);
+               .AddJsonFile("appsettings.internal.json", optional: true);
 
             var config = configBuilder.Build();
 
@@ -41,24 +41,6 @@ namespace Heidelpay.Payment.Tests
             Assert.Equal("SamplekeyFromFile", heidelpay.RestClient.Options.ApiKey);
             Assert.Equal("https://api.heidelpay.com/", heidelpay.RestClient.Options.ApiEndpoint.ToString());
             Assert.Null(heidelpay.RestClient.Options.HttpClientName);
-        }
-
-        [Fact]
-        public async Task Heidelpay_DI_Usage_Test_Without_User_Setup()
-        {
-            var services = new ServiceCollection();
-
-            var configBuilder = new ConfigurationBuilder()
-               .SetBasePath(Directory.GetCurrentDirectory())
-               .AddJsonFile("appsettings.json", optional: true);
-
-            var config = configBuilder.Build();
-
-            services.AddHeidelpay(config.GetSection("Heidelpay"));
-
-            var serviceProvider = services.BuildServiceProvider();
-
-            Assert.Throws<InvalidOperationException>(() => _ = serviceProvider.GetService<Heidelpay>());
         }
 
         [Fact]

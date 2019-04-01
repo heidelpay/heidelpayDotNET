@@ -1,22 +1,19 @@
 using Heidelpay.Payment.Communication;
-using Heidelpay.Payment.Extensions;
 using Heidelpay.Payment.Options;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Heidelpay.Payment.Tests.Communication
+namespace Heidelpay.Payment.Internal.Tests.Communication
 {
-    public class RestClientTest
+    public class RestClientTests
     {
         readonly Uri TestUri = new Uri("https://heidelpay.com");
         const string PrivateKey = "Samplekey";
@@ -140,11 +137,11 @@ namespace Heidelpay.Payment.Tests.Communication
         [Fact]
         public async Task BasicHttpDelete()
         {
-            var restClient = BuildMockRestClient(response: ValidResponse);
+            var restClient = BuildMockRestClient(response: "true");
 
             var response = await restClient.HttpDeleteAsync<ValidResponseClass>(TestUri);
 
-            Assert.Equal(JsonConvert.DeserializeObject<ValidResponseClass>(ValidResponse), response);
+            Assert.True(response);
             Assert.Equal(HttpStatusCode.OK, restClient.LoggedResponse.StatusCode);
         }
 
@@ -188,7 +185,7 @@ namespace Heidelpay.Payment.Tests.Communication
         [Fact]
         public async Task Auth_And_UserAgent_Header_Are_Set_On_Delete_Request()
         {
-            var restClient = BuildMockRestClient(ValidResponse);
+            var restClient = BuildMockRestClient("true");
 
             var _ = await restClient.HttpDeleteAsync<ValidResponseClass>(TestUri);
 

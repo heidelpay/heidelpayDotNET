@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Net.Http;
 
-namespace Heidelpay.Payment.Tests.Communication
+namespace Heidelpay.Payment.Internal.Tests.Communication
 {
     class MockRestClient : RestClient
     {

@@ -1,23 +1,18 @@
 ﻿using Heidelpay.Payment;
 using Heidelpay.Payment.Communication;
-using Heidelpay.Payment.Extensions;
 
 namespace System.Net.Http
 {
-    public static class HttpRequestMessageExtensions
+    internal static class HttpRequestMessageExtensions
     {
         public static void AddAuthentication(this HttpRequestMessage request, string privateKey)
         {
             Check.NotNull(request, nameof(request));
-
-            if (string.IsNullOrEmpty(privateKey))
-            {
-                throw new PaymentException(
-                    "PrivateKey/PublicKey is missing",
-                    "There was a problem authenticating your request. Please contact us for more information.",
-                    "API.000.000.001",
-                    request.RequestUri);
-            }
+            Check.ThrowIfTrue(string.IsNullOrEmpty(privateKey),
+                 merchantMessage: "PrivateKey/PublicKey is missing",
+                 customerMessage: "There was a problem authenticating your request. Please contact us for more information.",
+                 code: "API.000.000.001",
+                 returnUrl: request.RequestUri);
 
             if (!privateKey.EndsWith(":"))
             {

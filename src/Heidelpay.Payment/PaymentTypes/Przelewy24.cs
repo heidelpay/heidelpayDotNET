@@ -9,7 +9,7 @@ namespace Heidelpay.Payment.PaymentTypes
 
         }
 
-        public Przelewy24(Heidelpay heidelpay)
+        internal Przelewy24(Heidelpay heidelpay)
             : base(heidelpay)
         {
 

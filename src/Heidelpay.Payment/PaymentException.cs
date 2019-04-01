@@ -1,6 +1,4 @@
-﻿using Heidelpay.Payment.Communication;
-using Heidelpay.Payment.Extensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -15,6 +13,11 @@ namespace Heidelpay.Payment
         public Uri Uri { get; }
         public HttpStatusCode StatusCode { get; }
 
+        public PaymentException(string message)
+            : base(message)
+        {
+
+        }
         public PaymentException(Uri uri, HttpStatusCode statusCode, DateTime timestamp, IEnumerable<PaymentError> errors)
             : base(ToMessage(uri, statusCode, errors))
         {
@@ -28,6 +31,7 @@ namespace Heidelpay.Payment
             : base(merchantMessage)
         {
             PaymentErrorList = new[] { new PaymentError(merchantMessage, customerMessage, code) };
+            Uri = uri;
         }
 
         private static string ToMessage(Uri uri, HttpStatusCode statusCode, IEnumerable<PaymentError> errors)

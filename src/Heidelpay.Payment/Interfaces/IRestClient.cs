@@ -6,14 +6,15 @@ namespace Heidelpay.Payment.Interfaces
 {
     public interface IRestClient
     {
-        HeidelpayApiOptions Options { get; } 
+        HeidelpayApiOptions Options { get; }
 
-        Task<T> HttpGetAsync<T>(Uri uri);
+        Task<object> HttpGetAsync(Uri uri, Type responseType);
+        Task<object> HttpPostAsync(Uri uri, object content, Type responseType);
 
-        Task<T> HttpPostAsync<T>(Uri uri, object content);
+        Task<T> HttpGetAsync<T>(Uri uri) where T : class;
+        Task<T> HttpPostAsync<T>(Uri uri, object content) where T : class;
+        Task<T> HttpPutAsync<T>(Uri uri, object content) where T : class;
 
-        Task<T> HttpPutAsync<T>(Uri uri, object content);
-
-        Task<T> HttpDeleteAsync<T>(Uri uri);
+        Task<bool> HttpDeleteAsync<T>(Uri uri) where T : class;
     }
 }

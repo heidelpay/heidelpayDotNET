@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Heidelpay.Payment.Tests.Communication
+namespace Heidelpay.Payment.Internal.Tests.Communication
 {
     class MockHttpMessageHandler : HttpMessageHandler
     {

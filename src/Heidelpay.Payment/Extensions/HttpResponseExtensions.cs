@@ -1,13 +1,12 @@
 ﻿using Heidelpay.Payment;
 using Heidelpay.Payment.Communication;
-using Heidelpay.Payment.Extensions;
 using Newtonsoft.Json;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace System.Net.Http
 {
-    public static class HttpResponseExtensions
+    internal static class HttpResponseExtensions
     {
         public static readonly HttpStatusCode[] SuccessStatusCodes = new[]
         {
