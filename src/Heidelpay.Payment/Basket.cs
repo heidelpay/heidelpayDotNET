@@ -4,7 +4,6 @@ namespace Heidelpay.Payment
 {
     public class Basket : PaymentBase
     {
-        public string Id { get; set; }
         public decimal AmountTotal { get; set; }
         public decimal AmountTotalDiscount { get; set; }
         public string CurrencyCode { get; set; }

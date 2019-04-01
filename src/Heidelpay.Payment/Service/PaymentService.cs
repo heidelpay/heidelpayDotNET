@@ -136,6 +136,7 @@ namespace Heidelpay.Payment.Service
             var result = await ApiGetAsync(payment);
 
             result.CancelList = await FetchCancelListAsync(payment);
+            result.ChargesList = await FetchChargeListAsync(payment);
 
             return result;
         }
@@ -161,7 +162,25 @@ namespace Heidelpay.Payment.Service
 
         private async Task<IEnumerable<Cancel>> FetchCancelListAsync(Payment payment)
         {
-            return Enumerable.Empty<Cancel>();
+            var cancelTransactions = GetCancels(payment.Transactions);
+
+            var result = new List<Cancel>();
+            foreach (var cancelTransaction in cancelTransactions)
+            {
+                result.Add(await ApiGetAsync<Cancel>(cancelTransaction.Url));
+            }
+            return result;
+        }
+
+        private async Task<IEnumerable<Charge>> FetchChargeListAsync(Payment payment)
+        {
+            var chargeTransactions = GetCharges(payment.Transactions);
+            var result = new List<Charge>();
+            foreach (var chargeTransaction in chargeTransactions)
+            {
+                result.Add(await ApiGetAsync<Charge>(chargeTransaction.Url));
+            }
+            return result;
         }
 
         private IEnumerable<Cancel> GetCancelsForAuthorization(IEnumerable<Cancel> cancelList)
@@ -203,6 +222,13 @@ namespace Heidelpay.Payment.Service
         private async Task<object> ApiGetAsync(string id, IRestResource resource)
         {
             var result = await heidelpay.RestClient.HttpGetAsync(BuildApiEndpointUri(resource, id), resource.GetType());
+            return PostProcessApiResource(result);
+        }
+
+        private async Task<T> ApiGetAsync<T>(Uri uri)
+             where T : class, IRestResource
+        {
+            var result = await heidelpay.RestClient.HttpGetAsync<T>(uri);
             return PostProcessApiResource(result);
         }
 
