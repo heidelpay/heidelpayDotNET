@@ -80,6 +80,20 @@ namespace Heidelpay.Payment
             PaymentService = new PaymentService(this);
         }
 
+        public bool Attach(object resource)
+        {
+            bool attached = false;
+
+            if(resource is IHeidelpayProvider provider 
+                && provider.Heidelpay == null)
+            {
+                provider.Heidelpay = this;
+                attached = true;
+            }
+            
+            return attached;
+        }
+
         public async Task<Customer> CreateCustomerAsync(Customer customer)
         {
             Check.NotNull(customer, nameof(customer));
@@ -115,7 +129,7 @@ namespace Heidelpay.Payment
         {
             Check.NotNullOrEmpty(paymentId, nameof(paymentId));
 
-            throw new NotImplementedException();
+            return await PaymentService.CancelAsync(new Cancel { Amount = amount }, paymentId);
         }
 
         public async Task<Charge> ChargeAsync(decimal amount, string currency, string typeId, Uri returnUrl = null, string customerId = null, bool? card3ds = null)
@@ -272,7 +286,7 @@ namespace Heidelpay.Payment
             Check.NotNullOrEmpty(paymentId, nameof(paymentId));
             Check.NotNullOrEmpty(chargeId, nameof(chargeId));
 
-            throw new NotImplementedException();
+            return await PaymentService.CancelChargeAsync(new Cancel { Amount = amount }, chargeId, paymentId);
         }
 
         public async Task<Charge> FetchChargeAsync(string paymentId, string chargeId)

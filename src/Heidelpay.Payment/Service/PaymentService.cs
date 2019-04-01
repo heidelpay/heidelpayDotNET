@@ -64,18 +64,6 @@ namespace Heidelpay.Payment.Service
             return result;
         }
 
-        internal async Task<Charge> ChargeAsync(Charge charge, string paymentId)
-        {
-            Check.NotNull(charge, nameof(charge));
-            Check.NotNullOrEmpty(paymentId, nameof(paymentId));
-
-            var result = await ApiPostAsync(charge, BuildApiEndpointUri(charge, charge.ResolvePaymentUrl(paymentId), null), getAfterPost: false);
-
-            result.Payment = await FetchPaymentAsync(result.Resources.PaymentId);
-
-            return result;
-        }
-
         public async Task<Authorization> AuthorizeAsync(Authorization authorization)
         {
             Check.NotNull(authorization, nameof(authorization));
@@ -179,8 +167,45 @@ namespace Heidelpay.Payment.Service
         {
             var shipment = new Shipment { InvoiceId = invoiceId };
 
-            var paymentUri = BuildApiEndpointUri(shipment, shipment.ResolvePaymentUrl(paymentId), null);
+            var paymentUri = BuildApiEndpointUri(shipment.ResolvePaymentUrl(paymentId), null);
             var result = await ApiPostAsync(shipment, paymentUri, false);
+
+            result.Payment = await FetchPaymentAsync(result.Resources.PaymentId);
+
+            return result;
+        }
+
+        internal async Task<Charge> ChargeAsync(Charge charge, string paymentId)
+        {
+            Check.NotNull(charge, nameof(charge));
+            Check.NotNullOrEmpty(paymentId, nameof(paymentId));
+
+            var result = await ApiPostAsync(charge, BuildApiEndpointUri(charge.ResolvePaymentUrl(paymentId), null), getAfterPost: false);
+
+            result.Payment = await FetchPaymentAsync(result.Resources.PaymentId);
+
+            return result;
+        }
+
+        internal async Task<Cancel> CancelAsync(Cancel cancel, string paymentId)
+        {
+            Check.NotNull(cancel, nameof(cancel));
+            Check.NotNullOrEmpty(paymentId, nameof(paymentId));
+
+            var result = await ApiPostAsync(cancel, BuildApiEndpointUri(cancel.ResolvePaymentUrl(paymentId), null), getAfterPost: false);
+
+            result.Payment = await FetchPaymentAsync(result.Resources.PaymentId);
+
+            return result;
+        }
+
+        public async Task<Cancel> CancelChargeAsync(Cancel cancel, string chargeId, string paymentId)
+        { 
+            Check.NotNull(cancel, nameof(cancel));
+            Check.NotNullOrEmpty(chargeId, nameof(chargeId));
+            Check.NotNullOrEmpty(paymentId, nameof(paymentId));
+
+            var result = await ApiPostAsync(cancel, BuildApiEndpointUri(cancel.ResolveRefundUrl(paymentId, chargeId), null), getAfterPost: false);
 
             result.Payment = await FetchPaymentAsync(result.Resources.PaymentId);
 
@@ -319,10 +344,10 @@ namespace Heidelpay.Payment.Service
 
         private Uri BuildApiEndpointUri(IRestResource resource, string id = null)
         {
-            return BuildApiEndpointUri(resource, resource.ResolveResourceUrl(), id);
+            return BuildApiEndpointUri(resource.ResolveResourceUrl(), id);
         }
 
-        private Uri BuildApiEndpointUri(IRestResource resource, string resourceUrl, string id)
+        private Uri BuildApiEndpointUri(string resourceUrl, string id)
         {
             var rootPath = new Uri(heidelpay.RestClient?.Options?.ApiEndpoint, heidelpay.RestClient?.Options?.ApiVersion.EnsureTrailingSlash());
             var combinedPaths = new Uri(rootPath, resourceUrl);

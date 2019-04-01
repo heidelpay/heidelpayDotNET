@@ -29,6 +29,8 @@ namespace Heidelpay.Payment
 
         internal PaymentBase(Heidelpay heidelpay)
         {
+            Check.NotNull(heidelpay, nameof(heidelpay));
+
             ((IHeidelpayProvider)this).Heidelpay = heidelpay;
         }
 

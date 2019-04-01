@@ -9,7 +9,7 @@ namespace Heidelpay.Payment
 {
     public class Authorization : PaymentTransactionBase
     {
-        public decimal Amount { get; set; }
+        public decimal? Amount { get; set; }
         public string Currency { get; set; }
         public Uri ReturnUrl { get; set; }
         public Uri RedirectUrl { get; set; }

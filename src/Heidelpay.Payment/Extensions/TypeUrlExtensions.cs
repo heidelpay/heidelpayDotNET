@@ -26,7 +26,7 @@ namespace Heidelpay.Payment.Interface
         }
         public static string ResolveRefundUrl(this IRestResource value, string paymentId, string chargeId)
         {
-            return value.TypeUrl
+            return REFUND_URL
                 .Replace(PLACEHOLDER_PAYMENT_ID, paymentId)
                 .Replace(PLACEHOLDER_CHARGE_ID, chargeId)
                 .EnsureTrailingSlash();
