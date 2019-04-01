@@ -115,7 +115,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             Assert.Equal(builtCharge.OrderId, charge.OrderId);
         }
 
-        [Fact(Skip= "Bug in API, Ticket AHC-1197"]
+        [Fact(Skip= "Bug in API, Ticket AHC-1197")]
         public async Task Charge_With_3ds_False()
         {
             var card = await BuildHeidelpay().CreatePaymentTypeAsync(PaymentTypeCard);
@@ -130,7 +130,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             Assert.False(charge.Card3ds);
         }
 
-        [Fact(Skip = "Bug in API, Ticket AHC-1197"]
+        [Fact(Skip = "Bug in API, Ticket AHC-1197")]
         public async Task Charge_With_3ds_True()
         {
             var card = await BuildHeidelpay().CreatePaymentTypeAsync(PaymentTypeCard);
