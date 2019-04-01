@@ -18,6 +18,7 @@ namespace Heidelpay.Payment
         {
 
         }
+
         public PaymentException(Uri uri, HttpStatusCode statusCode, DateTime timestamp, IEnumerable<PaymentError> errors)
             : base(ToMessage(uri, statusCode, errors))
         {

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Heidelpay.Payment.Interfaces;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
@@ -7,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Heidelpay.Payment
 {
-    public class Charge : PaymentBase
+    public class Charge : PaymentTransactionBase
     {
-        public decimal Amount { get; set; }
+        public decimal? Amount { get; set; }
         public string Currency { get; set; }
         public Uri ReturnUrl { get; set; }
         public Uri RedirectUrl { get; set; }
@@ -43,49 +44,27 @@ namespace Heidelpay.Payment
                 return Status.Undefined;
             }
         }
-
-        public string PaymentId
-        {
-            get
-            {
-                return Payment?.Id ?? Resources?.PaymentId;
-            }
-        }
-
-        public string TypeId
-        {
-            get
-            {
-                return Resources?.TypeId;
-            }
-        }
-
-        [JsonProperty]
-        internal Resources Resources { get; set; } = new Resources();
-
-        [JsonProperty]
-        internal Processing Processing { get; set; } = new Processing();
-
+       
         public IEnumerable<Cancel> CancelList { get; set; } = Enumerable.Empty<Cancel>();
 
-        public Charge()
+        public Charge(IPaymentCharge chargeablePayment)
+            : this(chargeablePayment.Heidelpay)
         {
-        }
-        public Charge(string typeId)
-        {
-            Resources.TypeId = typeId;
+            Resources.TypeId = chargeablePayment.Id;
         }
 
-        public Charge(string typeId, string orderId)
+        [JsonConstructor]
+        internal Charge()
         {
-            Resources.TypeId = typeId;
-            OrderId = orderId;
-        }
+        }  
 
         internal Charge(Heidelpay heidelpay)
             : base(heidelpay)
         {
         }
+
+        [JsonProperty]
+        internal Processing Processing { get; set; } = new Processing();
 
         public async Task<Cancel> CancelAsync(decimal? amount = null)
         {

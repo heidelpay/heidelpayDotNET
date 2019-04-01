@@ -13,7 +13,8 @@ namespace Heidelpay.Payment
         [JsonProperty]
         public string Code { get; internal set; }
 
-        public PaymentError()
+        [JsonConstructor]
+        internal PaymentError()
         {
 
         }

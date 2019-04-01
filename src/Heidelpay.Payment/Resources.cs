@@ -4,6 +4,7 @@ namespace Heidelpay.Payment
 {
     public class Resources
     {
+        [JsonConstructor]
         internal Resources()
         {
 

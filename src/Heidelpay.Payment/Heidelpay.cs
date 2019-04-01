@@ -1,4 +1,5 @@
 ﻿using Heidelpay.Payment.Communication;
+using Heidelpay.Payment.Interface;
 using Heidelpay.Payment.Interfaces;
 using Heidelpay.Payment.Options;
 using Heidelpay.Payment.PaymentTypes;
@@ -107,7 +108,7 @@ namespace Heidelpay.Payment
         {
             Check.NotNullOrEmpty(paymentId, nameof(paymentId));
 
-            throw new NotImplementedException();
+            return await PaymentService.ChargeAsync(new Charge { Amount = amount }, paymentId);
         }
 
         public async Task<Cancel> CancelAuthorizationAsync(string paymentId, decimal? amount = null)

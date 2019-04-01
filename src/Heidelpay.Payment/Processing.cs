@@ -4,6 +4,7 @@ namespace Heidelpay.Payment
 {
     public class Processing
     {
+        [JsonConstructor]
         internal Processing()
         {
 

@@ -2,13 +2,14 @@
 
 namespace Heidelpay.Payment
 {
-    public class Cancel : PaymentBase
+    public class Cancel : PaymentTransactionBase
     {
         public decimal Amount { get; set; }
 
         [JsonProperty]
         internal Processing Processing { get; set; } = new Processing();
 
+        [JsonConstructor]
         internal Cancel()
         {
         }

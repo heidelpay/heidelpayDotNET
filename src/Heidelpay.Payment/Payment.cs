@@ -26,9 +26,9 @@ namespace Heidelpay.Payment
         public string Currency { get; set; }
         public string OrderId { get; set; }
 
-        public Authorization Authorization { get; set; }
-        public IEnumerable<Charge> ChargesList { get; set; } = Enumerable.Empty<Charge>();
-        public IEnumerable<Cancel> CancelList { get; set; } = Enumerable.Empty<Cancel>();
+        public Authorization Authorization { get; internal set; }
+        public IEnumerable<Charge> ChargesList { get; internal set; } = Enumerable.Empty<Charge>();
+        public IEnumerable<Cancel> CancelList { get; internal set; } = Enumerable.Empty<Cancel>();
 
         [JsonProperty]
         internal Resources Resources { get; set; } = new Resources();
@@ -50,6 +50,7 @@ namespace Heidelpay.Payment
 
         }
 
+        [JsonConstructor]
         internal Payment()
         {
 
@@ -57,7 +58,7 @@ namespace Heidelpay.Payment
 
         public async Task<Charge> ChargeAsync(decimal? amount = null)
         {
-            return await Heidelpay.ChargeAuthorizationAsync(Payment.Id, amount);
+            return await Heidelpay.ChargeAuthorizationAsync(Id, amount);
         }
 
         public async Task<Charge> ChargeAsync(decimal amount, string currency, string typeId, Uri returnUrl = null, string customerId = null)

@@ -1,7 +1,10 @@
-﻿namespace Heidelpay.Payment
+﻿using Newtonsoft.Json;
+
+namespace Heidelpay.Payment
 {
     public class Refund : PaymentBase
     {
+        [JsonConstructor]
         internal Refund()
         {
 

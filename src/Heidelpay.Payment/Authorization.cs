@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Heidelpay.Payment.Interfaces;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Heidelpay.Payment
 {
-    public class Authorization : PaymentBase
+    public class Authorization : PaymentTransactionBase
     {
         public decimal Amount { get; set; }
         public string Currency { get; set; }
@@ -15,15 +16,12 @@ namespace Heidelpay.Payment
 
         public string OrderId { get; set; }
 
-        [JsonProperty]
-        internal Resources Resources { get; set; } = new Resources();
-
-        [JsonProperty]
-        internal Processing Processing { get; set; } = new Processing();
+        public bool? Card3ds { get; set; }
 
         public IEnumerable<Cancel> CancelList { get; set; } = Enumerable.Empty<Cancel>();
 
-        public Authorization()
+        [JsonConstructor]
+        internal Authorization()
         {
         }
 
@@ -31,6 +29,15 @@ namespace Heidelpay.Payment
             : base(heidelpay)
         {
         }
+
+        public Authorization(IPaymentAuthorize paymentAuthorizable)
+            : this(paymentAuthorizable.Heidelpay)
+        {
+            Resources.TypeId = paymentAuthorizable.Id;
+        }
+
+        [JsonProperty]
+        internal Processing Processing { get; set; } = new Processing();
 
         public async Task<Cancel> CancelAsync(decimal? amount = null)
         {

@@ -18,6 +18,7 @@ namespace Heidelpay.Payment.Communication
         {
             NullValueHandling = NullValueHandling.Ignore,
             ContractResolver = new CamelCasePropertyNamesContractResolver(),
+            ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
         };
 
         private readonly IHttpClientFactory factory;

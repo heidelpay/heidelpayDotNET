@@ -64,6 +64,18 @@ namespace Heidelpay.Payment.Service
             return result;
         }
 
+        internal async Task<Charge> ChargeAsync(Charge charge, string paymentId)
+        {
+            Check.NotNull(charge, nameof(charge));
+            Check.NotNullOrEmpty(paymentId, nameof(paymentId));
+
+            var result = await ApiPostAsync(charge, BuildApiEndpointUri(charge, charge.ResolvePaymentUrl(paymentId), null), getAfterPost: false);
+
+            result.Payment = await FetchPaymentAsync(result.Resources.PaymentId);
+
+            return result;
+        }
+
         public async Task<Authorization> AuthorizeAsync(Authorization authorization)
         {
             Check.NotNull(authorization, nameof(authorization));
@@ -131,14 +143,8 @@ namespace Heidelpay.Payment.Service
         {
             Check.NotNullOrEmpty(paymentId, nameof(paymentId));
 
-            var payment = new Payment { Id = paymentId };
-
-            var result = await ApiGetAsync(payment);
-
-            result.CancelList = await FetchCancelListAsync(payment);
-            result.ChargesList = await FetchChargeListAsync(payment);
-
-            return result;
+            var payment = await ApiGetAsync(new Payment { Id = paymentId });
+            return await PostProcessPayment(payment);
         }
 
         public async Task<Basket> FetchBasketAsync(string basketId)
@@ -181,6 +187,23 @@ namespace Heidelpay.Payment.Service
             return result;
         }
 
+        private async Task<Authorization> FetchAuthorizationAsync(Payment payment)
+        {
+            var authTransactions = GetAuthorization(payment.Transactions);
+            var result = new List<Authorization>();
+            foreach (var authTransaction in authTransactions)
+            {
+                var auth = await ApiGetAsync<Authorization>(authTransaction.Url);
+                auth.Payment = payment;
+                auth.ResourceUrl = authTransaction.Url;
+                auth.TransactionType = authTransaction.Type;
+                auth.CancelList = GetCancelsForAuthorization(payment.CancelList);
+                auth.Resources.BasketId = payment.Resources.BasketId;
+                result.Add(auth);
+            }
+            return result.SingleOrDefault();
+        }
+
         private async Task<IEnumerable<Cancel>> FetchCancelListAsync(Payment payment)
         {
             var cancelTransactions = GetCancels(payment.Transactions);
@@ -188,18 +211,28 @@ namespace Heidelpay.Payment.Service
             var result = new List<Cancel>();
             foreach (var cancelTransaction in cancelTransactions)
             {
-                result.Add(await ApiGetAsync<Cancel>(cancelTransaction.Url));
+                var cancel = await ApiGetAsync<Cancel>(cancelTransaction.Url);
+                cancel.Payment = payment;
+                cancel.ResourceUrl = cancelTransaction.Url;
+                cancel.TransactionType = cancelTransaction.Type;
+                result.Add(cancel);
             }
             return result;
         }
-
+                
         private async Task<IEnumerable<Charge>> FetchChargeListAsync(Payment payment)
         {
             var chargeTransactions = GetCharges(payment.Transactions);
             var result = new List<Charge>();
             foreach (var chargeTransaction in chargeTransactions)
             {
-                result.Add(await ApiGetAsync<Charge>(chargeTransaction.Url));
+                var charge = await ApiGetAsync<Charge>(chargeTransaction.Url);
+                charge.Payment = payment;
+                charge.ResourceUrl = chargeTransaction.Url;
+                charge.CancelList = GetCancelsForCharge(payment.CancelList);
+                charge.TransactionType = chargeTransaction.Type;
+                charge.Resources.BasketId = payment.Resources.BasketId;
+                result.Add(charge);
             }
             return result;
         }
@@ -333,6 +366,14 @@ namespace Heidelpay.Payment.Service
             }
 
             return PostProcessApiResource(result);
+        }
+
+        private async Task<Payment> PostProcessPayment(Payment payment)
+        {
+            payment.CancelList = await FetchCancelListAsync(payment);
+            payment.ChargesList = await FetchChargeListAsync(payment);
+            payment.Authorization = await FetchAuthorizationAsync(payment);
+            return payment;
         }
 
         private T PostProcessApiResource<T>(T resource)

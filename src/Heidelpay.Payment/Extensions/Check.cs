@@ -23,6 +23,14 @@ namespace System
             }
         }
 
+        public static void ThrowIfFalse(bool func, string message)
+        {
+            if (!func)
+            {
+                throw new PaymentException(message);
+            }
+        }
+
         public static void ThrowIfTrue(bool func, string merchantMessage = null, string customerMessage = null, string code = null, Uri returnUrl = null)
         {
             if (func)
