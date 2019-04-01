@@ -18,7 +18,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         public async Task Charge_PaymentType()
         {
             var result = await BuildHeidelpay().CreatePaymentTypeAsync(new InvoiceGuaranteed());
-            var charge = await result.ChargeAsync(10.0m, "EUR", new Uri("https://www.meinShop.de"), GetMaximumCustomerSameAddress(GetRandomId()));
+            var charge = await result.ChargeAsync(10.0m, "EUR", ShopReturnUri, GetMaximumCustomerSameAddress(GetRandomId()));
             Assert.NotNull(result?.Id);
             Assert.NotNull(charge?.Id);
         }
@@ -28,14 +28,14 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         {
             var paymentType = await BuildHeidelpay().CreatePaymentTypeAsync(new InvoiceGuaranteed());
 
-            await Assert.ThrowsAsync<PaymentException>(() => paymentType.ChargeAsync(decimal.One, "EUR", new Uri("https://www.meinShop.de"), GetMaximumCustomer(GetRandomId())));
+            await Assert.ThrowsAsync<PaymentException>(() => paymentType.ChargeAsync(decimal.One, "EUR", ShopReturnUri, GetMaximumCustomer(GetRandomId())));
         }
 
         [Fact(Skip="Test fails every other execution because of unspecified provider errors")]
         public async Task Shipment_PaymentType()
         {
             var result = await BuildHeidelpay().CreatePaymentTypeAsync(new InvoiceGuaranteed());
-            var charge = await result.ChargeAsync(10.0m, "EUR", new Uri("https://www.meinShop.de"), GetMaximumCustomerSameAddress(GetRandomId()));
+            var charge = await result.ChargeAsync(10.0m, "EUR", ShopReturnUri, GetMaximumCustomerSameAddress(GetRandomId()));
             var shipment = await BuildHeidelpay().ShipmentAsync(charge?.PaymentId);
 
             Assert.NotNull(shipment?.Id);

@@ -1,9 +1,21 @@
-﻿namespace Heidelpay.Payment.Communication.Internal
+﻿using Newtonsoft.Json;
+
+namespace Heidelpay.Payment.Communication.Internal
 {
-    internal class Message
+    public class Message
     {
-        public string Code { get; set; }
-        public string Customer { get; set; }
-        public string Merchant { get; set; }
+        internal Message()
+        {
+
+        }
+
+        [JsonProperty]
+        public string Code { get; internal set; }
+
+        [JsonProperty]
+        public string Customer { get; internal set; }
+
+        [JsonProperty]
+        public string Merchant { get; internal set; }
     }
 }

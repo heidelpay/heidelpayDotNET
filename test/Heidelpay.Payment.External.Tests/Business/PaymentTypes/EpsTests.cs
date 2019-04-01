@@ -26,7 +26,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         public async Task Charge_Eps_Type()
         {
             var result = await BuildHeidelpay().CreatePaymentTypeAsync(new Eps());
-            var charge = await BuildHeidelpay().ChargeAsync(decimal.One, "EUR", result, new Uri("https://www.google.at"));
+            var charge = await BuildHeidelpay().ChargeAsync(decimal.One, "EUR", result, TestReturnUri);
             Assert.NotNull(charge?.Id);
             Assert.NotNull(charge?.RedirectUrl);
         }

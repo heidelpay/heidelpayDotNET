@@ -117,7 +117,7 @@ namespace Heidelpay.Payment
             throw new NotImplementedException();
         }
 
-        public async Task<Charge> ChargeAsync(decimal amount, string currency, string typeId, Uri returnUrl = null, string customerId = null)
+        public async Task<Charge> ChargeAsync(decimal amount, string currency, string typeId, Uri returnUrl = null, string customerId = null, bool? card3ds = null)
         {
             Check.NotNullOrEmpty(currency, nameof(currency));
             Check.NotNullOrEmpty(typeId, nameof(typeId));
@@ -126,6 +126,7 @@ namespace Heidelpay.Payment
             {
                 Amount = amount,
                 Currency = currency, ReturnUrl = returnUrl,
+                Card3ds = card3ds,
                 Resources = new Resources
                 {
                     TypeId = typeId,
@@ -134,14 +135,14 @@ namespace Heidelpay.Payment
             });
         }
 
-        public async Task<Charge> ChargeAsync(decimal amount, string currency, IPaymentType paymentType)
+        public async Task<Charge> ChargeAsync(decimal amount, string currency, IPaymentType paymentType, bool? card3ds = null)
         {
             Check.NotNullOrEmpty(currency, nameof(currency));
 
-            return await ChargeAsync(amount, currency, paymentType, returnUrl: null, customerId: null);
+            return await ChargeAsync(amount, currency, paymentType, returnUrl: null, customerId: null, card3ds: card3ds);
         }
 
-        public async Task<Charge> ChargeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, Customer customer = null)
+        public async Task<Charge> ChargeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, Customer customer = null, bool? card3ds = null)
         {
             Check.NotNullOrEmpty(currency, nameof(currency));
             Check.NotNull(paymentType, nameof(paymentType));
@@ -149,10 +150,10 @@ namespace Heidelpay.Payment
 
             var customerId = await EnsureRestResourceCreatedAsync(customer);
 
-            return await ChargeAsync(amount, currency, paymentType,  returnUrl, customerId);
+            return await ChargeAsync(amount, currency, paymentType,  returnUrl, customerId, card3ds);
         }
 
-        public async Task<Charge> ChargeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, string customerId)
+        public async Task<Charge> ChargeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, string customerId, bool? card3ds = null)
         {
             Check.NotNullOrEmpty(currency, nameof(currency));
             Check.NotNull(paymentType, nameof(paymentType));
@@ -165,6 +166,7 @@ namespace Heidelpay.Payment
                 Amount = amount,
                 Currency = currency,
                 ReturnUrl = returnUrl,
+                Card3ds = card3ds,
                 Resources = new Resources
                 {
                     TypeId = typeId,
@@ -173,7 +175,7 @@ namespace Heidelpay.Payment
             });
         }
 
-        public async Task<Charge> ChargeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, Customer customer, Basket basket, string invoiceId = null)
+        public async Task<Charge> ChargeAsync(decimal amount, string currency, IPaymentType paymentType, Uri returnUrl, Customer customer, Basket basket, string invoiceId = null, bool? card3ds = null)
         {
             Check.NotNullOrEmpty(currency, nameof(currency));
             Check.NotNull(paymentType, nameof(paymentType));
@@ -190,6 +192,7 @@ namespace Heidelpay.Payment
                 Currency = currency,
                 ReturnUrl = returnUrl,
                 InvoiceId = invoiceId,
+                Card3ds = card3ds,
                 Resources = new Resources
                 {
                     TypeId = typeId,
@@ -313,6 +316,13 @@ namespace Heidelpay.Payment
             Check.NotNullOrEmpty(paymentId, nameof(paymentId));
 
             return await PaymentService.FetchAuthorizationAsync(paymentId);
+        }
+
+        public async Task<Payment> FetchPaymentAsync(string paymentId)
+        {
+            Check.NotNullOrEmpty(paymentId, nameof(paymentId));
+
+            return await PaymentService.FetchPaymentAsync(paymentId);
         }
 
         public async Task<TPaymentBase> CreatePaymentTypeAsync<TPaymentBase>(TPaymentBase paymentType)

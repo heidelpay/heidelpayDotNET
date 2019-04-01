@@ -30,7 +30,7 @@ namespace Heidelpay.Payment.External.Tests
             {
                 Amount = decimal.One,
                 Currency = "EUR",
-                ReturnUrl = new Uri("https://www.google.at"),
+                ReturnUrl = TestReturnUri,
                 OrderId = orderId,
                 Resources = new Resources
                 {
@@ -41,5 +41,7 @@ namespace Heidelpay.Payment.External.Tests
                 }
             };
         }
+
+        static Uri TestReturnUri { get; } = new Uri("https://www.google.at");
     }
 }

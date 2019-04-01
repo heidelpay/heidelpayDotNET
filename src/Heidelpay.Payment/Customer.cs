@@ -21,13 +21,7 @@ namespace Heidelpay.Payment
         public Address BillingAddress { get; set; }
         public Address ShippingAddress { get; set; }
 
-        public Customer(string firstName, string lastName)
-        {
-            this.Firstname = firstName;
-            this.Lastname = lastName;
-        }
-
-        internal Customer()
+        public Customer()
         {
 
         }

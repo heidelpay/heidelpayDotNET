@@ -19,7 +19,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         public async Task Authorize_PaymentType()
         {
             var result = await BuildHeidelpay().CreatePaymentTypeAsync(new Paypal());
-            var auth = await BuildHeidelpay().AuthorizeAsync(decimal.One, "EUR", result, new Uri("https://www.meinShop.de"));
+            var auth = await BuildHeidelpay().AuthorizeAsync(decimal.One, "EUR", result, ShopReturnUri);
             Assert.NotNull(result?.Id);
             Assert.NotNull(auth?.Id);
         }
@@ -28,7 +28,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         public async Task Charge_PaymentType()
         {
             var result = await BuildHeidelpay().CreatePaymentTypeAsync(new Paypal());
-            var charge = await BuildHeidelpay().ChargeAsync(decimal.One, "EUR", result, new Uri("https://www.google.at"));
+            var charge = await BuildHeidelpay().ChargeAsync(decimal.One, "EUR", result, TestReturnUri);
             Assert.NotNull(charge?.Id);
             Assert.NotNull(charge?.RedirectUrl);
         }

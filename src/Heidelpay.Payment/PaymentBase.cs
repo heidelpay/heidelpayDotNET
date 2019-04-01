@@ -21,7 +21,7 @@ namespace Heidelpay.Payment
         Heidelpay IHeidelpayProvider.Heidelpay { get; set; }
 
         [JsonProperty]
-        internal Message Message { get; set; }
+        public Message Message { get; internal set; }
 
         [JsonProperty(PropertyName = "type")]
         internal string TransactionType { get; set; }

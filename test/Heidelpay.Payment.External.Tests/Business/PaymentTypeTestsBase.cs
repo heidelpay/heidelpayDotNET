@@ -57,15 +57,17 @@ namespace Heidelpay.Payment.External.Tests.Business
 
         protected Customer GetMinimumCustomer()
         {
-            return new Customer("Max", "Musterperson");
+            return new Customer { Firstname = "Max", Lastname = "Musterperson" };
         }
 
         protected Customer GetMaximumCustomerSameAddress(String customerId)
         {
             TryParseDateTime("1974-03-10", out DateTime dt);
 
-            return new Customer("Max", "Musterperson")
+            return new Customer
             {
+                Firstname = "Max",
+                Lastname = "Musterperson",
                 CustomerId = customerId,
                 Salutation = Salutation.Mr,
                 Email = "info@heidelpay.com",
@@ -79,8 +81,10 @@ namespace Heidelpay.Payment.External.Tests.Business
         {
             TryParseDateTime("1974-03-10", out DateTime dt);
 
-            return new Customer("Max", "Musterperson")
+            return new Customer
             {
+                Firstname = "Max",
+                Lastname = "Musterperson",
                 CustomerId = customerId,
                 Salutation = Salutation.Mr,
                 Email = "info@heidelpay.com",
@@ -140,5 +144,8 @@ namespace Heidelpay.Payment.External.Tests.Business
 
             return DateTime.TryParseExact(value, AllowedDateTimeFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out result);
         }
+
+        protected Uri TestReturnUri { get; } = new Uri("https://www.google.at");
+        protected Uri ShopReturnUri { get; } = new Uri("https://www.meinShop.de");
     }
 }

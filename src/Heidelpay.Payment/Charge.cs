@@ -71,6 +71,16 @@ namespace Heidelpay.Payment
         public Charge()
         {
         }
+        public Charge(string typeId)
+        {
+            Resources.TypeId = typeId;
+        }
+
+        public Charge(string typeId, string orderId)
+        {
+            Resources.TypeId = typeId;
+            OrderId = orderId;
+        }
 
         internal Charge(Heidelpay heidelpay)
             : base(heidelpay)

@@ -149,8 +149,10 @@ namespace Heidelpay.Payment.External.Tests.Business.Errors
 
             Assert.NotNull(customer.Id);
 
-            var customerUpdate = new Customer(customer.Firstname, customer.Lastname)
+            var customerUpdate = new Customer
             {
+                Firstname = customer.Firstname,
+                Lastname = customer.Lastname,
                 Email = "max",
             };
 
@@ -169,10 +171,10 @@ namespace Heidelpay.Payment.External.Tests.Business.Errors
         public async Task Create_Invalid_Customer()
         {
             TryParseDateTime("1944-01-01", out DateTime dt);
-            var customer = new Customer(
-                "This is a very long first name because someone put the wrong content into the field",
-                "This is a very long last name because someone put the wrong content into the field")
+            var customer = new Customer
             {
+                Firstname = "This is a very long first name because someone put the wrong content into the field",
+                Lastname = "This is a very long last name because someone put the wrong content into the field",
                 BirthDate = dt,
                 Email = "max",
                 Mobile = "xxx",
