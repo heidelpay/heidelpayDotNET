@@ -141,6 +141,27 @@ namespace Heidelpay.Payment.Service
             return result;
         }
 
+        public async Task<Basket> FetchBasketAsync(string basketId)
+        {
+            Check.NotNullOrEmpty(basketId, nameof(basketId));
+
+            return await ApiGetAsync(new Basket { Id = basketId });
+        }
+
+        public async Task<Customer> FetchCustomerAsync(string customerId)
+        {
+            Check.NotNullOrEmpty(customerId, nameof(customerId));
+
+            return await ApiGetAsync(new Customer { Id = customerId });
+        }
+
+        public async Task<MetaData> FetchMetaDataAsync(string metaDataId)
+        {
+            Check.NotNullOrEmpty(metaDataId, nameof(metaDataId));
+
+            return await ApiGetAsync(new MetaData { Id = metaDataId });
+        }
+
         public async Task<string> EnsureRestResourceIdAsync<T>(T resource)
             where T : class, IRestResource
         {

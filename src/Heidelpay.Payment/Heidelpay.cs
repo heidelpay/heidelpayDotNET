@@ -286,7 +286,7 @@ namespace Heidelpay.Payment
         {
             Check.NotNullOrEmpty(customerId, nameof(customerId));
 
-            throw new NotImplementedException();
+            return await PaymentService.FetchCustomerAsync(customerId);
         }
 
         public async Task<TPaymentType> FetchPaymentTypeAsync<TPaymentType>(string typeId)
@@ -301,14 +301,14 @@ namespace Heidelpay.Payment
         {
             Check.NotNullOrEmpty(metaDataId, nameof(metaDataId));
 
-            throw new NotImplementedException();
+            return await PaymentService.FetchMetaDataAsync(metaDataId);
         }
 
         public async Task<Basket> FetchBasketAsync(string basketId)
         {
             Check.NotNullOrEmpty(basketId, nameof(basketId));
 
-            throw new NotImplementedException();
+            return await PaymentService.FetchBasketAsync(basketId);
         }
 
         public async Task<Authorization> FetchAuthorizationAsync(string paymentId)
