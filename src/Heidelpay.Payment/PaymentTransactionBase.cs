@@ -129,6 +129,7 @@ namespace Heidelpay.Payment
         /// Gets or sets the basket identifier.
         /// </summary>
         /// <value>The basket identifier.</value>
+        [JsonIgnore]
         public string BasketId
         {
             get
@@ -208,7 +209,8 @@ namespace Heidelpay.Payment
         /// Gets or sets the cancel list.
         /// </summary>
         /// <value>The cancel list.</value>
-        public IEnumerable<Cancel> CancelList { get; set; } = Enumerable.Empty<Cancel>();
+        [JsonIgnore]
+        public IEnumerable<Cancel> CancelList { get; internal set; } = Enumerable.Empty<Cancel>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PaymentTransactionBase"/> class.
