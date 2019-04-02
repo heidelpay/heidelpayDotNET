@@ -25,7 +25,7 @@ namespace Heidelpay.Payment.PaymentTypes
     /// <seealso cref="Heidelpay.Payment.PaymentTypes.PaymentTypeBase" />
     /// <seealso cref="Heidelpay.Payment.Interfaces.IChargeablePaymentType" />
     /// <seealso cref="Heidelpay.Payment.Interfaces.IAuthorizedPaymentType" />
-    public sealed class Card : PaymentTypeBase, IChargeablePaymentType, IAuthorizedPaymentType
+    public sealed class Card : PaymentTypeBase, IChargeablePaymentType, IAuthorizedPaymentType, IProvide3DS
     {
         /// <summary>
         /// Gets or sets the number.

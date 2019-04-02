@@ -27,16 +27,15 @@ namespace Heidelpay.Payment.External.Tests.Business.Errors
         [Fact]
         public async Task Key_Invalid()
         {
-            var heidelpay = BuildHeidelpay("s-priv-123");
             var exception = await Assert.ThrowsAsync<PaymentException>(
-                () => heidelpay.AuthorizeAsync(10m, "EUR", "s-crd-2123"));
+                () => BuildHeidelpay("s-priv-123").CreatePaymentTypeAsync(PaymentTypeCard));
 
             Assert.NotNull(exception);
             Assert.Single(exception.PaymentErrorList);
 
             var error = exception.PaymentErrorList.First();
 
-            Assert.Equal("API.320.000.002", error.Code);
+            Assert.Equal("API.710.000.002", error.Code);
             Assert.Equal("The given key s-priv-123 is unknown or invalid.", error.MerchantMessage);
         }
 

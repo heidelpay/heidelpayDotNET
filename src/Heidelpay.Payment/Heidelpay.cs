@@ -14,6 +14,7 @@
 using Heidelpay.Payment.Communication;
 using Heidelpay.Payment.Interfaces;
 using Heidelpay.Payment.Options;
+using Heidelpay.Payment.PaymentTypes;
 using Heidelpay.Payment.Service;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -192,15 +193,21 @@ namespace Heidelpay.Payment
             Check.NotNullOrEmpty(currency, nameof(currency));
             Check.NotNullOrEmpty(chargeablePaymentTypeId, nameof(chargeablePaymentTypeId));
 
-            var type = PaymentService.ResolvePaymentTypeFromTypeId(chargeablePaymentTypeId, postProcess: false);
-            Check.NotNull(type as IChargeablePaymentType, "Only chargeable payment types are permitted for charging.");
+            var paymentType = await PaymentService.FetchPaymentTypeAsync<PaymentTypeBase>(chargeablePaymentTypeId);
+            Check.NotNull(paymentType as IChargeablePaymentType, "Only chargeable payment types are permitted for charging.");
+
+            bool? threeDS = card3ds;
+            if (card3ds == null && paymentType is IProvide3DS threeDSprovider)
+            {
+                threeDS = threeDSprovider.ThreeDs;
+            }
 
             return await ChargeAsync(new Charge
             {
                 Amount = amount,
                 Currency = currency,
                 ReturnUrl = returnUrl,
-                Card3ds = card3ds,
+                Card3ds = threeDS,
                 Resources = new Resources
                 {
                     TypeId = chargeablePaymentTypeId,
@@ -221,7 +228,13 @@ namespace Heidelpay.Payment
         {
             Check.NotNullOrEmpty(currency, nameof(currency));
 
-            return await ChargeAsync(amount, currency, paymentType, returnUrl: null, customerId: null, card3ds: card3ds);
+            bool? threeDS = card3ds;
+            if (card3ds == null && paymentType is IProvide3DS threeDSprovider)
+            {
+                threeDS = threeDSprovider.ThreeDs;
+            }
+
+            return await ChargeAsync(amount, currency, paymentType, returnUrl: null, customerId: null, card3ds: threeDS);
         }
 
         /// <summary>
@@ -242,7 +255,13 @@ namespace Heidelpay.Payment
 
             var customerId = await EnsureRestResourceCreatedAsync(customer);
 
-            return await ChargeAsync(amount, currency, paymentType, returnUrl, customerId, card3ds);
+            bool? threeDS = card3ds;
+            if (card3ds == null && paymentType is IProvide3DS threeDSprovider)
+            {
+                threeDS = threeDSprovider.ThreeDs;
+            }
+
+            return await ChargeAsync(amount, currency, paymentType, returnUrl, customerId, threeDS);
         }
 
         /// <summary>
@@ -263,12 +282,18 @@ namespace Heidelpay.Payment
 
             var typeId = await EnsureRestResourceCreatedAsync(paymentType);
 
+            bool? threeDS = card3ds;
+            if (card3ds == null && paymentType is IProvide3DS threeDSprovider)
+            {
+                threeDS = threeDSprovider.ThreeDs;
+            }
+
             return await ChargeAsync(new Charge
             {
                 Amount = amount,
                 Currency = currency,
                 ReturnUrl = returnUrl,
-                Card3ds = card3ds,
+                Card3ds = threeDS,
                 Resources = new Resources
                 {
                     TypeId = typeId,
@@ -300,13 +325,19 @@ namespace Heidelpay.Payment
             var customerId = await EnsureRestResourceCreatedAsync(customer);
             var basketId = await EnsureRestResourceCreatedAsync(basket);
 
+            bool? threeDS = card3ds;
+            if (card3ds == null && paymentType is IProvide3DS threeDSprovider)
+            {
+                threeDS = threeDSprovider.ThreeDs;
+            }
+
             return await ChargeAsync(new Charge
             {
                 Amount = amount,
                 Currency = currency,
                 ReturnUrl = returnUrl,
                 InvoiceId = invoiceId,
-                Card3ds = card3ds,
+                Card3ds = threeDS,
                 Resources = new Resources
                 {
                     TypeId = typeId,
@@ -336,20 +367,28 @@ namespace Heidelpay.Payment
         /// <param name="authorizedPaymentTypeId">The authorized payment type identifier.</param>
         /// <param name="returnUrl">The return URL.</param>
         /// <param name="customerId">The customer identifier.</param>
+        /// <param name="card3ds"></param>
         /// <returns>Task&lt;Authorization&gt;.</returns>
-        public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, string authorizedPaymentTypeId, Uri returnUrl = null, string customerId = null)
+        public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, string authorizedPaymentTypeId, Uri returnUrl = null, string customerId = null, bool? card3ds = null)
         {
             Check.NotNullOrEmpty(currency, nameof(currency));
             Check.NotNullOrEmpty(authorizedPaymentTypeId, nameof(authorizedPaymentTypeId));
 
-            var type = PaymentService.ResolvePaymentTypeFromTypeId(authorizedPaymentTypeId, postProcess: false);
+            var type = await PaymentService.FetchPaymentTypeAsync<PaymentTypeBase>(authorizedPaymentTypeId);
             Check.NotNull(type as IAuthorizedPaymentType, "Only authorizable payment types are permitted for authorization.");
+
+            bool? threeDS = card3ds;
+            if (card3ds == null && type is IProvide3DS threeDSprovider)
+            {
+                threeDS = threeDSprovider.ThreeDs;
+            }
 
             return await AuthorizeAsync(new Authorization
             {
                 Amount = amount,
                 Currency = currency,
                 ReturnUrl = returnUrl,
+                Card3ds = threeDS,
                 Resources = new Resources
                 {
                     TypeId = authorizedPaymentTypeId,
@@ -372,7 +411,13 @@ namespace Heidelpay.Payment
 
             var typeId = await EnsureRestResourceCreatedAsync(paymentType);
 
-            return await AuthorizeAsync(amount, currency, authorizedPaymentTypeId: typeId);
+            bool? threeDS = null;
+            if(paymentType is IProvide3DS threeDSprovider)
+            {
+                threeDS = threeDSprovider.ThreeDs;
+            }
+
+            return await AuthorizeAsync(amount, currency, authorizedPaymentTypeId: typeId, card3ds: threeDS);
         }
 
         /// <summary>
@@ -393,19 +438,25 @@ namespace Heidelpay.Payment
 
             var typeId = await EnsureRestResourceCreatedAsync(paymentType);
 
-            return await AuthorizeAsync(amount, currency, authorizedPaymentTypeId: typeId, returnUrl: returnUrl, customerId: customerId);
+            bool? threeDS = null;
+            if (paymentType is IProvide3DS threeDSprovider)
+            {
+                threeDS = threeDSprovider.ThreeDs;
+            }
+
+            return await AuthorizeAsync(amount, currency, authorizedPaymentTypeId: typeId, returnUrl: returnUrl, customerId: customerId, card3ds: threeDS);
         }
 
-        /// <summary>
-        /// authorize as an asynchronous operation.
-        /// </summary>
+        /// <summary>authorize as an asynchronous operation.</summary>
         /// <param name="amount">The amount.</param>
         /// <param name="currency">The currency.</param>
         /// <param name="paymentType">Type of the payment.</param>
         /// <param name="returnUrl">The return URL.</param>
         /// <param name="customer">The customer.</param>
+        /// <param name="card3ds">if set to <c>true</c> [card3ds].</param>
         /// <returns>Task&lt;Authorization&gt;.</returns>
-        public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, IAuthorizedPaymentType paymentType, Uri returnUrl, Customer customer = null)
+        public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, IAuthorizedPaymentType paymentType, Uri returnUrl, 
+            Customer customer = null, bool? card3ds = null)
         {
             Check.NotNullOrEmpty(currency, nameof(currency));
             Check.NotNull(paymentType, nameof(paymentType));
@@ -414,7 +465,13 @@ namespace Heidelpay.Payment
             var typeId = await EnsureRestResourceCreatedAsync(paymentType);
             var customerId = await EnsureRestResourceCreatedAsync(customer);
 
-            return await AuthorizeAsync(amount, currency, authorizedPaymentTypeId: typeId, returnUrl: returnUrl, customerId: customerId);
+            bool? threeDS = card3ds;
+            if (card3ds == null && paymentType is IProvide3DS threeDSprovider)
+            {
+                threeDS = threeDSprovider.ThreeDs;
+            }
+
+            return await AuthorizeAsync(amount, currency, authorizedPaymentTypeId: typeId, returnUrl: returnUrl, customerId: customerId, card3ds: threeDS);
         }
 
         /// <summary>

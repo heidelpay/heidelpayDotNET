@@ -126,6 +126,23 @@ namespace Heidelpay.Payment.External.Tests.Business
             x.CVC = "123"; 
         });
 
+        protected Action<Card> PaymentTypeCardNo3DS { get; } = new Action<Card>(x =>
+        {
+            x.Number = "4444333322221111";
+            x.ExpiryDate = "03/20";
+            x.CVC = "123";
+            x.ThreeDs = false;
+        });
+
+        protected Action<Card> PaymentTypeCard3DS { get; } = new Action<Card>(x =>
+        {
+            x.Number = "4444333322221111";
+            x.ExpiryDate = "03/20";
+            x.CVC = "123";
+            x.ThreeDs = true;
+        });
+
+
         static readonly string[] AllowedDateTimeFormats = new[]
         {
             DateTimeFormat,

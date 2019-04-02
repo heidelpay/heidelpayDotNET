@@ -35,16 +35,15 @@ namespace Heidelpay.Payment.Interfaces
         /// <param name="paymentType">Type of the payment.</param>
         /// <returns>Task&lt;Authorization&gt;.</returns>
         Task<Authorization> AuthorizeAsync(decimal amount, string currency, IAuthorizedPaymentType paymentType);
-        /// <summary>
-        /// Authorizes the asynchronous.
-        /// </summary>
+        /// <summary>Authorizes the asynchronous.</summary>
         /// <param name="amount">The amount.</param>
         /// <param name="currency">The currency.</param>
         /// <param name="paymentType">Type of the payment.</param>
         /// <param name="returnUrl">The return URL.</param>
         /// <param name="customer">The customer.</param>
+        /// <param name="card3ds"></param>
         /// <returns>Task&lt;Authorization&gt;.</returns>
-        Task<Authorization> AuthorizeAsync(decimal amount, string currency, IAuthorizedPaymentType paymentType, Uri returnUrl, Customer customer = null);
+        Task<Authorization> AuthorizeAsync(decimal amount, string currency, IAuthorizedPaymentType paymentType, Uri returnUrl, Customer customer = null, bool? card3ds = null);
         /// <summary>
         /// Authorizes the asynchronous.
         /// </summary>
@@ -63,8 +62,9 @@ namespace Heidelpay.Payment.Interfaces
         /// <param name="authorizedPaymentTypeId">The authorized payment type identifier.</param>
         /// <param name="returnUrl">The return URL.</param>
         /// <param name="customerId">The customer identifier.</param>
+        /// <param name="card3ds"></param>
         /// <returns>Task&lt;Authorization&gt;.</returns>
-        Task<Authorization> AuthorizeAsync(decimal amount, string currency, string authorizedPaymentTypeId, Uri returnUrl = null, string customerId = null);
+        Task<Authorization> AuthorizeAsync(decimal amount, string currency, string authorizedPaymentTypeId, Uri returnUrl = null, string customerId = null, bool? card3ds = null);
         /// <summary>
         /// Cancels the authorization asynchronous.
         /// </summary>

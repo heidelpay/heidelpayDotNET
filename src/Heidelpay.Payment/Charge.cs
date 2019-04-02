@@ -32,89 +32,10 @@ namespace Heidelpay.Payment
     public class Charge : PaymentTransactionBase
     {
         /// <summary>
-        /// Gets or sets the amount.
-        /// </summary>
-        /// <value>The amount.</value>
-        public decimal? Amount { get; set; }
-        /// <summary>
-        /// Gets or sets the currency.
-        /// </summary>
-        /// <value>The currency.</value>
-        public string Currency { get; set; }
-        /// <summary>
-        /// Gets or sets the return URL.
-        /// </summary>
-        /// <value>The return URL.</value>
-        public Uri ReturnUrl { get; set; }
-        /// <summary>
-        /// Gets or sets the redirect URL.
-        /// </summary>
-        /// <value>The redirect URL.</value>
-        public Uri RedirectUrl { get; set; }
-        /// <summary>
-        /// Gets or sets the order identifier.
-        /// </summary>
-        /// <value>The order identifier.</value>
-        public string OrderId { get; set; }
-        /// <summary>
         /// Gets or sets the invoice identifier.
         /// </summary>
         /// <value>The invoice identifier.</value>
         public string InvoiceId { get; set; }
-        /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="Charge"/> is card3ds.
-        /// </summary>
-        /// <value><c>null</c> if [card3ds] contains no value, <c>true</c> if [card3ds]; otherwise, <c>false</c>.</value>
-        public bool? Card3ds { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance is success.
-        /// </summary>
-        /// <value><c>true</c> if this instance is success; otherwise, <c>false</c>.</value>
-        [JsonProperty]
-        internal bool IsSuccess { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance is pending.
-        /// </summary>
-        /// <value><c>true</c> if this instance is pending; otherwise, <c>false</c>.</value>
-        [JsonProperty]
-        internal bool IsPending { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance is error.
-        /// </summary>
-        /// <value><c>true</c> if this instance is error; otherwise, <c>false</c>.</value>
-        [JsonProperty]
-        internal bool IsError { get; set; }
-
-        /// <summary>
-        /// Gets the status.
-        /// </summary>
-        /// <value>The status.</value>
-        [JsonIgnore]
-        public Status Status
-        {
-            get
-            {
-                if (IsSuccess)
-                    return Status.Success;
-
-                if (IsPending)
-                    return Status.Pending;
-
-                if (IsError)
-                    return Status.Error;
-
-                return Status.Undefined;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the cancel list.
-        /// </summary>
-        /// <value>The cancel list.</value>
-        public IEnumerable<Cancel> CancelList { get; set; } = Enumerable.Empty<Cancel>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Charge"/> class.
@@ -123,6 +44,10 @@ namespace Heidelpay.Payment
         public Charge(IChargeablePaymentType chargeablePayment)
             : this(chargeablePayment.Heidelpay)
         {
+            if (chargeablePayment is IProvide3DS threeDSprovider)
+            {
+                Card3ds = threeDSprovider.ThreeDs;
+            }
             Resources.TypeId = chargeablePayment.Id;
         }
 
@@ -142,13 +67,6 @@ namespace Heidelpay.Payment
             : base(heidelpayClient)
         {
         }
-
-        /// <summary>
-        /// Gets or sets the processing.
-        /// </summary>
-        /// <value>The processing.</value>
-        [JsonProperty]
-        internal Processing Processing { get; set; } = new Processing();
 
         /// <summary>
         /// cancel as an asynchronous operation.

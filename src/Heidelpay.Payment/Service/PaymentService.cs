@@ -334,7 +334,7 @@ namespace Heidelpay.Payment.Service
 
             var result = await ApiPostAsync(cancel, BuildApiEndpointUri(cancel.ResolvePaymentUrl(paymentId), null), getAfterPost: false);
 
-            result.Payment = await FetchPaymentAsync(result.Resources.PaymentId);
+            result.Payment = await FetchPaymentAsync(result.PaymentId);
 
             return result;
         }

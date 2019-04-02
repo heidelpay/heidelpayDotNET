@@ -25,19 +25,6 @@ namespace Heidelpay.Payment
     public class Cancel : PaymentTransactionBase
     {
         /// <summary>
-        /// Gets or sets the amount.
-        /// </summary>
-        /// <value>The amount.</value>
-        public decimal? Amount { get; set; }
-
-        /// <summary>
-        /// Gets or sets the processing.
-        /// </summary>
-        /// <value>The processing.</value>
-        [JsonProperty]
-        internal Processing Processing { get; set; } = new Processing();
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="Cancel"/> class.
         /// </summary>
         [JsonConstructor]
