@@ -93,9 +93,11 @@ namespace Heidelpay.Payment
         /// </summary>
         public Customer(string firstName, string lastName)
         {
-
+            this.Firstname = firstName;
+            this.Lastname = lastName;
         }
 
+        [JsonConstructor]
         internal Customer()
         {
 
