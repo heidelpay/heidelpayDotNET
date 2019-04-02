@@ -32,7 +32,7 @@ namespace Heidelpay.Payment
         /// Gets or sets the vat.
         /// </summary>
         /// <value>The vat.</value>
-        public int Vat { get; set; }
+        public decimal Vat { get; set; }
         /// <summary>
         /// Gets or sets the amount discount.
         /// </summary>

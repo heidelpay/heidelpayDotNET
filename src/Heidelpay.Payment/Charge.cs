@@ -40,20 +40,6 @@ namespace Heidelpay.Payment
         /// <summary>
         /// Initializes a new instance of the <see cref="Charge"/> class.
         /// </summary>
-        /// <param name="chargeablePayment">The chargeable payment.</param>
-        public Charge(IChargeablePaymentType chargeablePayment)
-            : this(chargeablePayment.Heidelpay)
-        {
-            if (chargeablePayment is IProvide3DS threeDSprovider)
-            {
-                Card3ds = threeDSprovider.ThreeDs;
-            }
-            Resources.TypeId = chargeablePayment.Id;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Charge"/> class.
-        /// </summary>
         [JsonConstructor]
         internal Charge()
         {
@@ -62,10 +48,14 @@ namespace Heidelpay.Payment
         /// <summary>
         /// Initializes a new instance of the <see cref="Charge"/> class.
         /// </summary>
-        /// <param name="heidelpayClient">The heidelpay client instance.</param>
-        internal Charge(IHeidelpay heidelpayClient)
-            : base(heidelpayClient)
+        /// <param name="chargeablePayment">The chargeable payment.</param>
+        public Charge(IChargeablePaymentType chargeablePayment)
+            : base(chargeablePayment.Heidelpay, paymentTypeId: chargeablePayment.Id)
         {
+            if (chargeablePayment is IProvide3DS threeDSprovider)
+            {
+                Card3ds = threeDSprovider.ThreeDs;
+            }
         }
 
         /// <summary>

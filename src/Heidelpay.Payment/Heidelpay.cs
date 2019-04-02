@@ -121,23 +121,51 @@ namespace Heidelpay.Payment
         {
             Check.NotNull(customer, nameof(customer));
             Check.ThrowIfTrue(!string.IsNullOrEmpty(customer.Id),
-                "Customer has an id set. createCustomer can only be called without Customer.id. Please use updateCustomer or remove the id from Customer.");
+                "Customer has an id set. CreateCustomerAsync can only be called without Customer.id. Please use UpdateCustomerAsync or remove the id from Customer.");
 
             return await PaymentService.CreateCustomerAsync(customer);
         }
 
         /// <summary>
+        /// create basket as an asynchronous operation.
+        /// </summary>
+        /// <param name="basket">The basket.</param>
+        /// <returns>Task&lt;Basket&gt;.</returns>
+        public async Task<Basket> CreateBasketAsync(Basket basket)
+        {
+            Check.NotNull(basket, nameof(basket));
+            Check.ThrowIfTrue(!string.IsNullOrEmpty(basket.Id),
+                "Basket has an id set. CreateBasketAsync can only be called without Basket.id. Please use UpdateBasketAsync or remove the id from Basket.");
+
+            return await PaymentService.CreateBasketAsync(basket);
+        }
+
+        /// <summary>
         /// update customer as an asynchronous operation.
         /// </summary>
-        /// <param name="id">The identifier.</param>
         /// <param name="customer">The customer.</param>
         /// <returns>Task&lt;Customer&gt;.</returns>
-        public async Task<Customer> UpdateCustomerAsync(string id, Customer customer)
+        public async Task<Customer> UpdateCustomerAsync(Customer customer)
         {
-            Check.NotNullOrEmpty(id, nameof(id));
             Check.NotNull(customer, nameof(customer));
+            Check.ThrowIfTrue(string.IsNullOrEmpty(customer.Id),
+               "Customer has no id set. UpdateCustomerAsync can only be called with Customer.id.");
 
-            return await PaymentService.UpdateCustomerAsync(id, customer);
+            return await PaymentService.UpdateCustomerAsync(customer.Id, customer);
+        }
+
+        /// <summary>
+        /// update basket as an asynchronous operation.
+        /// </summary>
+        /// <param name="basket">The basket.</param>
+        /// <returns>Task&lt;Basket&gt;.</returns>
+        public async Task<Basket> UpdateBasketAsync(Basket basket)
+        {
+            Check.NotNull(basket, nameof(basket));
+            Check.ThrowIfTrue(string.IsNullOrEmpty(basket.Id),
+               "Basket has no id set. UpdateBasketAsync can only be called with Basket.id.");
+
+            return await PaymentService.UpdateBasketAsync(basket.Id, basket);
         }
 
         /// <summary>

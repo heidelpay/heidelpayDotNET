@@ -18,7 +18,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         {
             var result = await BuildHeidelpay().CreatePaymentTypeAsync<InvoiceFactoring>();
             var charge = await result.ChargeAsync(10m, "EUR", ShopReturnUri, 
-                GetMaximumCustomerSameAddress(GetRandomInvoiceId()), FilledBasket());
+                GetMaximumCustomerSameAddress(GetRandomInvoiceId()), GetMaximumBasket());
 
             Assert.NotNull(result?.Id);
             Assert.NotNull(charge?.PaymentId);
@@ -29,7 +29,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         {
             var result = await BuildHeidelpay().CreatePaymentTypeAsync<InvoiceFactoring>();
             var ex = await Assert.ThrowsAsync<PaymentException>(() => result.ChargeAsync(10m, "EUR", ShopReturnUri,
-                GetMaximumCustomer(GetRandomInvoiceId()), FilledBasket()));
+                GetMaximumCustomer(GetRandomInvoiceId()), GetMaximumBasket()));
         }
 
         [Fact]

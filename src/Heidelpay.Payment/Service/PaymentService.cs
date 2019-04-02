@@ -72,6 +72,32 @@ namespace Heidelpay.Payment.Service
         }
 
         /// <summary>
+        /// create basket as an asynchronous operation.
+        /// </summary>
+        /// <param name="basket">The basket.</param>
+        /// <returns>Task&lt;Basket&gt;.</returns>
+        public async Task<Basket> CreateBasketAsync(Basket basket)
+        {
+            Check.NotNull(basket, nameof(basket));
+
+            return await ApiPostAsync(basket);
+        }
+
+        /// <summary>
+        /// update basket as an asynchronous operation.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <param name="basket">The basket.</param>
+        /// <returns>Task&lt;Basket&gt;.</returns>
+        public async Task<Basket> UpdateBasketAsync(string id, Basket basket)
+        {
+            Check.NotNullOrEmpty(id, nameof(id));
+            Check.NotNull(basket, nameof(basket));
+
+            return await ApiPutAsync(id, basket, getAfterPut: true);
+        }
+
+        /// <summary>
         /// create customer as an asynchronous operation.
         /// </summary>
         /// <param name="customer">The customer.</param>
@@ -94,7 +120,7 @@ namespace Heidelpay.Payment.Service
             Check.NotNullOrEmpty(id, nameof(id));
             Check.NotNull(customer, nameof(customer));
 
-            return await ApiPutAsync(id, customer);
+            return await ApiPutAsync(id, customer, getAfterPut: true);
         }
 
         /// <summary>

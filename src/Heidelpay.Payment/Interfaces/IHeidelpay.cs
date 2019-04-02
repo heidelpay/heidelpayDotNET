@@ -221,9 +221,22 @@ namespace Heidelpay.Payment.Interfaces
         /// <summary>
         /// Updates the customer asynchronous.
         /// </summary>
-        /// <param name="id">The identifier.</param>
         /// <param name="customer">The customer.</param>
         /// <returns>Task&lt;Customer&gt;.</returns>
-        Task<Customer> UpdateCustomerAsync(string id, Customer customer);
+        Task<Customer> UpdateCustomerAsync(Customer customer);
+
+        /// <summary>
+        /// Creates the basket asynchronous.
+        /// </summary>
+        /// <param name="basket">The basket.</param>
+        /// <returns>Task&lt;Basket&gt;.</returns>
+        Task<Basket> CreateBasketAsync(Basket basket);
+
+        /// <summary>
+        /// Updates the basket asynchronous.
+        /// </summary>
+        /// <param name="customer">The customer.</param>
+        /// <returns>Task&lt;Customer&gt;.</returns>
+        Task<Basket> UpdateBasketAsync(Basket customer);
     }
 }

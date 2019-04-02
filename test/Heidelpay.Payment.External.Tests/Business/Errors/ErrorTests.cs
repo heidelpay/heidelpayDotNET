@@ -130,10 +130,11 @@ namespace Heidelpay.Payment.External.Tests.Business.Errors
 
             var customerUpdate = new Customer(customer.Firstname, customer.Lastname)
             {
+                Id = customer.Id,
                 Email = "max",
             };
 
-            var exception = await Assert.ThrowsAsync<PaymentException>(() => heidelpay.UpdateCustomerAsync(customer.Id, customerUpdate));
+            var exception = await Assert.ThrowsAsync<PaymentException>(() => heidelpay.UpdateCustomerAsync(customerUpdate));
 
             Assert.NotNull(exception);
             Assert.Single(exception.PaymentErrorList);

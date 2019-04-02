@@ -53,13 +53,12 @@ namespace Heidelpay.Payment
         /// </summary>
         /// <param name="paymentAuthorizable">The payment authorizable.</param>
         public Authorization(IAuthorizedPaymentType paymentAuthorizable)
-            : this (paymentAuthorizable.Heidelpay)
+            : base(paymentAuthorizable.Heidelpay, paymentTypeId: paymentAuthorizable.Id)
         {
             if (paymentAuthorizable is IProvide3DS threeDSprovider)
             {
                 Card3ds = threeDSprovider.ThreeDs;
             }
-            Resources.TypeId = paymentAuthorizable.Id;
         }
 
         /// <summary>

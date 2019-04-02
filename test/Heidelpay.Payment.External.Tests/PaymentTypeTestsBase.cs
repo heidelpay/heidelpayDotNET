@@ -91,7 +91,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             };
         }
 
-        protected Basket FilledBasket()
+        protected Basket GetMaximumBasket()
         {
             var basket = new Basket
             {
@@ -113,6 +113,25 @@ namespace Heidelpay.Payment.External.Tests.Business
                 Title = "Apple iPhone",
                 Unit = "Pc.",
                 Vat = 19,
+            });
+            return basket;
+        }
+
+        protected Basket GetMinimumBasket()
+        {
+            var basket = new Basket
+            {
+                AmountTotal = 500.05m,
+                CurrencyCode = "EUR",
+                OrderId = GetRandomInvoiceId(),
+            };
+            basket.AddBasketItem(new BasketItem
+            {
+                BasketItemReferenceId = "Artikelnummer4711",
+                AmountNet = 420.1m,
+                AmountPerUnit = 100.1m,
+                Quantity = 5,
+                Title = "Apple iPhone",
             });
             return basket;
         }

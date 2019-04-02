@@ -80,6 +80,18 @@ namespace Heidelpay.Payment
         public IEnumerable<Cancel> CancelList { get; internal set; } = Enumerable.Empty<Cancel>();
 
         /// <summary>
+        /// Gets the basket identifier.
+        /// </summary>
+        /// <value>The basket identifier.</value>
+        public string BasketId
+        {
+            get
+            {
+                return Resources?.BasketId;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the resources.
         /// </summary>
         /// <value>The resources.</value>

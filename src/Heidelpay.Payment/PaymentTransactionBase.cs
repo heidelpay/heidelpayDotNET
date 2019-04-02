@@ -126,6 +126,85 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
+        /// Gets or sets the basket identifier.
+        /// </summary>
+        /// <value>The basket identifier.</value>
+        public string BasketId
+        {
+            get
+            {
+                return Payment?.BasketId ?? Resources?.BasketId;
+            }
+            set
+            {
+                if (Payment == null)
+                {
+                    Resources.BasketId = value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the customer identifier.
+        /// </summary>
+        /// <value>The customer identifier.</value>
+        [JsonIgnore]
+        public string CustomerId
+        {
+            get
+            {
+                return Payment?.BasketId ?? Resources?.CustomerId;
+            }
+            set
+            {
+                if (Payment == null)
+                {
+                    Resources.CustomerId = value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the metadata identifier.
+        /// </summary>
+        /// <value>The metadata identifier.</value>
+        [JsonIgnore]
+        public string MetadataId
+        {
+            get
+            {
+                return Payment?.BasketId ?? Resources?.MetadataId;
+            }
+            set
+            {
+                if (Payment == null)
+                {
+                    Resources.MetadataId = value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the risk identifier.
+        /// </summary>
+        /// <value>The risk identifier.</value>
+        [JsonIgnore]
+        public string RiskId
+        {
+            get
+            {
+                return Payment?.BasketId ?? Resources?.RiskId;
+            }
+            set
+            {
+                if (Payment == null)
+                {
+                    Resources.RiskId = value;
+                }
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the cancel list.
         /// </summary>
         /// <value>The cancel list.</value>
@@ -141,10 +220,12 @@ namespace Heidelpay.Payment
         /// <summary>
         /// Initializes a new instance of the <see cref="PaymentTransactionBase"/> class.
         /// </summary>
-        /// <param name="heidelpayClient">The heidelpay client instance.</param>
-        internal PaymentTransactionBase(IHeidelpay heidelpayClient)
+        /// <param name="heidelpayClient">The heidelpay client.</param>
+        /// <param name="paymentTypeId">The payment type identifier.</param>
+        internal PaymentTransactionBase(IHeidelpay heidelpayClient, string paymentTypeId = null)
             : base(heidelpayClient)
         {
+            Resources.TypeId = paymentTypeId;
         }
 
         /// <summary>

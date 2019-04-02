@@ -180,6 +180,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             Assert.NotNull(auth.Message.Customer);
         }
 
+        [Fact]
         public async Task Fetch_Authorization()
         {
             var card = await BuildHeidelpay().CreatePaymentTypeAsync(PaymentTypeCard3DS);
