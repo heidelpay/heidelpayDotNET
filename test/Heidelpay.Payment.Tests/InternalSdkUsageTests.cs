@@ -1,4 +1,5 @@
 using Heidelpay.Payment.Extensions;
+using Heidelpay.Payment.Interfaces;
 using Heidelpay.Payment.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,7 +31,7 @@ namespace Heidelpay.Payment.Internal.Tests
 
             var serviceProvider = services.BuildServiceProvider();
 
-            var heidelpay = serviceProvider.GetService<HeidelpayClient>();
+            var heidelpay = serviceProvider.GetService<IHeidelpay>() as HeidelpayClient;
 
             Assert.NotNull(heidelpay);
             Assert.NotNull(heidelpay.RestClient);
