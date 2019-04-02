@@ -29,7 +29,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             await Assert.ThrowsAsync<PaymentException>(() => paymentType.ChargeAsync(decimal.One, "EUR", ShopReturnUri, GetMaximumCustomer(GetRandomId())));
         }
 
-        [Fact(Skip="Test fails every other execution because of unspecified provider errors")]
+        [Fact]
         public async Task Shipment_PaymentType()
         {
             var result = await BuildHeidelpay().CreatePaymentTypeAsync<InvoiceGuaranteed>();
