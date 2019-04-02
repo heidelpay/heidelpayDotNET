@@ -1,8 +1,19 @@
-﻿using Heidelpay.Payment.Communication;
-using Heidelpay.Payment.Interface;
+﻿// ***********************************************************************
+// Assembly         : Heidelpay.Payment
+// Author           : berghtho
+// Created          : 03-14-2019
+//
+// Last Modified By : berghtho
+// Last Modified On : 04-02-2019
+// ***********************************************************************
+// <copyright file="Heidelpay.cs" company="Heidelpay">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using Heidelpay.Payment.Communication;
 using Heidelpay.Payment.Interfaces;
 using Heidelpay.Payment.Options;
-using Heidelpay.Payment.PaymentTypes;
 using Heidelpay.Payment.Service;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -10,41 +21,44 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-/*-
- * #%L
- * Heidelpay .NET SDK
- * %%
- * Copyright (C) 2019 Heidelpay GmbH
- * %%
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * #L%
- */
-
 namespace Heidelpay.Payment
 {
-    public sealed class Heidelpay
+    /// <summary>
+    /// Class Heidelpay. This class cannot be inherited.
+    /// 
+    /// The Heidelpay instance is a facade to the Heidelpay REST Api. The facade is initialized with an instance of HeidelpayApiOptions.
+    /// </summary>
+    public sealed class HeidelpayClient : IHeidelpay
     {
+        /// <summary>
+        /// Gets the rest client.
+        /// </summary>
+        /// <value>The rest client.</value>
         internal IRestClient RestClient { get; }
-        internal PaymentService PaymentService { get; } 
-       
-        public Heidelpay(HeidelpayApiOptions options, HttpClient httpClient)
+        /// <summary>
+        /// Gets the payment service.
+        /// </summary>
+        /// <value>The payment service.</value>
+        internal PaymentService PaymentService { get; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Heidelpay"/> class.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        /// <param name="httpClient">The HTTP client.</param>
+        public HeidelpayClient(HeidelpayApiOptions options, HttpClient httpClient)
             : this(Microsoft.Extensions.Options.Options.Create(options), httpClient)
         {
             Check.NotNull(options, nameof(options));
             Check.NotNull(httpClient, nameof(httpClient));
         }
 
-        public Heidelpay(IOptions<HeidelpayApiOptions> options, HttpClient httpClient)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Heidelpay"/> class.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        /// <param name="httpClient">The HTTP client.</param>
+        public HeidelpayClient(IOptions<HeidelpayApiOptions> options, HttpClient httpClient)
             : this()
         {
             Check.NotNull(options, nameof(options));
@@ -53,14 +67,24 @@ namespace Heidelpay.Payment
             RestClient = BuildRestClient(new WrappedHttpClientFactory(httpClient), options);
         }
 
-        public Heidelpay(HeidelpayApiOptions options, IHttpClientFactory httpClientFactory)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Heidelpay"/> class.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        /// <param name="httpClientFactory">The HTTP client factory.</param>
+        public HeidelpayClient(HeidelpayApiOptions options, IHttpClientFactory httpClientFactory)
             : this(Microsoft.Extensions.Options.Options.Create(options), httpClientFactory)
         {
             Check.NotNull(options, nameof(options));
             Check.NotNull(httpClientFactory, nameof(httpClientFactory));
         }
 
-        public Heidelpay(IOptions<HeidelpayApiOptions> options, IHttpClientFactory httpClientFactory)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Heidelpay"/> class.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        /// <param name="httpClientFactory">The HTTP client factory.</param>
+        public HeidelpayClient(IOptions<HeidelpayApiOptions> options, IHttpClientFactory httpClientFactory)
             : this()
         {
             Check.NotNull(options, nameof(options));
@@ -69,17 +93,29 @@ namespace Heidelpay.Payment
             RestClient = BuildRestClient(httpClientFactory, options);
         }
 
-        public Heidelpay(IRestClient restClient)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Heidelpay"/> class.
+        /// </summary>
+        /// <param name="restClient">The rest client.</param>
+        public HeidelpayClient(IRestClient restClient)
             : this()
         {
             RestClient = restClient;
         }
 
-        private Heidelpay()
+        /// <summary>
+        /// Prevents a default instance of the <see cref="Heidelpay"/> class from being created.
+        /// </summary>
+        private HeidelpayClient()
         {
             PaymentService = new PaymentService(this);
         }
 
+        /// <summary>
+        /// create customer as an asynchronous operation.
+        /// </summary>
+        /// <param name="customer">The customer.</param>
+        /// <returns>Task&lt;Customer&gt;.</returns>
         public async Task<Customer> CreateCustomerAsync(Customer customer)
         {
             Check.NotNull(customer, nameof(customer));
@@ -89,6 +125,12 @@ namespace Heidelpay.Payment
             return await PaymentService.CreateCustomerAsync(customer);
         }
 
+        /// <summary>
+        /// update customer as an asynchronous operation.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <param name="customer">The customer.</param>
+        /// <returns>Task&lt;Customer&gt;.</returns>
         public async Task<Customer> UpdateCustomerAsync(string id, Customer customer)
         {
             Check.NotNullOrEmpty(id, nameof(id));
@@ -97,6 +139,11 @@ namespace Heidelpay.Payment
             return await PaymentService.UpdateCustomerAsync(id, customer);
         }
 
+        /// <summary>
+        /// delete customer as an asynchronous operation.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>Task.</returns>
         public async Task DeleteCustomerAsync(string id)
         {
             Check.NotNullOrEmpty(id, nameof(id));
@@ -104,6 +151,12 @@ namespace Heidelpay.Payment
             await PaymentService.DeleteCustomerAsync(id);
         }
 
+        /// <summary>
+        /// charge authorization as an asynchronous operation.
+        /// </summary>
+        /// <param name="paymentId">The payment identifier.</param>
+        /// <param name="amount">The amount.</param>
+        /// <returns>Task&lt;Charge&gt;.</returns>
         public async Task<Charge> ChargeAuthorizationAsync(string paymentId, decimal? amount = null)
         {
             Check.NotNullOrEmpty(paymentId, nameof(paymentId));
@@ -111,6 +164,12 @@ namespace Heidelpay.Payment
             return await PaymentService.ChargeAsync(new Charge { Amount = amount }, paymentId);
         }
 
+        /// <summary>
+        /// cancel authorization as an asynchronous operation.
+        /// </summary>
+        /// <param name="paymentId">The payment identifier.</param>
+        /// <param name="amount">The amount.</param>
+        /// <returns>Task&lt;Cancel&gt;.</returns>
         public async Task<Cancel> CancelAuthorizationAsync(string paymentId, decimal? amount = null)
         {
             Check.NotNullOrEmpty(paymentId, nameof(paymentId));
@@ -118,27 +177,46 @@ namespace Heidelpay.Payment
             return await PaymentService.CancelAsync(new Cancel { Amount = amount }, paymentId);
         }
 
-        public async Task<Charge> ChargeAsync(decimal amount, string currency, string typeId, Uri returnUrl = null, string customerId = null, bool? card3ds = null)
+        /// <summary>
+        /// charge as an asynchronous operation.
+        /// </summary>
+        /// <param name="amount">The amount.</param>
+        /// <param name="currency">The currency.</param>
+        /// <param name="chargeablePaymentTypeId">The chargeable payment type identifier.</param>
+        /// <param name="returnUrl">The return URL.</param>
+        /// <param name="customerId">The customer identifier.</param>
+        /// <param name="card3ds">if set to <c>true</c> [card3ds].</param>
+        /// <returns>Task&lt;Charge&gt;.</returns>
+        public async Task<Charge> ChargeAsync(decimal amount, string currency, string chargeablePaymentTypeId, Uri returnUrl = null, string customerId = null, bool? card3ds = null)
         {
             Check.NotNullOrEmpty(currency, nameof(currency));
-            Check.NotNullOrEmpty(typeId, nameof(typeId));
+            Check.NotNullOrEmpty(chargeablePaymentTypeId, nameof(chargeablePaymentTypeId));
 
-            var type = PaymentService.ResolvePaymentTypeFromTypeId(typeId, postProcess: false);
+            var type = PaymentService.ResolvePaymentTypeFromTypeId(chargeablePaymentTypeId, postProcess: false);
             Check.NotNull(type as IChargeablePaymentType, "Only chargeable payment types are permitted for charging.");
 
             return await ChargeAsync(new Charge
             {
                 Amount = amount,
-                Currency = currency, ReturnUrl = returnUrl,
+                Currency = currency,
+                ReturnUrl = returnUrl,
                 Card3ds = card3ds,
                 Resources = new Resources
                 {
-                    TypeId = typeId,
+                    TypeId = chargeablePaymentTypeId,
                     CustomerId = customerId
                 }
             });
         }
 
+        /// <summary>
+        /// charge as an asynchronous operation.
+        /// </summary>
+        /// <param name="amount">The amount.</param>
+        /// <param name="currency">The currency.</param>
+        /// <param name="paymentType">Type of the payment.</param>
+        /// <param name="card3ds">if set to <c>true</c> [card3ds].</param>
+        /// <returns>Task&lt;Charge&gt;.</returns>
         public async Task<Charge> ChargeAsync(decimal amount, string currency, IChargeablePaymentType paymentType, bool? card3ds = null)
         {
             Check.NotNullOrEmpty(currency, nameof(currency));
@@ -146,6 +224,16 @@ namespace Heidelpay.Payment
             return await ChargeAsync(amount, currency, paymentType, returnUrl: null, customerId: null, card3ds: card3ds);
         }
 
+        /// <summary>
+        /// charge as an asynchronous operation.
+        /// </summary>
+        /// <param name="amount">The amount.</param>
+        /// <param name="currency">The currency.</param>
+        /// <param name="paymentType">Type of the payment.</param>
+        /// <param name="returnUrl">The return URL.</param>
+        /// <param name="customer">The customer.</param>
+        /// <param name="card3ds">if set to <c>true</c> [card3ds].</param>
+        /// <returns>Task&lt;Charge&gt;.</returns>
         public async Task<Charge> ChargeAsync(decimal amount, string currency, IChargeablePaymentType paymentType, Uri returnUrl, Customer customer = null, bool? card3ds = null)
         {
             Check.NotNullOrEmpty(currency, nameof(currency));
@@ -154,9 +242,19 @@ namespace Heidelpay.Payment
 
             var customerId = await EnsureRestResourceCreatedAsync(customer);
 
-            return await ChargeAsync(amount, currency, paymentType,  returnUrl, customerId, card3ds);
+            return await ChargeAsync(amount, currency, paymentType, returnUrl, customerId, card3ds);
         }
 
+        /// <summary>
+        /// charge as an asynchronous operation.
+        /// </summary>
+        /// <param name="amount">The amount.</param>
+        /// <param name="currency">The currency.</param>
+        /// <param name="paymentType">Type of the payment.</param>
+        /// <param name="returnUrl">The return URL.</param>
+        /// <param name="customerId">The customer identifier.</param>
+        /// <param name="card3ds">if set to <c>true</c> [card3ds].</param>
+        /// <returns>Task&lt;Charge&gt;.</returns>
         public async Task<Charge> ChargeAsync(decimal amount, string currency, IChargeablePaymentType paymentType, Uri returnUrl, string customerId, bool? card3ds = null)
         {
             Check.NotNullOrEmpty(currency, nameof(currency));
@@ -179,6 +277,18 @@ namespace Heidelpay.Payment
             });
         }
 
+        /// <summary>
+        /// charge as an asynchronous operation.
+        /// </summary>
+        /// <param name="amount">The amount.</param>
+        /// <param name="currency">The currency.</param>
+        /// <param name="paymentType">Type of the payment.</param>
+        /// <param name="returnUrl">The return URL.</param>
+        /// <param name="customer">The customer.</param>
+        /// <param name="basket">The basket.</param>
+        /// <param name="invoiceId">The invoice identifier.</param>
+        /// <param name="card3ds">if set to <c>true</c> [card3ds].</param>
+        /// <returns>Task&lt;Charge&gt;.</returns>
         public async Task<Charge> ChargeAsync(decimal amount, string currency, IChargeablePaymentType paymentType, Uri returnUrl, Customer customer, Basket basket, string invoiceId = null, bool? card3ds = null)
         {
             Check.NotNullOrEmpty(currency, nameof(currency));
@@ -206,19 +316,33 @@ namespace Heidelpay.Payment
             });
         }
 
+        /// <summary>
+        /// charge as an asynchronous operation.
+        /// </summary>
+        /// <param name="charge">The charge.</param>
+        /// <returns>Task&lt;Charge&gt;.</returns>
         public async Task<Charge> ChargeAsync(Charge charge)
         {
             Check.NotNull(charge, nameof(charge));
-            
+
             return await PaymentService.ChargeAsync(charge);
         }
 
-        public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, string typeId, Uri returnUrl = null, string customerId = null)
+        /// <summary>
+        /// authorize as an asynchronous operation.
+        /// </summary>
+        /// <param name="amount">The amount.</param>
+        /// <param name="currency">The currency.</param>
+        /// <param name="authorizedPaymentTypeId">The authorized payment type identifier.</param>
+        /// <param name="returnUrl">The return URL.</param>
+        /// <param name="customerId">The customer identifier.</param>
+        /// <returns>Task&lt;Authorization&gt;.</returns>
+        public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, string authorizedPaymentTypeId, Uri returnUrl = null, string customerId = null)
         {
             Check.NotNullOrEmpty(currency, nameof(currency));
-            Check.NotNullOrEmpty(typeId, nameof(typeId));
+            Check.NotNullOrEmpty(authorizedPaymentTypeId, nameof(authorizedPaymentTypeId));
 
-            var type = PaymentService.ResolvePaymentTypeFromTypeId(typeId, postProcess: false);
+            var type = PaymentService.ResolvePaymentTypeFromTypeId(authorizedPaymentTypeId, postProcess: false);
             Check.NotNull(type as IAuthorizedPaymentType, "Only authorizable payment types are permitted for authorization.");
 
             return await AuthorizeAsync(new Authorization
@@ -228,12 +352,19 @@ namespace Heidelpay.Payment
                 ReturnUrl = returnUrl,
                 Resources = new Resources
                 {
-                    TypeId = typeId,
+                    TypeId = authorizedPaymentTypeId,
                     CustomerId = customerId,
                 }
             });
         }
 
+        /// <summary>
+        /// authorize as an asynchronous operation.
+        /// </summary>
+        /// <param name="amount">The amount.</param>
+        /// <param name="currency">The currency.</param>
+        /// <param name="paymentType">Type of the payment.</param>
+        /// <returns>Task&lt;Authorization&gt;.</returns>
         public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, IAuthorizedPaymentType paymentType)
         {
             Check.NotNullOrEmpty(currency, nameof(currency));
@@ -241,9 +372,18 @@ namespace Heidelpay.Payment
 
             var typeId = await EnsureRestResourceCreatedAsync(paymentType);
 
-            return await AuthorizeAsync(amount, currency, typeId: typeId);
+            return await AuthorizeAsync(amount, currency, authorizedPaymentTypeId: typeId);
         }
 
+        /// <summary>
+        /// authorize as an asynchronous operation.
+        /// </summary>
+        /// <param name="amount">The amount.</param>
+        /// <param name="currency">The currency.</param>
+        /// <param name="paymentType">Type of the payment.</param>
+        /// <param name="returnUrl">The return URL.</param>
+        /// <param name="customerId">The customer identifier.</param>
+        /// <returns>Task&lt;Authorization&gt;.</returns>
         public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, IAuthorizedPaymentType paymentType, Uri returnUrl, string customerId)
         {
             Check.NotNullOrEmpty(currency, nameof(currency));
@@ -253,9 +393,18 @@ namespace Heidelpay.Payment
 
             var typeId = await EnsureRestResourceCreatedAsync(paymentType);
 
-            return await AuthorizeAsync(amount, currency, typeId: typeId, returnUrl: returnUrl, customerId: customerId);
+            return await AuthorizeAsync(amount, currency, authorizedPaymentTypeId: typeId, returnUrl: returnUrl, customerId: customerId);
         }
 
+        /// <summary>
+        /// authorize as an asynchronous operation.
+        /// </summary>
+        /// <param name="amount">The amount.</param>
+        /// <param name="currency">The currency.</param>
+        /// <param name="paymentType">Type of the payment.</param>
+        /// <param name="returnUrl">The return URL.</param>
+        /// <param name="customer">The customer.</param>
+        /// <returns>Task&lt;Authorization&gt;.</returns>
         public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, IAuthorizedPaymentType paymentType, Uri returnUrl, Customer customer = null)
         {
             Check.NotNullOrEmpty(currency, nameof(currency));
@@ -265,14 +414,26 @@ namespace Heidelpay.Payment
             var typeId = await EnsureRestResourceCreatedAsync(paymentType);
             var customerId = await EnsureRestResourceCreatedAsync(customer);
 
-            return await AuthorizeAsync(amount, currency, typeId: typeId, returnUrl: returnUrl, customerId: customerId);
+            return await AuthorizeAsync(amount, currency, authorizedPaymentTypeId: typeId, returnUrl: returnUrl, customerId: customerId);
         }
 
+        /// <summary>
+        /// authorize as an asynchronous operation.
+        /// </summary>
+        /// <param name="authorization">The authorization.</param>
+        /// <returns>Task&lt;Authorization&gt;.</returns>
         public async Task<Authorization> AuthorizeAsync(Authorization authorization)
         {
             return await PaymentService.AuthorizeAsync(authorization);
         }
 
+        /// <summary>
+        /// cancel charge as an asynchronous operation.
+        /// </summary>
+        /// <param name="paymentId">The payment identifier.</param>
+        /// <param name="chargeId">The charge identifier.</param>
+        /// <param name="amount">The amount.</param>
+        /// <returns>Task&lt;Cancel&gt;.</returns>
         public async Task<Cancel> CancelChargeAsync(string paymentId, string chargeId, decimal? amount = null)
         {
             Check.NotNullOrEmpty(paymentId, nameof(paymentId));
@@ -281,6 +442,12 @@ namespace Heidelpay.Payment
             return await PaymentService.CancelChargeAsync(new Cancel { Amount = amount }, chargeId, paymentId);
         }
 
+        /// <summary>
+        /// fetch charge as an asynchronous operation.
+        /// </summary>
+        /// <param name="paymentId">The payment identifier.</param>
+        /// <param name="chargeId">The charge identifier.</param>
+        /// <returns>Task&lt;Charge&gt;.</returns>
         public async Task<Charge> FetchChargeAsync(string paymentId, string chargeId)
         {
             Check.NotNullOrEmpty(paymentId, nameof(paymentId));
@@ -289,6 +456,11 @@ namespace Heidelpay.Payment
             return await PaymentService.FetchChargeAsync(paymentId, chargeId);
         }
 
+        /// <summary>
+        /// fetch customer as an asynchronous operation.
+        /// </summary>
+        /// <param name="customerId">The customer identifier.</param>
+        /// <returns>Task&lt;Customer&gt;.</returns>
         public async Task<Customer> FetchCustomerAsync(string customerId)
         {
             Check.NotNullOrEmpty(customerId, nameof(customerId));
@@ -296,6 +468,12 @@ namespace Heidelpay.Payment
             return await PaymentService.FetchCustomerAsync(customerId);
         }
 
+        /// <summary>
+        /// fetch payment type as an asynchronous operation.
+        /// </summary>
+        /// <typeparam name="TPaymentType">The type of the t payment type.</typeparam>
+        /// <param name="typeId">The type identifier.</param>
+        /// <returns>Task&lt;TPaymentType&gt;.</returns>
         public async Task<TPaymentType> FetchPaymentTypeAsync<TPaymentType>(string typeId)
             where TPaymentType : class, IPaymentType
         {
@@ -303,7 +481,12 @@ namespace Heidelpay.Payment
 
             return await PaymentService.FetchPaymentTypeAsync<TPaymentType>(typeId);
         }
-        
+
+        /// <summary>
+        /// fetch meta data as an asynchronous operation.
+        /// </summary>
+        /// <param name="metaDataId">The meta data identifier.</param>
+        /// <returns>Task&lt;MetaData&gt;.</returns>
         public async Task<MetaData> FetchMetaDataAsync(string metaDataId)
         {
             Check.NotNullOrEmpty(metaDataId, nameof(metaDataId));
@@ -311,6 +494,11 @@ namespace Heidelpay.Payment
             return await PaymentService.FetchMetaDataAsync(metaDataId);
         }
 
+        /// <summary>
+        /// fetch basket as an asynchronous operation.
+        /// </summary>
+        /// <param name="basketId">The basket identifier.</param>
+        /// <returns>Task&lt;Basket&gt;.</returns>
         public async Task<Basket> FetchBasketAsync(string basketId)
         {
             Check.NotNullOrEmpty(basketId, nameof(basketId));
@@ -318,6 +506,11 @@ namespace Heidelpay.Payment
             return await PaymentService.FetchBasketAsync(basketId);
         }
 
+        /// <summary>
+        /// fetch authorization as an asynchronous operation.
+        /// </summary>
+        /// <param name="paymentId">The payment identifier.</param>
+        /// <returns>Task&lt;Authorization&gt;.</returns>
         public async Task<Authorization> FetchAuthorizationAsync(string paymentId)
         {
             Check.NotNullOrEmpty(paymentId, nameof(paymentId));
@@ -325,6 +518,11 @@ namespace Heidelpay.Payment
             return await PaymentService.FetchAuthorizationAsync(paymentId);
         }
 
+        /// <summary>
+        /// fetch payment as an asynchronous operation.
+        /// </summary>
+        /// <param name="paymentId">The payment identifier.</param>
+        /// <returns>Task&lt;Payment&gt;.</returns>
         public async Task<Payment> FetchPaymentAsync(string paymentId)
         {
             Check.NotNullOrEmpty(paymentId, nameof(paymentId));
@@ -332,6 +530,12 @@ namespace Heidelpay.Payment
             return await PaymentService.FetchPaymentAsync(paymentId);
         }
 
+        /// <summary>
+        /// create payment type as an asynchronous operation.
+        /// </summary>
+        /// <typeparam name="TPaymentBase">The type of the t payment base.</typeparam>
+        /// <param name="config">The configuration.</param>
+        /// <returns>Task&lt;TPaymentBase&gt;.</returns>
         public async Task<TPaymentBase> CreatePaymentTypeAsync<TPaymentBase>(Action<TPaymentBase> config = null)
              where TPaymentBase : class, IPaymentType
         {
@@ -342,6 +546,12 @@ namespace Heidelpay.Payment
             return await PaymentService.CreatePaymentTypeAsync(instance);
         }
 
+        /// <summary>
+        /// shipment as an asynchronous operation.
+        /// </summary>
+        /// <param name="paymentId">The payment identifier.</param>
+        /// <param name="invoiceId">The invoice identifier.</param>
+        /// <returns>Task&lt;Shipment&gt;.</returns>
         public async Task<Shipment> ShipmentAsync(string paymentId, string invoiceId = null)
         {
             Check.NotNullOrEmpty(paymentId, nameof(paymentId));
@@ -349,11 +559,23 @@ namespace Heidelpay.Payment
             return await PaymentService.ShipmentAsync(paymentId, invoiceId);
         }
 
+        /// <summary>
+        /// Builds the rest client.
+        /// </summary>
+        /// <param name="httpClientFactory">The HTTP client factory.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>IRestClient.</returns>
         private IRestClient BuildRestClient(IHttpClientFactory httpClientFactory, IOptions<HeidelpayApiOptions> options)
         {
             return new RestClient(httpClientFactory, options, new NullLogger<RestClient>());
         }
 
+        /// <summary>
+        /// ensure rest resource created as an asynchronous operation.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="restResource">The rest resource.</param>
+        /// <returns>Task&lt;System.String&gt;.</returns>
         private async Task<string> EnsureRestResourceCreatedAsync<T>(T restResource)
             where T : class, IRestResource
         {

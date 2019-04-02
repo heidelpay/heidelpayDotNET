@@ -1,21 +1,54 @@
-﻿using Heidelpay.Payment.Interfaces;
+﻿// ***********************************************************************
+// Assembly         : Heidelpay.Payment
+// Author           : berghtho
+// Created          : 03-14-2019
+//
+// Last Modified By : berghtho
+// Last Modified On : 04-01-2019
+// ***********************************************************************
+// <copyright file="MetaData.cs" company="Heidelpay">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using Heidelpay.Payment.Interfaces;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace Heidelpay.Payment
 {
-    public class MetaData : IRestResource, IHeidelpayProvider
+    /// <summary>
+    /// Class MetaData.
+    /// Implements the <see cref="Heidelpay.Payment.Interfaces.IRestResource" />
+    /// </summary>
+    /// <seealso cref="Heidelpay.Payment.Interfaces.IRestResource" />
+    public class MetaData : IRestResource
     {
+        /// <summary>
+        /// Gets or sets the identifier.
+        /// </summary>
+        /// <value>The identifier.</value>
         public string Id { get; set; }
 
+        /// <summary>
+        /// Gets or sets the metadata map.
+        /// </summary>
+        /// <value>The metadata map.</value>
         [JsonProperty]
         internal IDictionary<string, string> MetadataMap { get; set; } = new Dictionary<string, string>();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MetaData"/> class.
+        /// </summary>
         public MetaData() 
             : this(false)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MetaData"/> class.
+        /// </summary>
+        /// <param name="sorted">if set to <c>true</c> [sorted].</param>
         public MetaData(bool sorted)
         {
             if(sorted)
@@ -24,6 +57,11 @@ namespace Heidelpay.Payment
             }
         }
 
+        /// <summary>
+        /// Gets or sets the <see cref="System.String"/> with the specified key.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns>System.String.</returns>
         public string this[string key]
         {
             get
@@ -36,6 +74,10 @@ namespace Heidelpay.Payment
             }
         }
 
+        /// <summary>
+        /// Gets the count.
+        /// </summary>
+        /// <value>The count.</value>
         public int Count
         {
             get
@@ -44,13 +86,20 @@ namespace Heidelpay.Payment
             }
         }
 
+        /// <summary>
+        /// Determines whether the specified key contains key.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns><c>true</c> if the specified key contains key; otherwise, <c>false</c>.</returns>
         public bool ContainsKey(string key)
         {
             return MetadataMap.ContainsKey(key);
         }
 
+        /// <summary>
+        /// Gets the type URL.
+        /// </summary>
+        /// <value>The type URL.</value>
         public string TypeUrl => "metadata";
-
-        Heidelpay IHeidelpayProvider.Heidelpay { get; set; }
     }
 }

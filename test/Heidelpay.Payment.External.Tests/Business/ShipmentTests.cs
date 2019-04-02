@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Xunit;
 
 namespace Heidelpay.Payment.External.Tests.Business
@@ -11,7 +8,7 @@ namespace Heidelpay.Payment.External.Tests.Business
         [Fact(Skip = "It's not ready yet")]
         public async Task EmptyTest()
         {
-
+            await Task.CompletedTask;
         }
     }
 }

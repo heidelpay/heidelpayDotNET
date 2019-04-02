@@ -1,5 +1,5 @@
-﻿using Heidelpay.Payment;
-using Heidelpay.Payment.Extensions;
+﻿using Heidelpay.Payment.Extensions;
+using Heidelpay.Payment.Interfaces;
 using Heidelpay.Payment.PaymentTypes;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -10,7 +10,7 @@ namespace Heidelpay.Payment.External.Tests.Business
 {
     public abstract class PaymentTypeTestsBase
     {
-        protected Heidelpay BuildHeidelpay(string privateKey = null)
+        protected IHeidelpay BuildHeidelpay(string privateKey = null)
         {
             var services = new ServiceCollection();
 
@@ -26,7 +26,7 @@ namespace Heidelpay.Payment.External.Tests.Business
 
             var serviceProvider = services.BuildServiceProvider();
 
-            return serviceProvider.GetService<Heidelpay>();
+            return serviceProvider.GetService<IHeidelpay>();
         }
 
 
@@ -45,29 +45,27 @@ namespace Heidelpay.Payment.External.Tests.Business
             return GetRandomId().Substring(0, 5);
         }
 
-        protected async Task<Customer> CreateMaximumCustomer(Heidelpay heidelpay)
+        protected async Task<Customer> CreateMaximumCustomer(HeidelpayClient heidelpay)
         {
             return await heidelpay.CreateCustomerAsync(GetMaximumCustomer(GetRandomId()));
         }
 
-        protected async Task<Customer> CreateMaximumCustomerSameAddress(Heidelpay heidelpay)
+        protected async Task<Customer> CreateMaximumCustomerSameAddress(HeidelpayClient heidelpay)
         {
             return await heidelpay.CreateCustomerAsync(GetMaximumCustomerSameAddress(GetRandomId()));
         }
 
         protected Customer GetMinimumCustomer()
         {
-            return new Customer { Firstname = "Max", Lastname = "Musterperson" };
+            return new Customer( "Max", "Musterperson" );
         }
 
         protected Customer GetMaximumCustomerSameAddress(String customerId)
         {
             TryParseDateTime("1974-03-10", out DateTime dt);
 
-            return new Customer
+            return new Customer("Max", "Musterperson")
             {
-                Firstname = "Max",
-                Lastname = "Musterperson",
                 CustomerId = customerId,
                 Salutation = Salutation.Mr,
                 Email = "info@heidelpay.com",
@@ -81,10 +79,8 @@ namespace Heidelpay.Payment.External.Tests.Business
         {
             TryParseDateTime("1974-03-10", out DateTime dt);
 
-            return new Customer
+            return new Customer("Max", "Musterperson")
             {
-                Firstname = "Max",
-                Lastname = "Musterperson",
                 CustomerId = customerId,
                 Salutation = Salutation.Mr,
                 Email = "info@heidelpay.com",

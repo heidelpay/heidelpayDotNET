@@ -1,5 +1,5 @@
 ﻿using Heidelpay.Payment.Extensions;
-using Heidelpay.Payment.PaymentTypes;
+using Heidelpay.Payment.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
@@ -10,7 +10,7 @@ namespace Heidelpay.Payment.Internal.Tests.Business.Errors
 {
     public class ErrorTests
     {
-        protected Heidelpay BuildHeidelpay(string privateKey = null)
+        protected IHeidelpay BuildHeidelpay(string privateKey = null)
         {
             var services = new ServiceCollection();
 
@@ -26,7 +26,7 @@ namespace Heidelpay.Payment.Internal.Tests.Business.Errors
 
             var serviceProvider = services.BuildServiceProvider();
 
-            return serviceProvider.GetService<Heidelpay>();
+            return serviceProvider.GetService<IHeidelpay>();
         }
 
         [Fact]

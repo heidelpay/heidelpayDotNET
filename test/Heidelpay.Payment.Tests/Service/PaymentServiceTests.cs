@@ -1,15 +1,12 @@
 ﻿using Heidelpay.Payment.Communication;
 using Heidelpay.Payment.Interfaces;
 using Heidelpay.Payment.Options;
-using Heidelpay.Payment.Service;
 using Moq;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -30,7 +27,7 @@ namespace Heidelpay.Payment.Internal.Tests.Service
                 .Setup(x => x.HttpPostAsync<Charge>(It.IsAny<Uri>(), It.IsAny<Charge>()))
                 .Throws(HttpResponseExtensions.AsException(ErrorJsonObject(), HttpStatusCode.InternalServerError));
 
-            var heidelpay = new Heidelpay(mockedRestClient.Object);
+            var heidelpay = new HeidelpayClient(mockedRestClient.Object);
 
             var exception = await Assert.ThrowsAsync<PaymentException>(
                 () => heidelpay.PaymentService.ChargeAsync(new Charge()));

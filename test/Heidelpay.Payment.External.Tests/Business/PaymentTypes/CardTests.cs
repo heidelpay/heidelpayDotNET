@@ -1,5 +1,4 @@
 ﻿using Heidelpay.Payment.PaymentTypes;
-using System;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -60,12 +59,5 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             Assert.Equal("03/2020", fetchedCard.ExpiryDate);
             Assert.Equal("444433******1111", fetchedCard.Number);
         }
-
-        protected Action<Card> PaymentTypeCard { get; } = new Action<Card>(x =>
-        {
-            x.Number = "4444333322221111";
-            x.ExpiryDate = "03/20";
-            x.CVC = "123";
-        });
     }
 }

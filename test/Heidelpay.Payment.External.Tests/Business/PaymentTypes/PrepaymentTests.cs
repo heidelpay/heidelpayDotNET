@@ -1,5 +1,4 @@
 ﻿using Heidelpay.Payment.PaymentTypes;
-using System;
 using System.Threading.Tasks;
 using Xunit;
 
