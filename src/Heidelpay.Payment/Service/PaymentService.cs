@@ -51,7 +51,7 @@ namespace Heidelpay.Payment.Service
         /// <summary>
         /// Initializes a new instance of the <see cref="PaymentService"/> class.
         /// </summary>
-        /// <param name="heidelpay">The heidelpay.</param>
+        /// <param name="heidelpay">The heidelpay client instance.</param>
         public PaymentService(HeidelpayClient heidelpay)
         {
             Check.NotNull(heidelpay, nameof(heidelpay));

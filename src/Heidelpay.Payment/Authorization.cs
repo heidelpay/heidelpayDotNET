@@ -81,7 +81,7 @@ namespace Heidelpay.Payment
         /// <summary>
         /// Initializes a new instance of the <see cref="Authorization"/> class.
         /// </summary>
-        /// <param name="heidelpayClient">The heidelpay.</param>
+        /// <param name="heidelpayClient">The heidelpay client instance.</param>
         internal Authorization(IHeidelpay heidelpayClient)
             : base(heidelpayClient)
         {

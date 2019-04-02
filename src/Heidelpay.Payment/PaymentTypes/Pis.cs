@@ -37,7 +37,7 @@ namespace Heidelpay.Payment.PaymentTypes
         /// <summary>
         /// Initializes a new instance of the <see cref="Pis"/> class.
         /// </summary>
-        /// <param name="heidelpayClient">The heidelpay.</param>
+        /// <param name="heidelpayClient">The heidelpay client instance.</param>
         public Pis(IHeidelpay heidelpayClient)
             : base(heidelpayClient)
         {

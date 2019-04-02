@@ -53,7 +53,7 @@ namespace Heidelpay.Payment.PaymentTypes
         /// <summary>
         /// Initializes a new instance of the <see cref="SepaDirectDebitGuaranteed"/> class.
         /// </summary>
-        /// <param name="heidelpayClient">The heidelpay.</param>
+        /// <param name="heidelpayClient">The heidelpay client instance.</param>
         public SepaDirectDebitGuaranteed(IHeidelpay heidelpayClient)
             : base(heidelpayClient)
         {

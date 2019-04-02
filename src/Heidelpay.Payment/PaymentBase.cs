@@ -65,7 +65,7 @@ namespace Heidelpay.Payment
         /// <summary>
         /// Initializes a new instance of the <see cref="PaymentBase"/> class.
         /// </summary>
-        /// <param name="heidelpayClient">The heidelpay.</param>
+        /// <param name="heidelpayClient">The heidelpay client instance.</param>
         internal PaymentBase(IHeidelpay heidelpayClient)
         {
             Check.NotNull(heidelpayClient, nameof(heidelpayClient));
