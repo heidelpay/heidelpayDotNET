@@ -58,29 +58,55 @@ namespace Heidelpay.Payment.External.Tests.Business
         }
 
         [Fact]
-        public async Task Authorize_3DS_Override_Id()
+        public async Task Authorize_3DS_True_Override_False_Id()
         {
             var card = await BuildHeidelpay().CreatePaymentTypeAsync(PaymentTypeCard3DS);
 
             var auth = await BuildHeidelpay().AuthorizeAsync(10m, "EUR", card.Id, TestReturnUri, card3ds: false);
 
             Assert.NotNull(auth?.Id);
-            Assert.Equal("COR.000.200.000", auth.Message.Code);
+            Assert.Equal("COR.000.100.112", auth.Message.Code);
             Assert.NotNull(auth.Message.Customer);
             Assert.Equal(Status.Success, auth.Status);
         }
 
         [Fact]
-        public async Task Authorize_3DS_Override_Type()
+        public async Task Authorize_3DS_True_Override_False_Type()
         {
             var card = await BuildHeidelpay().CreatePaymentTypeAsync(PaymentTypeCard3DS);
 
             var auth = await BuildHeidelpay().AuthorizeAsync(10m, "EUR", card, TestReturnUri, card3ds: false);
 
             Assert.NotNull(auth?.Id);
-            Assert.Equal("COR.000.200.000", auth.Message.Code);
+            Assert.Equal("COR.000.100.112", auth.Message.Code);
             Assert.NotNull(auth.Message.Customer);
             Assert.Equal(Status.Success, auth.Status);
+        }
+
+        [Fact]
+        public async Task Authorize_3DS_False_Override_True_Id()
+        {
+            var card = await BuildHeidelpay().CreatePaymentTypeAsync(PaymentTypeCardNo3DS);
+
+            var auth = await BuildHeidelpay().AuthorizeAsync(10m, "EUR", card.Id, TestReturnUri, card3ds: true);
+
+            Assert.NotNull(auth?.Id);
+            Assert.Equal("COR.000.200.000", auth.Message.Code);
+            Assert.NotNull(auth.Message.Customer);
+            Assert.Equal(Status.Pending, auth.Status);
+        }
+
+        [Fact]
+        public async Task Authorize_3DS_False_Override_True_Type()
+        {
+            var card = await BuildHeidelpay().CreatePaymentTypeAsync(PaymentTypeCardNo3DS);
+
+            var auth = await BuildHeidelpay().AuthorizeAsync(10m, "EUR", card, TestReturnUri, card3ds: true);
+
+            Assert.NotNull(auth?.Id);
+            Assert.Equal("COR.000.200.000", auth.Message.Code);
+            Assert.NotNull(auth.Message.Customer);
+            Assert.Equal(Status.Pending, auth.Status);
         }
 
         [Fact]
