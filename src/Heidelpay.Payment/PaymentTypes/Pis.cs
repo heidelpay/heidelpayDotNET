@@ -1,15 +1,17 @@
 ﻿using Heidelpay.Payment.Interfaces;
+using Newtonsoft.Json;
 
 namespace Heidelpay.Payment.PaymentTypes
 {
     public sealed class Pis : PaymentTypeBase, IChargeablePaymentType
     {
-        public Pis()
+        [JsonConstructor]
+        internal Pis()
         {
 
         }
 
-        internal Pis(Heidelpay heidelpay)
+        public Pis(Heidelpay heidelpay)
             : base(heidelpay)
         {
 

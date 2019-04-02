@@ -35,7 +35,8 @@ namespace Heidelpay.Payment.External.Tests.Business
         public async Task Charge_With_TypeId_Ensure_Payment_Type()
         {
             var heidelpay = BuildHeidelpay();
-            var card = PaymentTypeCard;
+            var card = new Card(heidelpay);
+            PaymentTypeCard(card);
 
             var charge = await heidelpay.ChargeAsync(decimal.One, "EUR", card, TestReturnUri, card3ds: false);
 
@@ -45,7 +46,9 @@ namespace Heidelpay.Payment.External.Tests.Business
         [Fact]
         public async Task Charge_With_Payment_Type()
         {
-            var card = new Card { Number = "4444333322221111", ExpiryDate = "12/19" };
+            var heidelpay = BuildHeidelpay();
+
+            var card = new Card(heidelpay) { Number = "4444333322221111", ExpiryDate = "12/19" };
             var charge = await BuildHeidelpay().ChargeAsync(decimal.One, "EUR", card, TestReturnUri, card3ds: false);
 
             Assert.NotNull(charge?.Id);
@@ -56,10 +59,12 @@ namespace Heidelpay.Payment.External.Tests.Business
         [Fact]
         public async Task Charge_With_Customer_Type_ReturnUrl()
         {
-            var card = new Card { Number = "4444333322221111", ExpiryDate = "12/19" };
+            var heidelpay = BuildHeidelpay();
+
+            var card = new Card(heidelpay) { Number = "4444333322221111", ExpiryDate = "12/19" };
             var customer = GetMinimumCustomer();
 
-            var charge = await BuildHeidelpay().ChargeAsync(decimal.One, "EUR", card, TestReturnUri, customer: customer, card3ds: false);
+            var charge = await heidelpay.ChargeAsync(decimal.One, "EUR", card, TestReturnUri, customer: customer, card3ds: false);
 
             Assert.NotNull(charge?.Id);
             Assert.Equal("COR.000.100.112", charge.Message.Code);
@@ -84,7 +89,9 @@ namespace Heidelpay.Payment.External.Tests.Business
         [Fact]
         public async Task Charge_Sofort()
         {
-            var charge = await BuildHeidelpay().ChargeAsync(decimal.One, "EUR", new Sofort(), TestReturnUri);
+            var heidelpay = BuildHeidelpay();
+            var sofort = new Sofort(heidelpay);
+            var charge = await heidelpay.ChargeAsync(decimal.One, "EUR", sofort, TestReturnUri);
 
             Assert.NotNull(charge?.Id);
             Assert.NotNull(charge?.RedirectUrl);

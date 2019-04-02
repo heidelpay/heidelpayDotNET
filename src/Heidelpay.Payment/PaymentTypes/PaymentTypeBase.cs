@@ -1,11 +1,12 @@
 ﻿using Heidelpay.Payment.Interfaces;
+using Newtonsoft.Json;
 using System;
 
 namespace Heidelpay.Payment.PaymentTypes
 {
     public abstract class PaymentTypeBase : IPaymentType, IHeidelpayProvider
     {
-        internal PaymentTypeBase(Heidelpay heidelpay)
+        public PaymentTypeBase(Heidelpay heidelpay)
         {
             ((IHeidelpayProvider)this).Heidelpay = heidelpay;
         }

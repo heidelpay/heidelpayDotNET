@@ -38,7 +38,7 @@ namespace Heidelpay.Payment
         public decimal AmountCanceled { get => Amount.Canceled; }
         public decimal AmountRemaining { get => Amount.Remaining; }
 
-        public Payment(PaymentTypeBase paymentType)
+        public Payment(IPaymentType paymentType)
             : this(((IHeidelpayProvider)paymentType).Heidelpay)
         {
             Resources.TypeId = paymentType.Id;

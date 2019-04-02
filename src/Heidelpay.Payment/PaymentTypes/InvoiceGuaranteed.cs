@@ -1,15 +1,17 @@
 ﻿using Heidelpay.Payment.Interfaces;
+using Newtonsoft.Json;
 
 namespace Heidelpay.Payment.PaymentTypes
 {
     public sealed class InvoiceGuaranteed : PaymentTypeBase, IChargeablePaymentType
     {
-        public InvoiceGuaranteed()
+        [JsonConstructor]
+        internal InvoiceGuaranteed()
         {
 
         }
 
-        internal InvoiceGuaranteed(Heidelpay heidelpay)
+        public InvoiceGuaranteed(Heidelpay heidelpay)
             : base(heidelpay)
         {
 

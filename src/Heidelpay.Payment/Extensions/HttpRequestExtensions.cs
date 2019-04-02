@@ -32,11 +32,11 @@ namespace System.Net.Http
             request.Headers.Add(RestClientConstants.USER_AGENT, $"{RestClientConstants.USER_AGENT_PREFIX}{SDKInfo.Version} - {callerName}");
         }
 
-        public static void AddLocale(this HttpRequestMessage request, CultureInfo cultureInfo = null)
+        public static void AddLocale(this HttpRequestMessage request, string locale = null)
         {
             Check.NotNull(request, nameof(request));
 
-            request.Headers.Add(RestClientConstants.ACCEPT_LANGUAGE, cultureInfo?.Name ?? RestClientConstants.ACCEPT_LANGUAGE_DEFAULT_VALUE);
+            request.Headers.Add(RestClientConstants.ACCEPT_LANGUAGE, locale ?? RestClientConstants.ACCEPT_LANGUAGE_DEFAULT_VALUE);
         }
     }
 }

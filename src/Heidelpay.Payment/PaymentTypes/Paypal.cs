@@ -1,15 +1,17 @@
 ﻿using Heidelpay.Payment.Interfaces;
+using Newtonsoft.Json;
 
 namespace Heidelpay.Payment.PaymentTypes
 {
     public sealed class Paypal : PaymentTypeBase, IAuthorizedPaymentType, IChargeablePaymentType
     {
-        public Paypal()
+        [JsonConstructor]
+        internal Paypal()
         {
 
         }
 
-        internal Paypal(Heidelpay heidelpay)
+        public Paypal(Heidelpay heidelpay)
             : base(heidelpay)
         {
 

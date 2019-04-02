@@ -1,21 +1,23 @@
 ﻿using Heidelpay.Payment.Interfaces;
+using Newtonsoft.Json;
 
 namespace Heidelpay.Payment.PaymentTypes
 {
-    public sealed class Invoice : PaymentTypeBase, IAuthorizedPaymentType
+    public sealed class Invoice : PaymentTypeBase, IChargeablePaymentType
     {
-        public Invoice()
+        [JsonConstructor]
+        internal Invoice()
         {
 
         }
-
-        internal Invoice(Heidelpay heidelpay)
+        
+        public Invoice(Heidelpay heidelpay)
             : base(heidelpay)
         {
 
         }
         public override string TypeUrl => "types/invoice";
 
-        Heidelpay IAuthorizedPaymentType.Heidelpay => Heidelpay;
+        Heidelpay IChargeablePaymentType.Heidelpay => Heidelpay;
     }
 }

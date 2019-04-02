@@ -1,15 +1,17 @@
 ﻿using Heidelpay.Payment.Interfaces;
+using Newtonsoft.Json;
 
 namespace Heidelpay.Payment.PaymentTypes
 {
     public sealed class Giropay : PaymentTypeBase, IChargeablePaymentType
     {
-        public Giropay()
+        [JsonConstructor]
+        internal Giropay()
         {
 
         }
-
-        internal Giropay(Heidelpay heidelpay)
+                
+        public Giropay(Heidelpay heidelpay)
             : base(heidelpay)
         {
 

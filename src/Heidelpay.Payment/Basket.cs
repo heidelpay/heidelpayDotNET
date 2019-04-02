@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using Heidelpay.Payment.Interfaces;
+using System.Collections.Generic;
 
 namespace Heidelpay.Payment
 {
-    public class Basket : PaymentBase
+    public class Basket : IRestResource
     {
+        public string Id { get; set; }
         public decimal AmountTotal { get; set; }
         public decimal AmountTotalDiscount { get; set; }
         public string CurrencyCode { get; set; }
@@ -17,16 +19,11 @@ namespace Heidelpay.Payment
         {
         }
 
-        internal Basket(Heidelpay heidelpay)
-            : base(heidelpay)
-        {
-        }
-
         public void AddBasketItem(BasketItem item)
         {
             basketItems.Add(item);
         }
 
-        public override string TypeUrl => "baskets";
+        public string TypeUrl => "baskets";
     }
 }

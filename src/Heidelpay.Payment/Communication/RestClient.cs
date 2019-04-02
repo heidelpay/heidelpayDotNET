@@ -107,6 +107,7 @@ namespace Heidelpay.Payment.Communication
 
             request.AddUserAgent(GetType().FullName);
             request.AddAuthentication(apiOptions?.Value?.ApiKey);
+            request.AddLocale(apiOptions?.Value?.Locale);
 
             LogRequest(request);
 

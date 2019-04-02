@@ -11,5 +11,7 @@ namespace Heidelpay.Payment.Options
         public string ApiKey { get; set; }
 
         public string HttpClientName { get; set; }
+
+        public string Locale { get; set; }
     }
 }

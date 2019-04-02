@@ -1,4 +1,5 @@
 ﻿using Heidelpay.Payment.Interfaces;
+using Newtonsoft.Json;
 
 namespace Heidelpay.Payment.PaymentTypes
 {
@@ -6,12 +7,13 @@ namespace Heidelpay.Payment.PaymentTypes
     {
         public string Bic { get; set; }
 
-        public Ideal()
+        [JsonConstructor]
+        internal Ideal()
         {
 
         }
-
-        internal Ideal(Heidelpay heidelpay)
+        
+        public Ideal(Heidelpay heidelpay)
             : base(heidelpay)
         {
 

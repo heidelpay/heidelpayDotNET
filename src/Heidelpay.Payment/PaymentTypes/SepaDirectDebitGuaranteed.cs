@@ -1,4 +1,5 @@
 ﻿using Heidelpay.Payment.Interfaces;
+using Newtonsoft.Json;
 
 namespace Heidelpay.Payment.PaymentTypes
 {
@@ -8,12 +9,13 @@ namespace Heidelpay.Payment.PaymentTypes
         public string Bic { get; set; }
         public string Holder { get; set; }
 
-        public SepaDirectDebitGuaranteed()
+        [JsonConstructor]
+        internal SepaDirectDebitGuaranteed()
         {
 
         }
 
-        internal SepaDirectDebitGuaranteed(Heidelpay heidelpay)
+        public SepaDirectDebitGuaranteed(Heidelpay heidelpay)
             : base(heidelpay)
         {
 

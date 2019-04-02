@@ -165,6 +165,11 @@ namespace Heidelpay.Payment.External.Tests
             Assert.NotNull(factory);
         }
 
-        protected Card PaymentTypeCard { get; } = new Card { Number = "4444333322221111", ExpiryDate = "03/20", CVC = "123" };
+        protected Action<Card> PaymentTypeCard { get; } = new Action<Card>(x =>
+        {
+            x.Number = "4444333322221111";
+            x.ExpiryDate = "03/20";
+            x.CVC = "123";
+        });
     }
 }

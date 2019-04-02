@@ -10,7 +10,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         [Fact]
         public async Task Create_PaymentType()
         {
-            var result = await BuildHeidelpay().CreatePaymentTypeAsync(new SepaDirectDebit { Iban = "DE89370400440532013000" });
+            var result = await BuildHeidelpay().CreatePaymentTypeAsync<SepaDirectDebit>(x => x.Iban = "DE89370400440532013000");
             Assert.NotNull(result?.Id);
         }
 
@@ -20,7 +20,9 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             var result = await BuildHeidelpay().CreatePaymentTypeAsync(TestPaymentType);
             Assert.NotNull(result?.Id);
 
-            AssertEqual(TestPaymentType, result);
+            Assert.Equal("COBADEFFXXX", result.Bic);
+            Assert.Equal("Max Musterperson", result.Holder);
+            Assert.Equal("DE8937************3000", result.Iban);
         }
 
         [Fact]
@@ -39,17 +41,16 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             var fetched = await BuildHeidelpay().FetchPaymentTypeAsync<SepaDirectDebit>(result.Id);
             Assert.NotNull(fetched?.Id);
 
-            AssertEqual(TestPaymentType, fetched);
+            Assert.Equal("COBADEFFXXX", fetched.Bic);
+            Assert.Equal("Max Musterperson", fetched.Holder);
+            Assert.Equal("DE8937************3000", fetched.Iban);
         }
 
-        private SepaDirectDebit TestPaymentType { get; } = new SepaDirectDebit { Iban = "DE89370400440532013000", Bic = "COBADEFFXXX", Holder = "Max Musterperson" };
-
-        private static void AssertEqual(SepaDirectDebit expected, SepaDirectDebit actual)
+        private Action<SepaDirectDebit> TestPaymentType { get; } = new Action<SepaDirectDebit>(x =>
         {
-            Assert.NotNull(actual);
-            Assert.Equal(expected.Bic, actual.Bic);
-            Assert.Equal(expected.Holder, actual.Holder);
-            Assert.Equal("DE8937************3000", actual.Iban);
-        }
+            x.Iban = "DE89370400440532013000";
+            x.Bic = "COBADEFFXXX";
+            x.Holder = "Max Musterperson";
+        });
     }
 }

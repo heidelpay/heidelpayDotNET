@@ -5,20 +5,20 @@ namespace Heidelpay.Payment.PaymentTypes
 {
     public sealed class Card : PaymentTypeBase, IChargeablePaymentType, IAuthorizedPaymentType
     {
-        public string Number { get; set; }
-        public string CVC { get; set; }
-        public string ExpiryDate { get; set; }
+        public string Number { get; set; } = string.Empty;
+        public string CVC { get; set; } 
+        public string ExpiryDate { get; set; } = string.Empty;
         public string Brand { get; set; }
 
         [JsonProperty(PropertyName = "3ds")]
         public bool? ThreeDs { get; set; }
 
-        public Card()
+        [JsonConstructor]
+        internal Card()
         {
-
         }
 
-        internal Card(Heidelpay heidelpay)
+        public Card(Heidelpay heidelpay)
             : base(heidelpay)
         {
 

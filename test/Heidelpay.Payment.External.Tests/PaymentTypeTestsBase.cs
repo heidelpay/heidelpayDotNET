@@ -123,7 +123,12 @@ namespace Heidelpay.Payment.External.Tests.Business
 
         protected MetaData TestMetaData { get; } = new MetaData { ["invoice-nr"] = "Rg-2018-11-1", ["shop-id"] = "4711", ["delivery-date"] = "24.12.2018", ["reason"] = "X-mas present" };
         protected Address TestAddress { get; } = new Address { Name = "Mozart", Street = "Grüngasse 16", City = "Vienna", State = "Vienna", Zip = "1010", Country = "AT" };
-        protected Card PaymentTypeCard { get; } = new Card { Number = "4444333322221111", ExpiryDate = "03/20", CVC = "123" };
+        protected Action<Card> PaymentTypeCard { get; } = new Action<Card>(x => 
+        {
+            x.Number = "4444333322221111";
+            x.ExpiryDate = "03/20";
+            x.CVC = "123"; 
+        });
 
         static readonly string[] AllowedDateTimeFormats = new[]
         {

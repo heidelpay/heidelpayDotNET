@@ -1,15 +1,17 @@
 ﻿using Heidelpay.Payment.Interfaces;
+using Newtonsoft.Json;
 
 namespace Heidelpay.Payment.PaymentTypes
 {
     public sealed class Przelewy24 : PaymentTypeBase, IChargeablePaymentType
     {
-        public Przelewy24()
+        [JsonConstructor]
+        internal Przelewy24()
         {
 
         }
-
-        internal Przelewy24(Heidelpay heidelpay)
+                
+        public Przelewy24(Heidelpay heidelpay)
             : base(heidelpay)
         {
 

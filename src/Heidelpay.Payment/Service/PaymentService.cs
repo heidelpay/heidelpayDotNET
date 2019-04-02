@@ -26,7 +26,7 @@ namespace Heidelpay.Payment.Service
         }
 
         public async Task<TPaymentBase> CreatePaymentTypeAsync<TPaymentBase>(TPaymentBase paymentType)
-            where TPaymentBase : PaymentTypeBase
+            where TPaymentBase : class, IPaymentType
         {
             return await ApiPostAsync(paymentType);
         }
@@ -76,10 +76,10 @@ namespace Heidelpay.Payment.Service
         }
 
         public async Task<TPaymentBase> FetchPaymentTypeAsync<TPaymentBase>(string paymentTypeId)
-            where TPaymentBase : PaymentTypeBase
+            where TPaymentBase : class, IPaymentType
         {
             Check.NotNullOrEmpty(paymentTypeId, nameof(paymentTypeId));
-            var paymentType = ResolvePaymentTypeFromTypeId(paymentTypeId);
+            var paymentType = ResolvePaymentTypeFromTypeId(paymentTypeId, postProcess: true);
 
             return await ApiGetAsync(paymentTypeId, paymentType) as TPaymentBase;
         }
@@ -208,6 +208,41 @@ namespace Heidelpay.Payment.Service
             var result = await ApiPostAsync(cancel, BuildApiEndpointUri(cancel.ResolveRefundUrl(paymentId, chargeId), null), getAfterPost: false);
 
             result.Payment = await FetchPaymentAsync(result.Resources.PaymentId);
+
+            return result;
+        }
+
+        internal PaymentTypeBase ResolvePaymentTypeFromTypeId(string typeId, bool postProcess)
+        {
+            Check.NotNullOrEmpty(typeId, nameof(typeId));
+            Check.ThrowIfTrue(typeId.Length < 5, "TypeId '" + typeId + "' is invalid");
+
+            var shortTypeId = typeId
+                .Substring(2, 3)
+                .ToLower();
+
+            PaymentTypeBase result = null;
+
+            switch (shortTypeId)
+            {
+                case "crd": result = new Card(); break;
+                case "eps": result = new Eps(); break;
+                case "gro": result = new Giropay(); break;
+                case "idl": result = new Ideal(); break;
+                case "ivc": result = new Invoice(); break;
+                case "ivf": result = new InvoiceFactoring(); break;
+                case "ivg": result = new InvoiceGuaranteed(); break;
+                case "ppl": result = new Paypal(); break;
+                case "ppy": result = new Prepayment(); break;
+                case "p24": result = new Przelewy24(); break;
+                case "sdd": result = new SepaDirectDebit(); break;
+                case "ddg": result = new SepaDirectDebitGuaranteed(); break;
+                case "sft": result = new Sofort(); break;
+                case "pis": result = new Pis(); break;
+                default: throw new PaymentException("Type '" + shortTypeId + "' is currently not supported by the SDK");
+            }
+
+            if (postProcess) PostProcessApiResource(result);
 
             return result;
         }
@@ -359,39 +394,7 @@ namespace Heidelpay.Payment.Service
 
             return combinedPaths;
         }
-
-        private PaymentTypeBase ResolvePaymentTypeFromTypeId(string typeId)
-        {
-            Check.NotNullOrEmpty(typeId, nameof(typeId));
-            Check.ThrowIfTrue(typeId.Length < 5, "TypeId '" + typeId + "' is invalid");
-
-            var shortTypeId = typeId
-                .Substring(2, 3)
-                .ToLower();
-
-            PaymentTypeBase result = null;
-
-            switch (shortTypeId)
-            {
-                case "crd": result = new Card { Number = "", ExpiryDate = "" }; break;
-                case "eps": result = new Eps(); break;
-                case "gro": result = new Giropay(); break;
-                case "idl": result = new Ideal(); break;
-                case "ivc": result = new Invoice(); break;
-                case "ivf": result = new InvoiceFactoring(); break;
-                case "ivg": result = new InvoiceGuaranteed(); break;
-                case "ppl": result = new Paypal(); break;
-                case "ppy": result = new Prepayment(); break;
-                case "p24": result = new Przelewy24(); break;
-                case "sdd": result = new SepaDirectDebit(); break;
-                case "ddg": result = new SepaDirectDebitGuaranteed(); break;
-                case "sft": result = new Sofort(); break;
-                case "pis": result = new Pis(); break;
-                default: throw new PaymentException("Type '" + shortTypeId + "' is currently not supported by the SDK");
-            }
-
-            return PostProcessApiResource(result);
-        }
+              
 
         private async Task<Payment> PostProcessPayment(Payment payment)
         {

@@ -10,7 +10,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         [Fact]
         public async Task Create_PaymentType()
         {
-            var result = await BuildHeidelpay().CreatePaymentTypeAsync(new Paypal());
+            var result = await BuildHeidelpay().CreatePaymentTypeAsync<Paypal>();
             Assert.NotNull(result?.Id);
         }
 
@@ -18,7 +18,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         [Fact]
         public async Task Authorize_PaymentType()
         {
-            var result = await BuildHeidelpay().CreatePaymentTypeAsync(new Paypal());
+            var result = await BuildHeidelpay().CreatePaymentTypeAsync<Paypal>();
             var auth = await BuildHeidelpay().AuthorizeAsync(decimal.One, "EUR", result, ShopReturnUri);
             Assert.NotNull(result?.Id);
             Assert.NotNull(auth?.Id);
@@ -27,7 +27,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         [Fact]
         public async Task Charge_PaymentType()
         {
-            var result = await BuildHeidelpay().CreatePaymentTypeAsync(new Paypal());
+            var result = await BuildHeidelpay().CreatePaymentTypeAsync<Paypal>();
             var charge = await BuildHeidelpay().ChargeAsync(decimal.One, "EUR", result, TestReturnUri);
             Assert.NotNull(charge?.Id);
             Assert.NotNull(charge?.RedirectUrl);
@@ -36,7 +36,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         [Fact]
         public async Task Fetch_PaymentType()
         {
-            var result = await BuildHeidelpay().CreatePaymentTypeAsync(new Paypal());
+            var result = await BuildHeidelpay().CreatePaymentTypeAsync<Paypal>();
             var fetched = await BuildHeidelpay().FetchPaymentTypeAsync<Paypal>(result.Id);
             Assert.NotNull(fetched?.Id);
         }
