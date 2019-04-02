@@ -1,5 +1,6 @@
 ﻿using Heidelpay.Payment;
 using Heidelpay.Payment.Communication;
+using System.Globalization;
 
 namespace System.Net.Http
 {
@@ -26,8 +27,16 @@ namespace System.Net.Http
         public static void AddUserAgent(this HttpRequestMessage request, string callerName)
         {
             Check.NotNull(request, nameof(request));
+            Check.NotNullOrEmpty(callerName, nameof(callerName));
 
             request.Headers.Add(RestClientConstants.USER_AGENT, $"{RestClientConstants.USER_AGENT_PREFIX}{SDKInfo.Version} - {callerName}");
+        }
+
+        public static void AddLocale(this HttpRequestMessage request, CultureInfo cultureInfo = null)
+        {
+            Check.NotNull(request, nameof(request));
+
+            request.Headers.Add(RestClientConstants.ACCEPT_LANGUAGE, cultureInfo?.Name ?? RestClientConstants.ACCEPT_LANGUAGE_DEFAULT_VALUE);
         }
     }
 }

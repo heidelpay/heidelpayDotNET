@@ -8,5 +8,7 @@
         public const string USER_AGENT_PREFIX = "heidelpay-DOTNET-";
         public const string CONTENT_TYPE_JSON = "application/json; charset=UTF-8";
         public const string CONTENT_TYPE = "Content-Type";
+        public const string ACCEPT_LANGUAGE = "Accept-Language";
+        public const string ACCEPT_LANGUAGE_DEFAULT_VALUE = "en-US";
     }
 }

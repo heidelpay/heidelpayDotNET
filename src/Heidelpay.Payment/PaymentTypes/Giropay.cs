@@ -2,7 +2,7 @@
 
 namespace Heidelpay.Payment.PaymentTypes
 {
-    public sealed class Giropay : PaymentTypeBase, IPaymentCharge
+    public sealed class Giropay : PaymentTypeBase, IChargeablePaymentType
     {
         public Giropay()
         {
@@ -16,6 +16,6 @@ namespace Heidelpay.Payment.PaymentTypes
         }
         public override string TypeUrl => "types/giropay";
 
-        Heidelpay IPaymentCharge.Heidelpay => Heidelpay;
+        Heidelpay IChargeablePaymentType.Heidelpay => Heidelpay;
     }
 }

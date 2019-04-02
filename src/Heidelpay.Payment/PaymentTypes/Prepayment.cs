@@ -2,7 +2,7 @@
 
 namespace Heidelpay.Payment.PaymentTypes
 {
-    public sealed class Prepayment : PaymentTypeBase, IPaymentAuthorize
+    public sealed class Prepayment : PaymentTypeBase, IAuthorizedPaymentType
     {
         public Prepayment()
         {
@@ -16,6 +16,6 @@ namespace Heidelpay.Payment.PaymentTypes
         }
         public override string TypeUrl => "types/prepayment";
 
-        Heidelpay IPaymentAuthorize.Heidelpay => Heidelpay;
+        Heidelpay IAuthorizedPaymentType.Heidelpay => Heidelpay;
     }
 }

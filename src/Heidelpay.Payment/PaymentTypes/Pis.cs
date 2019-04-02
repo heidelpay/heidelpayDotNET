@@ -2,7 +2,7 @@
 
 namespace Heidelpay.Payment.PaymentTypes
 {
-    public sealed class Pis : PaymentTypeBase, IPaymentCharge
+    public sealed class Pis : PaymentTypeBase, IChargeablePaymentType
     {
         public Pis()
         {
@@ -16,6 +16,6 @@ namespace Heidelpay.Payment.PaymentTypes
         }
         public override string TypeUrl => "types/pis";
 
-        Heidelpay IPaymentCharge.Heidelpay => Heidelpay;
+        Heidelpay IChargeablePaymentType.Heidelpay => Heidelpay;
     }
 }

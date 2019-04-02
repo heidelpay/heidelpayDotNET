@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Heidelpay.Payment.PaymentTypes
 {
-    public sealed class Card : PaymentTypeBase, IPaymentCharge, IPaymentAuthorize
+    public sealed class Card : PaymentTypeBase, IChargeablePaymentType, IAuthorizedPaymentType
     {
         public string Number { get; set; }
         public string CVC { get; set; }
@@ -26,7 +26,7 @@ namespace Heidelpay.Payment.PaymentTypes
 
         public override string TypeUrl => "types/card";
 
-        Heidelpay IPaymentCharge.Heidelpay => Heidelpay;
-        Heidelpay IPaymentAuthorize.Heidelpay => Heidelpay;
+        Heidelpay IChargeablePaymentType.Heidelpay => Heidelpay;
+        Heidelpay IAuthorizedPaymentType.Heidelpay => Heidelpay;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Heidelpay.Payment.PaymentTypes
 {
-    public sealed class Przelewy24 : PaymentTypeBase, IPaymentCharge
+    public sealed class Przelewy24 : PaymentTypeBase, IChargeablePaymentType
     {
         public Przelewy24()
         {
@@ -16,6 +16,6 @@ namespace Heidelpay.Payment.PaymentTypes
         }
         public override string TypeUrl => "types/przelewy24";
 
-        Heidelpay IPaymentCharge.Heidelpay => Heidelpay;
+        Heidelpay IChargeablePaymentType.Heidelpay => Heidelpay;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Heidelpay.Payment.PaymentTypes
 {
-    public sealed class Paypal : PaymentTypeBase, IPaymentAuthorize, IPaymentCharge
+    public sealed class Paypal : PaymentTypeBase, IAuthorizedPaymentType, IChargeablePaymentType
     {
         public Paypal()
         {
@@ -17,7 +17,7 @@ namespace Heidelpay.Payment.PaymentTypes
 
         public override string TypeUrl => "types/paypal";
 
-        Heidelpay IPaymentCharge.Heidelpay => Heidelpay;
-        Heidelpay IPaymentAuthorize.Heidelpay => Heidelpay;
+        Heidelpay IChargeablePaymentType.Heidelpay => Heidelpay;
+        Heidelpay IAuthorizedPaymentType.Heidelpay => Heidelpay;
     }
 }

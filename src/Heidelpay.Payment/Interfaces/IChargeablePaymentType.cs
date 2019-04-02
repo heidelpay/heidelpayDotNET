@@ -1,6 +1,6 @@
 ﻿namespace Heidelpay.Payment.Interfaces
 {
-    public interface IPaymentAuthorize : IPaymentType
+    public interface IChargeablePaymentType : IPaymentType
     {
         Heidelpay Heidelpay { get; }
     }

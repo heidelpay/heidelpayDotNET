@@ -2,7 +2,7 @@
 
 namespace Heidelpay.Payment.PaymentTypes
 {
-    public sealed class SepaDirectDebit : PaymentTypeBase, IPaymentCharge
+    public sealed class SepaDirectDebit : PaymentTypeBase, IChargeablePaymentType
     {
         public string Iban { get; set; }
         public string Bic { get; set; }
@@ -21,6 +21,6 @@ namespace Heidelpay.Payment.PaymentTypes
 
         public override string TypeUrl => "types/sepa-direct-debit";
 
-        Heidelpay IPaymentCharge.Heidelpay => Heidelpay;
+        Heidelpay IChargeablePaymentType.Heidelpay => Heidelpay;
     }
 }

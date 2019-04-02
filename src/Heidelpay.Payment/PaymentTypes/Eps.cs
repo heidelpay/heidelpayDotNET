@@ -2,7 +2,7 @@
 
 namespace Heidelpay.Payment.PaymentTypes
 {
-    public sealed class Eps : PaymentTypeBase, IPaymentCharge
+    public sealed class Eps : PaymentTypeBase, IChargeablePaymentType
     {
         public string Bic { get; set; }
 
@@ -18,6 +18,6 @@ namespace Heidelpay.Payment.PaymentTypes
         }
         public override string TypeUrl => "types/eps";
 
-        Heidelpay IPaymentCharge.Heidelpay => Heidelpay;
+        Heidelpay IChargeablePaymentType.Heidelpay => Heidelpay;
     }
 }

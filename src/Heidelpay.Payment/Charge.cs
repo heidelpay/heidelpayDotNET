@@ -47,7 +47,7 @@ namespace Heidelpay.Payment
        
         public IEnumerable<Cancel> CancelList { get; set; } = Enumerable.Empty<Cancel>();
 
-        public Charge(IPaymentCharge chargeablePayment)
+        public Charge(IChargeablePaymentType chargeablePayment)
             : this(chargeablePayment.Heidelpay)
         {
             Resources.TypeId = chargeablePayment.Id;

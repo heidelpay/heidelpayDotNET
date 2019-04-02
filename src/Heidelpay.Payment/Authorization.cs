@@ -30,7 +30,7 @@ namespace Heidelpay.Payment
         {
         }
 
-        public Authorization(IPaymentAuthorize paymentAuthorizable)
+        public Authorization(IAuthorizedPaymentType paymentAuthorizable)
             : this(paymentAuthorizable.Heidelpay)
         {
             Resources.TypeId = paymentAuthorizable.Id;
