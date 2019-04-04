@@ -92,7 +92,9 @@ namespace Heidelpay.Payment.Service
         {
             Check.NotNull(metadata, nameof(metadata));
 
-            return await ApiPostAsync(metadata);
+            var created = await heidelpay.RestClient.HttpPostAsync<MetaData>(BuildApiEndpointUri(metadata), metadata.MetadataMap);
+            created.MetadataMap = await heidelpay.RestClient.HttpGetAsync<Dictionary<string,string>>(BuildApiEndpointUri(created, created.Id));
+            return created;
         }
 
         /// <summary>
@@ -118,7 +120,7 @@ namespace Heidelpay.Payment.Service
         {
             Check.NotNull(customer, nameof(customer));
 
-            return await ApiPostAsync(customer);
+            return await ApiPostAsync(customer, getAfterPost: true);
         }
 
         /// <summary>
@@ -271,6 +273,7 @@ namespace Heidelpay.Payment.Service
             Check.NotNullOrEmpty(paymentId, nameof(paymentId));
 
             var payment = await ApiGetAsync(new Payment { Id = paymentId });
+
             return await PostProcessPayment(payment);
         }
 
@@ -307,7 +310,10 @@ namespace Heidelpay.Payment.Service
         {
             Check.NotNullOrEmpty(metaDataId, nameof(metaDataId));
 
-            return await ApiGetAsync(new MetaData { Id = metaDataId });
+            var fetched = new MetaData { Id = metaDataId };
+            fetched.MetadataMap = await heidelpay.RestClient.HttpGetAsync<Dictionary<string, string>>(BuildApiEndpointUri(fetched, fetched.Id));
+
+            return fetched;
         }
 
         /// <summary>
@@ -646,7 +652,11 @@ namespace Heidelpay.Payment.Service
         private async Task ApiDeleteAsync<T>(string id)
            where T : class, IRestResource
         {
-            await heidelpay.RestClient.HttpDeleteAsync<T>(BuildApiEndpointUri(default(T), id));
+            // default(T) only works with public parameterless constructors but most of our business classes
+            // have only internal constructors, so we need to activate a new instance by hand
+            var defaultInstance = (T)Activator.CreateInstance(typeof(T), nonPublic: true);
+
+            await heidelpay.RestClient.HttpDeleteAsync<T>(BuildApiEndpointUri(defaultInstance, id));
         }
 
         /// <summary>

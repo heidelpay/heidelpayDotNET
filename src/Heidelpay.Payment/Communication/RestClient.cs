@@ -35,7 +35,7 @@ namespace Heidelpay.Payment.Communication
         /// <summary>
         /// The serialization settings
         /// </summary>
-        private readonly JsonSerializerSettings serializationSettings = new JsonSerializerSettings
+        readonly JsonSerializerSettings SerializationSettings = new JsonSerializerSettings
         {
             NullValueHandling = NullValueHandling.Ignore,
             ContractResolver = new CamelCasePropertyNamesContractResolver(),
@@ -239,7 +239,7 @@ namespace Heidelpay.Payment.Communication
 
             if (content != null)
             {
-                var serializedContent = JsonConvert.SerializeObject(content, serializationSettings);
+                var serializedContent = JsonConvert.SerializeObject(content, SerializationSettings);
                 request.Content = new StringContent(serializedContent, Encoding.UTF8, "application/json");
                 request.Content.Headers.ContentEncoding.Add("UTF-8");
             }

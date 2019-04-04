@@ -129,7 +129,7 @@ namespace Heidelpay.Payment
         {
             get
             {
-                return MetaData?.Id ?? Resources?.MetadataId;
+                return Resources?.MetadataId;
             }
         }
 
@@ -152,13 +152,6 @@ namespace Heidelpay.Payment
         /// <value>The resources.</value>
         [JsonProperty]
         internal Resources Resources { get; set; } = new Resources();
-
-        /// <summary>
-        /// Gets the meta data.
-        /// </summary>
-        /// <value>The meta data.</value>
-        [JsonProperty]
-        public MetaData MetaData { get; internal set; } = new MetaData();
 
         /// <summary>
         /// Gets the amount total.

@@ -41,7 +41,13 @@ namespace Heidelpay.Payment.External.Tests.Business
         {
             var card = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCardNo3DS);
             var metadata = await Heidelpay.CreateMetadataAsync(TestMetaDataSorted);
-            var auth = await Heidelpay.AuthorizeAsync(new Authorization(card) { Amount = 1m, Currency = "EUR", ReturnUrl = TestReturnUri, MetadataId = metadata.Id });
+            var auth = await Heidelpay.AuthorizeAsync(new Authorization(card)
+            {
+                Amount = 1m,
+                Currency = "EUR",
+                ReturnUrl = TestReturnUri,
+                MetadataId = metadata.Id
+            });
             var payment = await Heidelpay.FetchPaymentAsync(auth.PaymentId);
 
             Assert.NotNull(payment?.Id);
@@ -49,7 +55,6 @@ namespace Heidelpay.Payment.External.Tests.Business
 
             Assert.Equal(metadata.Id, payment.MetadataId);
             Assert.Equal(metadata.Id, payment.Authorization.MetadataId);
-            Assert.NotNull(payment.MetaData.MetadataMap);
         }
     }
 }

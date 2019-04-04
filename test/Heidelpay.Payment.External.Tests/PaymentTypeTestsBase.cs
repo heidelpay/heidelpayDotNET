@@ -16,7 +16,7 @@ namespace Heidelpay.Payment.External.Tests.Business
         {
             get
             {
-                return Heidelpay;
+                return BuildHeidelpay();
             }
         }
 
@@ -198,13 +198,13 @@ namespace Heidelpay.Payment.External.Tests.Business
 
         protected void AssertEquals(Customer expected, Customer actual)
         {
-            Assert.Equal(expected.Firstname, actual.Firstname);
-            Assert.Equal(expected.Lastname, actual.Lastname);
-            Assert.Equal(expected.CustomerId, actual.CustomerId);
+            Assert.Equal(expected.Firstname ?? "", actual.Firstname);
+            Assert.Equal(expected.Lastname ?? "", actual.Lastname);
+            Assert.Equal(expected.CustomerId ?? "", actual.CustomerId);
             Assert.Equal(expected.BirthDate, actual.BirthDate);
-            Assert.Equal(expected.Email, actual.Email);
-            Assert.Equal(expected.Mobile, actual.Mobile);
-            Assert.Equal(expected.Phone, actual.Phone);
+            Assert.Equal(expected.Email ?? "", actual.Email);
+            Assert.Equal(expected.Mobile ?? "", actual.Mobile);
+            Assert.Equal(expected.Phone ?? "", actual.Phone);
             AssertEquals(expected.BillingAddress, actual.BillingAddress);
             AssertEquals(expected.ShippingAddress, actual.ShippingAddress);
         }
@@ -215,12 +215,12 @@ namespace Heidelpay.Payment.External.Tests.Business
             {
                 return;
             }
-            Assert.Equal(expected.City, actual.City);
-            Assert.Equal(expected.Country, actual.Country);
-            Assert.Equal(expected.Name, actual.Name);
-            Assert.Equal(expected.State, actual.State);
-            Assert.Equal(expected.Street, actual.Street);
-            Assert.Equal(expected.Zip, actual.Zip);
+            Assert.Equal(expected.City ?? "", actual.City);
+            Assert.Equal(expected.Country ?? "", actual.Country);
+            Assert.Equal(expected.Name ?? "", actual.Name);
+            Assert.Equal(expected.State ?? "", actual.State);
+            Assert.Equal(expected.Street ?? "", actual.Street);
+            Assert.Equal(expected.Zip ?? "", actual.Zip);
         }
 
         protected void AssertEqual(Basket expected, Basket actual)
