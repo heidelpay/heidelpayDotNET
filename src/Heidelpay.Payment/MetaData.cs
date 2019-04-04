@@ -24,7 +24,6 @@ namespace Heidelpay.Payment
     /// Implements the <see cref="Heidelpay.Payment.Interfaces.IRestResource" />
     /// </summary>
     /// <seealso cref="Heidelpay.Payment.Interfaces.IRestResource" />
-    //[JsonConverter(typeof(MetaDataConverter))]
     public class MetaData : IRestResource
     {
         /// <summary>
