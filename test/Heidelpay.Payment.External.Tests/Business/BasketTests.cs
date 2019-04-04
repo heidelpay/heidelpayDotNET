@@ -85,31 +85,5 @@ namespace Heidelpay.Payment.External.Tests.Business
             Assert.Equal(maxbasket.Id, payment.BasketId);
             Assert.Equal(maxbasket.Id, payment.ChargesList.First().BasketId);
         }
-
-        private void AssertEqual(Basket expected, Basket actual)
-        {
-            Assert.Equal(expected.AmountTotal, actual.AmountTotal);
-            Assert.Equal(expected.AmountTotalDiscount, actual.AmountTotalDiscount);
-            Assert.Equal(expected.CurrencyCode, actual.CurrencyCode);
-            Assert.Equal(expected.Note, actual.Note);
-            Assert.Equal(expected.OrderId, actual.OrderId);
-            Assert.Single(actual.BasketItems);
-
-            AssertEqual(expected.BasketItems.First(), actual.BasketItems.First());
-        }
-
-        private void AssertEqual(BasketItem expected, BasketItem actual)
-        {
-            Assert.Equal(expected.AmountDiscount, actual.AmountDiscount);
-            Assert.Equal(expected.AmountGross, actual.AmountGross);
-            Assert.Equal(expected.AmountNet, actual.AmountNet);
-            Assert.Equal(expected.AmountPerUnit, actual.AmountPerUnit);
-            Assert.Equal(expected.AmountVat, actual.AmountVat);
-            Assert.Equal(expected.BasketItemReferenceId, actual.BasketItemReferenceId);
-            Assert.Equal(expected.Quantity, actual.Quantity);
-            Assert.Equal(expected.Title, actual.Title);
-            Assert.Equal(expected.Unit, actual.Unit);
-            Assert.Equal(expected.Vat, actual.Vat);
-        }
     }
 }

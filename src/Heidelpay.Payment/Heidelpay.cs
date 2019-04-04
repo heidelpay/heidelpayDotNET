@@ -556,6 +556,22 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
+        /// fetch cancel as an asynchronous operation.
+        /// </summary>
+        /// <param name="paymentId">The payment identifier.</param>
+        /// <param name="chargeId">The charge identifier.</param>
+        /// <param name="cancelId">The cancel identifier.</param>
+        /// <returns>Task&lt;Cancel&gt;.</returns>
+        public async Task<Cancel> FetchCancelAsync(string paymentId, string chargeId, string cancelId)
+        {
+            Check.NotNullOrEmpty(paymentId, nameof(paymentId));
+            Check.NotNullOrEmpty(chargeId, nameof(chargeId));
+            Check.NotNullOrEmpty(cancelId, nameof(cancelId));
+
+            return await PaymentService.FetchCancelAsync(paymentId, chargeId, cancelId);
+        }
+
+        /// <summary>
         /// fetch customer as an asynchronous operation.
         /// </summary>
         /// <param name="customerId">The customer identifier.</param>

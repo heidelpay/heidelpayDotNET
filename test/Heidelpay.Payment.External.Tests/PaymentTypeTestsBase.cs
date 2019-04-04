@@ -4,7 +4,9 @@ using Heidelpay.Payment.PaymentTypes;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Heidelpay.Payment.External.Tests.Business
 {
@@ -184,5 +186,50 @@ namespace Heidelpay.Payment.External.Tests.Business
 
         protected Uri TestReturnUri { get; } = new Uri("https://www.google.at");
         protected Uri ShopReturnUri { get; } = new Uri("https://www.meinShop.de");
+
+        protected void AssertEqual(Basket expected, Basket actual)
+        {
+            Assert.Equal(expected.AmountTotal, actual.AmountTotal);
+            Assert.Equal(expected.AmountTotalDiscount, actual.AmountTotalDiscount);
+            Assert.Equal(expected.CurrencyCode, actual.CurrencyCode);
+            Assert.Equal(expected.Note, actual.Note);
+            Assert.Equal(expected.OrderId, actual.OrderId);
+            Assert.Single(actual.BasketItems);
+
+            AssertEqual(expected.BasketItems.First(), actual.BasketItems.First());
+        }
+
+        protected void AssertEqual(BasketItem expected, BasketItem actual)
+        {
+            Assert.Equal(expected.AmountDiscount, actual.AmountDiscount);
+            Assert.Equal(expected.AmountGross, actual.AmountGross);
+            Assert.Equal(expected.AmountNet, actual.AmountNet);
+            Assert.Equal(expected.AmountPerUnit, actual.AmountPerUnit);
+            Assert.Equal(expected.AmountVat, actual.AmountVat);
+            Assert.Equal(expected.BasketItemReferenceId, actual.BasketItemReferenceId);
+            Assert.Equal(expected.Quantity, actual.Quantity);
+            Assert.Equal(expected.Title, actual.Title);
+            Assert.Equal(expected.Unit, actual.Unit);
+            Assert.Equal(expected.Vat, actual.Vat);
+        }
+
+        protected void AssertEquals(Charge expected, Charge actual)
+        {
+            Assert.Equal(expected.Amount, actual.Amount);
+            Assert.Equal(expected.Currency, actual.Currency);
+            Assert.Equal(expected.CustomerId, actual.CustomerId);
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.PaymentId, actual.PaymentId);
+            Assert.Equal(expected.ReturnUrl, actual.ReturnUrl);
+            Assert.Equal(expected.RiskId, actual.RiskId);
+            Assert.Equal(expected.TypeId, actual.TypeId);
+            AssertEquals(expected.Processing, actual.Processing);
+        }
+
+        protected void AssertEquals(Processing expected, Processing actual)
+        {
+            Assert.Equal(expected.ShortId, actual.ShortId);
+            Assert.Equal(expected.UniqueId, actual.UniqueId);
+        }
     }
 }
