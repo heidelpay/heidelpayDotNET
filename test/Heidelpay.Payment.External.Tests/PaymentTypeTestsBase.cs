@@ -12,6 +12,14 @@ namespace Heidelpay.Payment.External.Tests.Business
 {
     public abstract class PaymentTypeTestsBase
     {
+        protected IHeidelpay Heidelpay
+        {
+            get
+            {
+                return Heidelpay;
+            }
+        }
+
         protected IHeidelpay BuildHeidelpay(string privateKey = null)
         {
             var services = new ServiceCollection();
@@ -230,6 +238,19 @@ namespace Heidelpay.Payment.External.Tests.Business
         {
             Assert.Equal(expected.ShortId, actual.ShortId);
             Assert.Equal(expected.UniqueId, actual.UniqueId);
+        }
+
+        protected void AssertEquals(Cancel expected, Cancel actual)
+        {
+            Assert.Equal(expected.Amount, actual.Amount);
+            Assert.Equal(expected.Currency, actual.Currency);
+            Assert.Equal(expected.CustomerId, actual.CustomerId);
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.PaymentId, actual.PaymentId);
+            Assert.Equal(expected.ReturnUrl, actual.ReturnUrl);
+            Assert.Equal(expected.RiskId, actual.RiskId);
+            Assert.Equal(expected.TypeId, actual.TypeId);
+            AssertEquals(expected.Processing, actual.Processing);
         }
     }
 }

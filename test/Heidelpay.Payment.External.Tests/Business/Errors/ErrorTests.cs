@@ -58,7 +58,7 @@ namespace Heidelpay.Payment.External.Tests.Business.Errors
         [Fact]
         public async Task Invalid_Access()
         {
-            var card = await BuildHeidelpay()
+            var card = await Heidelpay
                 .CreatePaymentTypeAsync(PaymentTypeCard);
 
             var heidelpay = BuildHeidelpay("s-priv-2a1095rIVXy4IrNFXG6yQiguSAqNjciC");
@@ -77,7 +77,7 @@ namespace Heidelpay.Payment.External.Tests.Business.Errors
         [Fact]
         public async Task Missing_Return_Url()
         {
-            var heidelpay = BuildHeidelpay();
+            var heidelpay = Heidelpay;
             var card = await heidelpay.CreatePaymentTypeAsync(PaymentTypeCard);
 
             var exception = await Assert.ThrowsAsync<PaymentException>(() => heidelpay.AuthorizeAsync(10m, "EUR", card.Id));
@@ -94,7 +94,7 @@ namespace Heidelpay.Payment.External.Tests.Business.Errors
         [Fact]
         public async Task Fetch_Non_Existing_Payment()
         {
-            var heidelpay = BuildHeidelpay();
+            var heidelpay = Heidelpay;
 
             var exception = await Assert.ThrowsAsync<PaymentException>(() => heidelpay.FetchAuthorizationAsync("213"));
 
@@ -113,7 +113,7 @@ namespace Heidelpay.Payment.External.Tests.Business.Errors
         [Fact]
         public async Task Fetch_Non_Existing_Charge()
         {
-            var heidelpay = BuildHeidelpay();
+            var heidelpay = Heidelpay;
             var card = await heidelpay.CreatePaymentTypeAsync(PaymentTypeCard);
             var charge = await heidelpay.ChargeAsync(new Charge(card) { Amount = decimal.One, Currency = "EUR", ReturnUrl = TestReturnUri });
             var chargeFetched = await heidelpay.FetchChargeAsync(charge.PaymentId, "s-chg-200");
@@ -123,7 +123,7 @@ namespace Heidelpay.Payment.External.Tests.Business.Errors
         [Fact]
         public async Task Invalid_PUT_Customer()
         {
-            var heidelpay = BuildHeidelpay();
+            var heidelpay = Heidelpay;
             var customer = await heidelpay.CreateCustomerAsync(GetMaximumCustomer(GetRandomId()));
 
             Assert.NotNull(customer.Id);
@@ -158,7 +158,7 @@ namespace Heidelpay.Payment.External.Tests.Business.Errors
                 Mobile = "xxx",
             };
 
-            var heidelpay = BuildHeidelpay();
+            var heidelpay = Heidelpay;
 
             var exception = await Assert.ThrowsAsync<PaymentException>(() => heidelpay.CreateCustomerAsync(customer));
 

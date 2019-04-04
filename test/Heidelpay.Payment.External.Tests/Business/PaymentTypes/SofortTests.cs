@@ -9,15 +9,15 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         [Fact]
         public async Task Create_PaymentType()
         {
-            var result = await BuildHeidelpay().CreatePaymentTypeAsync<Sofort>();
+            var result = await Heidelpay.CreatePaymentTypeAsync<Sofort>();
             Assert.NotNull(result?.Id);
         }
 
         [Fact]
         public async Task Charge_PaymentType()
         {
-            var result = await BuildHeidelpay().CreatePaymentTypeAsync<Sofort>();
-            var charge = await BuildHeidelpay().ChargeAsync(decimal.One, "EUR", result, TestReturnUri);
+            var result = await Heidelpay.CreatePaymentTypeAsync<Sofort>();
+            var charge = await Heidelpay.ChargeAsync(decimal.One, "EUR", result, TestReturnUri);
             Assert.NotNull(charge?.Id);
             Assert.NotNull(charge?.RedirectUrl);
         }
@@ -25,8 +25,8 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         [Fact]
         public async Task Fetch_PaymentType()
         {
-            var result = await BuildHeidelpay().CreatePaymentTypeAsync<Sofort>();
-            var fetched = await BuildHeidelpay().FetchPaymentTypeAsync<Sofort>(result.Id);
+            var result = await Heidelpay.CreatePaymentTypeAsync<Sofort>();
+            var fetched = await Heidelpay.FetchPaymentTypeAsync<Sofort>(result.Id);
             Assert.NotNull(fetched?.Id);
         }
     }

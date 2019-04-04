@@ -10,22 +10,22 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         [Fact]
         public async Task Create_Eps()
         {
-            var result = await BuildHeidelpay().CreatePaymentTypeAsync<Eps>();
+            var result = await Heidelpay.CreatePaymentTypeAsync<Eps>();
             Assert.NotNull(result?.Id);
         }
 
         [Fact]
         public async Task Create_Eps_With_BicType()
         {
-            var result = await BuildHeidelpay().CreatePaymentTypeAsync<Eps>(x =>  x.Bic = "SPFKAT2BXXX");
+            var result = await Heidelpay.CreatePaymentTypeAsync<Eps>(x =>  x.Bic = "SPFKAT2BXXX");
             Assert.NotNull(result?.Id);
         }
 
         [Fact]
         public async Task Charge_Eps_Type()
         {
-            var result = await BuildHeidelpay().CreatePaymentTypeAsync<Eps>();
-            var charge = await BuildHeidelpay().ChargeAsync(decimal.One, "EUR", result, TestReturnUri);
+            var result = await Heidelpay.CreatePaymentTypeAsync<Eps>();
+            var charge = await Heidelpay.ChargeAsync(decimal.One, "EUR", result, TestReturnUri);
             Assert.NotNull(charge?.Id);
             Assert.NotNull(charge?.RedirectUrl);
         }
@@ -33,8 +33,8 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         [Fact]
         public async Task Fetch_Eps_Type()
         {
-            var result = await BuildHeidelpay().CreatePaymentTypeAsync<Eps>();
-            var fetchedEps = await BuildHeidelpay().FetchPaymentTypeAsync<Eps>(result.Id);
+            var result = await Heidelpay.CreatePaymentTypeAsync<Eps>();
+            var fetchedEps = await Heidelpay.FetchPaymentTypeAsync<Eps>(result.Id);
             Assert.NotNull(fetchedEps?.Id);
         }
     }

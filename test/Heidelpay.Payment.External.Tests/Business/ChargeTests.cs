@@ -9,7 +9,7 @@ namespace Heidelpay.Payment.External.Tests.Business
         [Fact]
         public async Task Charge_With_TypeId()
         {
-            var heidelpay = BuildHeidelpay();
+            var heidelpay = Heidelpay;
             var card = await heidelpay.CreatePaymentTypeAsync(PaymentTypeCard);
 
             var charge = await heidelpay.ChargeAsync(decimal.One, "EUR", card, TestReturnUri, card3ds: false);
@@ -20,7 +20,7 @@ namespace Heidelpay.Payment.External.Tests.Business
         [Fact]
         public async Task Charge_Is_Success()
         {
-            var heidelpay = BuildHeidelpay();
+            var heidelpay = Heidelpay;
             var card = await heidelpay.CreatePaymentTypeAsync(PaymentTypeCard);
 
             var charge = await heidelpay.ChargeAsync(decimal.One, "EUR", card, TestReturnUri, card3ds: false);
@@ -33,7 +33,7 @@ namespace Heidelpay.Payment.External.Tests.Business
         [Fact]
         public async Task Charge_With_TypeId_Ensure_Payment_Type()
         {
-            var heidelpay = BuildHeidelpay();
+            var heidelpay = Heidelpay;
             var card = new Card(heidelpay);
             PaymentTypeCard(card);
 
@@ -45,10 +45,10 @@ namespace Heidelpay.Payment.External.Tests.Business
         [Fact]
         public async Task Charge_With_Payment_Type()
         {
-            var heidelpay = BuildHeidelpay();
+            var heidelpay = Heidelpay;
 
             var card = new Card(heidelpay) { Number = "4444333322221111", ExpiryDate = "12/19" };
-            var charge = await BuildHeidelpay().ChargeAsync(decimal.One, "EUR", card, TestReturnUri, card3ds: false);
+            var charge = await Heidelpay.ChargeAsync(decimal.One, "EUR", card, TestReturnUri, card3ds: false);
 
             Assert.NotNull(charge?.Id);
             Assert.Equal("COR.000.100.112", charge.Message.Code);
@@ -58,7 +58,7 @@ namespace Heidelpay.Payment.External.Tests.Business
         [Fact]
         public async Task Charge_With_Customer_Type_ReturnUrl()
         {
-            var heidelpay = BuildHeidelpay();
+            var heidelpay = Heidelpay;
 
             var card = new Card(heidelpay) { Number = "4444333322221111", ExpiryDate = "12/19" };
             var customer = GetMinimumCustomer();
@@ -73,10 +73,10 @@ namespace Heidelpay.Payment.External.Tests.Business
         [Fact]
         public async Task Charge_With_CustomerId_ReturnUrl()
         {
-            var customer = await BuildHeidelpay().CreateCustomerAsync(GetMaximumCustomer(GetRandomId()));
-            var card = await BuildHeidelpay().CreatePaymentTypeAsync(PaymentTypeCard);
+            var customer = await Heidelpay.CreateCustomerAsync(GetMaximumCustomer(GetRandomId()));
+            var card = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCard);
 
-            var charge = await BuildHeidelpay().ChargeAsync(decimal.One, "EUR", card.Id, TestReturnUri, customer.Id, false);
+            var charge = await Heidelpay.ChargeAsync(decimal.One, "EUR", card.Id, TestReturnUri, customer.Id, false);
 
             Assert.NotNull(charge?.Id);
             Assert.Equal("COR.000.100.112", charge.Message.Code);
@@ -88,7 +88,7 @@ namespace Heidelpay.Payment.External.Tests.Business
         [Fact]
         public async Task Charge_Sofort()
         {
-            var heidelpay = BuildHeidelpay();
+            var heidelpay = Heidelpay;
             var sofort = new Sofort(heidelpay);
             var charge = await heidelpay.ChargeAsync(decimal.One, "EUR", sofort, TestReturnUri);
 
@@ -103,7 +103,7 @@ namespace Heidelpay.Payment.External.Tests.Business
         [Fact]
         public async Task Charge_OrderId()
         {
-            var card = await BuildHeidelpay().CreatePaymentTypeAsync(PaymentTypeCard);
+            var card = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCard);
             var builtCharge = new Charge(card)
             {
                 Amount = decimal.One,
@@ -113,7 +113,7 @@ namespace Heidelpay.Payment.External.Tests.Business
                 Card3ds = false
             };
 
-            var charge = await BuildHeidelpay().ChargeAsync(builtCharge);
+            var charge = await Heidelpay.ChargeAsync(builtCharge);
 
             Assert.NotNull(charge?.Id);
             Assert.Equal("COR.000.100.112", charge.Message.Code);
@@ -121,7 +121,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             Assert.NotNull(charge.Payment?.Id);
             Assert.Equal(charge.PaymentId, charge.Payment.Id);
 
-            var payment = await BuildHeidelpay().FetchPaymentAsync(charge.PaymentId);
+            var payment = await Heidelpay.FetchPaymentAsync(charge.PaymentId);
 
             Assert.NotNull(payment?.Id);
             Assert.Equal(charge.PaymentId, payment.Id);
@@ -131,8 +131,8 @@ namespace Heidelpay.Payment.External.Tests.Business
         [Fact(Skip = "Bug in API, Ticket AHC-1197")]
         public async Task Charge_With_3ds_False()
         {
-            var card = await BuildHeidelpay().CreatePaymentTypeAsync(PaymentTypeCard);
-            var charge = await BuildHeidelpay().ChargeAsync(new Charge(card)
+            var card = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCard);
+            var charge = await Heidelpay.ChargeAsync(new Charge(card)
             {
                 Amount = decimal.One,
                 Currency = "EUR",
@@ -151,8 +151,8 @@ namespace Heidelpay.Payment.External.Tests.Business
         [Fact(Skip = "Bug in API, Ticket AHC-1197")]
         public async Task Charge_With_3ds_True()
         {
-            var card = await BuildHeidelpay().CreatePaymentTypeAsync(PaymentTypeCard);
-            var charge = await BuildHeidelpay().ChargeAsync(new Charge(card)
+            var card = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCard);
+            var charge = await Heidelpay.ChargeAsync(new Charge(card)
             {
                 Amount = decimal.One,
                 Currency = "EUR",
