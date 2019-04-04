@@ -186,6 +186,15 @@ namespace Heidelpay.Payment.Interfaces
         /// <param name="chargeId">The charge identifier.</param>
         /// <returns>Task&lt;Charge&gt;.</returns>
         Task<Charge> FetchChargeAsync(string paymentId, string chargeId);
+
+        /// <summary>
+        /// Fetches the cancel asynchronous.
+        /// </summary>
+        /// <param name="paymentId">The payment identifier.</param>
+        /// <param name="cancelId">The cancel identifier.</param>
+        /// <returns>Task&lt;Cancel&gt;.</returns>
+        Task<Cancel> FetchCancelAsync(string paymentId, string cancelId);
+
         /// <summary>
         /// Fetches the customer asynchronous.
         /// </summary>
