@@ -5,8 +5,8 @@ namespace Heidelpay.Payment.External.Tests.Business
 {
     public class ShipmentTests : PaymentTypeTestsBase
     {
-        [Fact(Skip = "It's not ready yet")]
-        public async Task EmptyTest()
+        [Fact(Skip = "Merchant is having problem with insurance provider")]
+        public async Task Authorize_With_Shipment()
         {
             await Task.CompletedTask;
         }

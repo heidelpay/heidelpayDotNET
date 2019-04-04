@@ -4,7 +4,7 @@
 // Created          : 03-14-2019
 //
 // Last Modified By : berghtho
-// Last Modified On : 04-02-2019
+// Last Modified On : 04-04-2019
 // ***********************************************************************
 // <copyright file="Payment.cs" company="Heidelpay">
 //     Copyright (c) . All rights reserved.
@@ -23,10 +23,9 @@ using System.Threading.Tasks;
 namespace Heidelpay.Payment
 {
     /// <summary>
-    /// Business object for a payment. A payment is the object that combines several 
-    /// requests over the lifetime of a payment transaction. This means that one payment 
+    /// Business object for a payment. A payment is the object that combines several
+    /// requests over the lifetime of a payment transaction. This means that one payment
     /// always relates to one offer from the merchant.
-    /// 
     /// Implements the <see cref="Heidelpay.Payment.PaymentBase" />
     /// </summary>
     /// <seealso cref="Heidelpay.Payment.PaymentBase" />
@@ -57,6 +56,7 @@ namespace Heidelpay.Payment
         /// </summary>
         /// <value>The currency.</value>
         public string Currency { get; set; }
+
         /// <summary>
         /// Gets or sets the order identifier.
         /// </summary>
@@ -68,11 +68,13 @@ namespace Heidelpay.Payment
         /// </summary>
         /// <value>The authorization.</value>
         public Authorization Authorization { get; internal set; }
+
         /// <summary>
         /// Gets the charges list.
         /// </summary>
         /// <value>The charges list.</value>
         public IEnumerable<Charge> ChargesList { get; internal set; } = Enumerable.Empty<Charge>();
+
         /// <summary>
         /// Gets the cancel list.
         /// </summary>
@@ -80,14 +82,67 @@ namespace Heidelpay.Payment
         public IEnumerable<Cancel> CancelList { get; internal set; } = Enumerable.Empty<Cancel>();
 
         /// <summary>
+        /// Gets the type identifier.
+        /// </summary>
+        /// <value>The type identifier.</value>
+        [JsonIgnore]
+        public string TypeId
+        {
+            get
+            {
+                return Resources?.TypeId;
+            }
+        }
+
+        /// <summary>
         /// Gets the basket identifier.
         /// </summary>
         /// <value>The basket identifier.</value>
+        [JsonIgnore]
         public string BasketId
         {
             get
             {
                 return Resources?.BasketId;
+            }
+        }
+
+        /// <summary>
+        /// Gets the customer identifier.
+        /// </summary>
+        /// <value>The customer identifier.</value>
+        [JsonIgnore]
+        public string CustomerId
+        {
+            get
+            {
+                return Resources?.CustomerId;
+            }
+        }
+
+        /// <summary>
+        /// Gets the metadata identifier.
+        /// </summary>
+        /// <value>The metadata identifier.</value>
+        [JsonIgnore]
+        public string MetadataId
+        {
+            get
+            {
+                return MetaData?.Id ?? Resources?.MetadataId;
+            }
+        }
+
+        /// <summary>
+        /// Gets the risk identifier.
+        /// </summary>
+        /// <value>The risk identifier.</value>
+        [JsonIgnore]
+        public string RiskId
+        {
+            get
+            {
+                return Resources?.RiskId;
             }
         }
 
@@ -99,20 +154,30 @@ namespace Heidelpay.Payment
         internal Resources Resources { get; set; } = new Resources();
 
         /// <summary>
+        /// Gets the meta data.
+        /// </summary>
+        /// <value>The meta data.</value>
+        [JsonProperty]
+        public MetaData MetaData { get; internal set; } = new MetaData();
+
+        /// <summary>
         /// Gets the amount total.
         /// </summary>
         /// <value>The amount total.</value>
         public decimal AmountTotal { get => Amount.Total; }
+
         /// <summary>
         /// Gets the amount charged.
         /// </summary>
         /// <value>The amount charged.</value>
         public decimal AmountCharged { get => Amount.Charged; }
+
         /// <summary>
         /// Gets the amount canceled.
         /// </summary>
         /// <value>The amount canceled.</value>
         public decimal AmountCanceled { get => Amount.Canceled; }
+
         /// <summary>
         /// Gets the amount remaining.
         /// </summary>
@@ -120,7 +185,7 @@ namespace Heidelpay.Payment
         public decimal AmountRemaining { get => Amount.Remaining; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Payment"/> class.
+        /// Initializes a new instance of the <see cref="Payment" /> class.
         /// </summary>
         /// <param name="paymentType">Type of the payment.</param>
         public Payment(IPaymentType paymentType)
@@ -144,7 +209,7 @@ namespace Heidelpay.Payment
         internal IEnumerable<Transaction> Transactions { get; set; } = Enumerable.Empty<Transaction>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Payment"/> class.
+        /// Initializes a new instance of the <see cref="Payment" /> class.
         /// </summary>
         /// <param name="heidelpayClient">The heidelpay client instance.</param>
         internal Payment(IHeidelpay heidelpayClient)
@@ -154,7 +219,7 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Payment"/> class.
+        /// Initializes a new instance of the <see cref="Payment" /> class.
         /// </summary>
         [JsonConstructor]
         internal Payment()

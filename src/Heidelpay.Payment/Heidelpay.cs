@@ -141,6 +141,20 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
+        /// create metadata as an asynchronous operation.
+        /// </summary>
+        /// <param name="metadata">The metadata.</param>
+        /// <returns>Task&lt;MetaData&gt;.</returns>
+        public async Task<MetaData> CreateMetadataAsync(MetaData metadata)
+        {
+            Check.NotNull(metadata, nameof(metadata));
+            Check.ThrowIfTrue(!string.IsNullOrEmpty(metadata.Id),
+                "MetaData has an id set. CreateMetadataAsync can only be called without MetaData.id. Please use UpdateMetaDataAsync or remove the id from MetaData.");
+
+            return await PaymentService.CreateMetaDataAsync(metadata);
+        }
+
+        /// <summary>
         /// update customer as an asynchronous operation.
         /// </summary>
         /// <param name="customer">The customer.</param>

@@ -154,7 +154,7 @@ namespace Heidelpay.Payment
         {
             get
             {
-                return Payment?.BasketId ?? Resources?.CustomerId;
+                return Payment?.CustomerId ?? Resources?.CustomerId;
             }
             set
             {
@@ -174,7 +174,7 @@ namespace Heidelpay.Payment
         {
             get
             {
-                return Payment?.BasketId ?? Resources?.MetadataId;
+                return Payment?.MetadataId ?? Resources?.MetadataId;
             }
             set
             {
@@ -194,7 +194,7 @@ namespace Heidelpay.Payment
         {
             get
             {
-                return Payment?.BasketId ?? Resources?.RiskId;
+                return Payment?.RiskId ?? Resources?.RiskId;
             }
             set
             {

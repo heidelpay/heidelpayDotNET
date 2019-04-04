@@ -84,6 +84,18 @@ namespace Heidelpay.Payment.Service
         }
 
         /// <summary>
+        /// create meta data as an asynchronous operation.
+        /// </summary>
+        /// <param name="metadata">The metadata.</param>
+        /// <returns>Task&lt;MetaData&gt;.</returns>
+        public async Task<MetaData> CreateMetaDataAsync(MetaData metadata)
+        {
+            Check.NotNull(metadata, nameof(metadata));
+
+            return await ApiPostAsync(metadata);
+        }
+
+        /// <summary>
         /// update basket as an asynchronous operation.
         /// </summary>
         /// <param name="id">The identifier.</param>

@@ -147,6 +147,7 @@ namespace Heidelpay.Payment.External.Tests.Business
         }
 
         protected MetaData TestMetaData { get; } = new MetaData { ["invoice-nr"] = "Rg-2018-11-1", ["shop-id"] = "4711", ["delivery-date"] = "24.12.2018", ["reason"] = "X-mas present" };
+        protected MetaData TestMetaDataSorted { get; } = new MetaData(true) { ["invoice-nr"] = "Rg-2018-11-1", ["shop-id"] = "4711", ["delivery-date"] = "24.12.2018", ["reason"] = "X-mas present" };
         protected Address TestAddress { get; } = new Address { Name = "Mozart", Street = "Grüngasse 16", City = "Vienna", State = "Vienna", Zip = "1010", Country = "AT" };
         protected Action<Card> PaymentTypeCard { get; } = new Action<Card>(x => 
         {

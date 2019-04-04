@@ -251,6 +251,13 @@ namespace Heidelpay.Payment.Interfaces
         Task<Basket> CreateBasketAsync(Basket basket);
 
         /// <summary>
+        /// Creates the metadata asynchronous.
+        /// </summary>
+        /// <param name="metadata">The metadata.</param>
+        /// <returns>Task&lt;MetaDatas&gt;.</returns>
+        Task<MetaData> CreateMetadataAsync(MetaData metadata);
+
+        /// <summary>
         /// Updates the basket asynchronous.
         /// </summary>
         /// <param name="customer">The customer.</param>

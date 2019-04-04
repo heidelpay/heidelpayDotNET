@@ -35,21 +35,13 @@ namespace Heidelpay.Payment
         /// </summary>
         /// <value>The metadata map.</value>
         [JsonProperty]
-        internal IDictionary<string, string> MetadataMap { get; set; } = new Dictionary<string, string>();
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MetaData"/> class.
-        /// </summary>
-        public MetaData() 
-            : this(false)
-        {
-        }
+        public IDictionary<string, string> MetadataMap { get; internal set; } = new Dictionary<string, string>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MetaData"/> class.
         /// </summary>
         /// <param name="sorted">if set to <c>true</c> [sorted].</param>
-        public MetaData(bool sorted)
+        public MetaData(bool sorted = false)
         {
             if(sorted)
             {
