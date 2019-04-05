@@ -1,4 +1,5 @@
 using Heidelpay.Payment.Extensions;
+using Heidelpay.Payment.Interfaces;
 using Heidelpay.Payment.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,7 +7,6 @@ using Moq;
 using System;
 using System.IO;
 using System.Net.Http;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Heidelpay.Payment.Internal.Tests
@@ -14,7 +14,7 @@ namespace Heidelpay.Payment.Internal.Tests
     public class InternalSdkUsageTests
     {
         [Fact]
-        public async Task Heidelpay_DI_Usage_Test_With_User_Setup()
+        public void Heidelpay_DI_Usage_Test_With_User_Setup()
         {
             var services = new ServiceCollection();
 
@@ -31,7 +31,7 @@ namespace Heidelpay.Payment.Internal.Tests
 
             var serviceProvider = services.BuildServiceProvider();
 
-            var heidelpay = serviceProvider.GetService<Heidelpay>();
+            var heidelpay = serviceProvider.GetService<IHeidelpay>() as HeidelpayClient;
 
             Assert.NotNull(heidelpay);
             Assert.NotNull(heidelpay.RestClient);
@@ -44,9 +44,9 @@ namespace Heidelpay.Payment.Internal.Tests
         }
 
         [Fact]
-        public async Task Heidelpay_Simple_Usage_Test_With_HttpClient()
+        public void Heidelpay_Simple_Usage_Test_With_HttpClient()
         {
-            var heidelpay = new Heidelpay(new HeidelpayApiOptions
+            var heidelpay = new HeidelpayClient(new HeidelpayApiOptions
             {
                 ApiEndpoint = new Uri("https://api.heidelpay.com"),
                 ApiVersion = "v1",
@@ -64,7 +64,7 @@ namespace Heidelpay.Payment.Internal.Tests
         }
 
         [Fact]
-        public async Task Heidelpay_Simple_Usage_Test_With_HttpClientFactory()
+        public void Heidelpay_Simple_Usage_Test_With_HttpClientFactory()
         {
             var factoryMock = new Mock<IHttpClientFactory>();
 
@@ -72,7 +72,7 @@ namespace Heidelpay.Payment.Internal.Tests
                 .Setup(x => x.CreateClient(It.IsAny<string>()))
                 .Returns(new HttpClient());
 
-            var heidelpay = new Heidelpay(new HeidelpayApiOptions
+            var heidelpay = new HeidelpayClient(new HeidelpayApiOptions
             {
                 ApiEndpoint = new Uri("https://api.heidelpay.com"),
                 ApiVersion = "v1",

@@ -1,4 +1,5 @@
 using Heidelpay.Payment.Extensions;
+using Heidelpay.Payment.Interfaces;
 using Heidelpay.Payment.Options;
 using Heidelpay.Payment.PaymentTypes;
 using Microsoft.Extensions.Configuration;
@@ -28,7 +29,7 @@ namespace Heidelpay.Payment.External.Tests
 
             var serviceProvider = services.BuildServiceProvider();
 
-            var heidelpay = serviceProvider.GetService<Heidelpay>();
+            var heidelpay = serviceProvider.GetService<IHeidelpay>();
 
             Assert.NotNull(heidelpay);
 
@@ -54,7 +55,7 @@ namespace Heidelpay.Payment.External.Tests
 
             var serviceProvider = services.BuildServiceProvider();
 
-            var heidelpay = serviceProvider.GetService<Heidelpay>();
+            var heidelpay = serviceProvider.GetService<IHeidelpay>();
 
             Assert.NotNull(heidelpay);
 
@@ -78,7 +79,7 @@ namespace Heidelpay.Payment.External.Tests
 
             var serviceProvider = services.BuildServiceProvider();
 
-            var heidelpay = serviceProvider.GetService<Heidelpay>();
+            var heidelpay = serviceProvider.GetService<IHeidelpay>();
 
             Assert.NotNull(heidelpay);
 
@@ -90,7 +91,7 @@ namespace Heidelpay.Payment.External.Tests
         [Fact]
         public async Task Heidelpay_Simple_Usage_Test_With_HttpClient()
         {
-            var heidelpay = new Heidelpay(new HeidelpayApiOptions
+            var heidelpay = new HeidelpayClient(new HeidelpayApiOptions
             {
                 ApiEndpoint = new Uri("https://api.heidelpay.com"),
                 ApiVersion = "v1",
@@ -105,7 +106,7 @@ namespace Heidelpay.Payment.External.Tests
         }
 
         [Fact]
-        public async Task AddHeidelpay_Add_HttpClientFactory_If_Not_Added_By_Client()
+        public void AddHeidelpay_Add_HttpClientFactory_If_Not_Added_By_Client()
         {
             var services = new ServiceCollection();
 
@@ -124,7 +125,7 @@ namespace Heidelpay.Payment.External.Tests
         }
 
         [Fact]
-        public async Task AddHeidelpay_Does_Not_Add_HttpClientFactory_If_Added_By_Client()
+        public void AddHeidelpay_Does_Not_Add_HttpClientFactory_If_Added_By_Client()
         {
             var services = new ServiceCollection();
 
@@ -145,7 +146,7 @@ namespace Heidelpay.Payment.External.Tests
         }
 
         [Fact]
-        public async Task AddHeidelpay_Does_Not_Add_HttpClientFactory_If_Added_By_Client2()
+        public void AddHeidelpay_Does_Not_Add_HttpClientFactory_If_Added_By_Client2()
         {
             var services = new ServiceCollection();
 
@@ -165,6 +166,11 @@ namespace Heidelpay.Payment.External.Tests
             Assert.NotNull(factory);
         }
 
-        protected Card PaymentTypeCard { get; } = new Card { Number = "4444333322221111", ExpiryDate = "03/20", CVC = "123" };
+        protected Action<Card> PaymentTypeCard { get; } = new Action<Card>(x =>
+        {
+            x.Number = "4444333322221111";
+            x.ExpiryDate = "03/20";
+            x.CVC = "123";
+        });
     }
 }

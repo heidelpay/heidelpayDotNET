@@ -217,7 +217,9 @@ namespace Heidelpay.Payment.Internal.Tests.Communication
                 restClient.LoggedRequest.Headers.UserAgent.ToString());
         }
 
-        class ContentTestData
+#pragma warning disable CS0659 // Type overrides Object.Equals(object o) but does not override Object.GetHashCode()
+        private class ContentTestData
+#pragma warning restore CS0659 // Type overrides Object.Equals(object o) but does not override Object.GetHashCode()
         {
             public int TestProperty1 { get; set; }
             public string TestProperty2 { get; set; }
@@ -236,7 +238,9 @@ namespace Heidelpay.Payment.Internal.Tests.Communication
             }
         }
 
-        class ValidResponseClass
+#pragma warning disable CS0659 // Type overrides Object.Equals(object o) but does not override Object.GetHashCode()
+        private class ValidResponseClass
+#pragma warning restore CS0659 // Type overrides Object.Equals(object o) but does not override Object.GetHashCode()
         {
             public string Key { get; set; }
 

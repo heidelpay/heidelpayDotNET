@@ -1,47 +1,87 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿// ***********************************************************************
+// Assembly         : Heidelpay.Payment
+// Author           : berghtho
+// Created          : 03-14-2019
+//
+// Last Modified By : berghtho
+// Last Modified On : 04-02-2019
+// ***********************************************************************
+// <copyright file="Authorization.cs" company="Heidelpay">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using Heidelpay.Payment.Interfaces;
+using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace Heidelpay.Payment
 {
-    public class Authorization : PaymentBase
+    /// <summary>
+    /// Business object for Authorization. Amount, currency and typeId are mandatory parameter to 
+    /// execute an Authorization.
+    /// 
+    /// The returnUrl is mandatory in case of redirectPayments like Sofort, Paypal, Giropay, Creditcard 3DS
+    /// 
+    /// Implements the <see cref="Heidelpay.Payment.PaymentTransactionBase" />
+    /// </summary>
+    /// <seealso cref="Heidelpay.Payment.PaymentTransactionBase" />
+    public class Authorization : PaymentTransactionBase
     {
-        public decimal Amount { get; set; }
-        public string Currency { get; set; }
-        public Uri ReturnUrl { get; set; }
-        public Uri RedirectUrl { get; set; }
-
-        public string OrderId { get; set; }
-
-        [JsonProperty]
-        internal Resources Resources { get; set; } = new Resources();
-
-        [JsonProperty]
-        internal Processing Processing { get; set; } = new Processing();
-
-        public IEnumerable<Cancel> CancelList { get; set; } = Enumerable.Empty<Cancel>();
-
-        public Authorization()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Authorization"/> class.
+        /// </summary>
+        [JsonConstructor]
+        internal Authorization()
         {
         }
 
-        internal Authorization(Heidelpay heidelpay)
-            : base(heidelpay)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Authorization"/> class.
+        /// </summary>
+        /// <param name="heidelpayClient">The heidelpay client instance.</param>
+        internal Authorization(IHeidelpay heidelpayClient)
+            : base(heidelpayClient)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Authorization"/> class.
+        /// </summary>
+        /// <param name="paymentAuthorizable">The payment authorizable.</param>
+        public Authorization(IAuthorizedPaymentType paymentAuthorizable)
+            : base(paymentAuthorizable.Heidelpay, paymentTypeId: paymentAuthorizable.Id)
+        {
+            if (paymentAuthorizable is IProvide3DS threeDSprovider)
+            {
+                Card3ds = threeDSprovider.ThreeDs;
+            }
+        }
+
+        /// <summary>
+        /// cancel as an asynchronous operation.
+        /// </summary>
+        /// <param name="amount">The amount.</param>
+        /// <returns>Task&lt;Cancel&gt;.</returns>
         public async Task<Cancel> CancelAsync(decimal? amount = null)
         {
             return await Heidelpay.CancelAuthorizationAsync(Payment?.Id ?? Resources?.PaymentId, amount);
         }
 
+        /// <summary>
+        /// charge as an asynchronous operation.
+        /// </summary>
+        /// <param name="amount">The amount.</param>
+        /// <returns>Task&lt;Charge&gt;.</returns>
         public async Task<Charge> ChargeAsync(decimal? amount = null)
         {
             return await Heidelpay.ChargeAuthorizationAsync(Payment?.Id ?? Resources?.PaymentId, amount);
         }
 
+        /// <summary>
+        /// Gets the type URL.
+        /// </summary>
+        /// <value>The type URL.</value>
         public override string TypeUrl => "payments/<paymentId>/authorize";
     }
 }
