@@ -11,10 +11,8 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using Heidelpay.Payment.Communication.Converter;
 using Heidelpay.Payment.Interfaces;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 
 namespace Heidelpay.Payment
