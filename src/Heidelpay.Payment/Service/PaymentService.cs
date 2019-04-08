@@ -272,7 +272,7 @@ namespace Heidelpay.Payment.Service
         {
             Check.ThrowIfNullOrEmpty(paymentId, nameof(paymentId));
 
-            var payment = await ApiGetAsync(new Payment { Id = paymentId });
+            var payment = await ApiGetAsync<Payment>(paymentId);
 
             return await PostProcessPayment(payment);
         }
@@ -286,7 +286,7 @@ namespace Heidelpay.Payment.Service
         {
             Check.ThrowIfNullOrEmpty(basketId, nameof(basketId));
 
-            return await ApiGetAsync(new Basket { Id = basketId });
+            return await ApiGetAsync<Basket>(basketId);
         }
 
         /// <summary>
@@ -298,7 +298,7 @@ namespace Heidelpay.Payment.Service
         {
             Check.ThrowIfNullOrEmpty(customerId, nameof(customerId));
 
-            return await ApiGetAsync(new Customer { Id = customerId });
+            return await ApiGetAsync<Customer>(customerId);
         }
 
         /// <summary>
@@ -310,10 +310,9 @@ namespace Heidelpay.Payment.Service
         {
             Check.ThrowIfNullOrEmpty(metaDataId, nameof(metaDataId));
 
-            var fetched = new MetaData { Id = metaDataId };
-            fetched.MetadataMap = await heidelpay.RestClient.HttpGetAsync<Dictionary<string, string>>(BuildApiEndpointUri(fetched, fetched.Id));
+            var fetched = await heidelpay.RestClient.HttpGetAsync<Dictionary<string, string>>(BuildApiEndpointUri<MetaData>(metaDataId));
 
-            return fetched;
+            return new MetaData { Id = metaDataId, MetadataMap = fetched };
         }
 
         /// <summary>
@@ -602,10 +601,10 @@ namespace Heidelpay.Payment.Service
         /// <typeparam name="T"></typeparam>
         /// <param name="resource">The resource.</param>
         /// <returns>Task&lt;T&gt;.</returns>
-        private async Task<T> ApiGetAsync<T>(T resource)
+        private async Task<T> ApiGetAsync<T>(string id)
              where T : class, IRestResource
         {
-            var result = await heidelpay.RestClient.HttpGetAsync<T>(BuildApiEndpointUri(resource, resource.Id));
+            var result = await heidelpay.RestClient.HttpGetAsync<T>(BuildApiEndpointUri<T>(id));
             return PostProcessApiResource(result);
         }
 
@@ -620,9 +619,9 @@ namespace Heidelpay.Payment.Service
         private async Task<T> ApiPostAsync<T>(T resource, Uri uri = null, bool getAfterPost = true)
            where T : class, IRestResource
         {
-            var posted = await heidelpay.RestClient.HttpPostAsync<T>(uri ?? BuildApiEndpointUri(resource), resource);
+            var posted = await heidelpay.RestClient.HttpPostAsync<T>(uri ?? BuildApiEndpointUri<T>(), resource);
             return getAfterPost 
-                ? await ApiGetAsync(posted) 
+                ? await ApiGetAsync<T>(posted.Id) 
                 : PostProcessApiResource(posted);
         }
 
@@ -637,9 +636,9 @@ namespace Heidelpay.Payment.Service
         private async Task<T> ApiPutAsync<T>(string id, T resource, bool getAfterPut = false)
            where T : class, IRestResource
         {
-            var putted = await heidelpay.RestClient.HttpPutAsync<T>(BuildApiEndpointUri(resource, id), resource);
+            var putted = await heidelpay.RestClient.HttpPutAsync<T>(BuildApiEndpointUri<T>(id), resource);
             return getAfterPut
-                ? await ApiGetAsync(putted)
+                ? await ApiGetAsync<T>(putted.Id)
                 : PostProcessApiResource(putted);
         }
 
@@ -652,11 +651,7 @@ namespace Heidelpay.Payment.Service
         private async Task ApiDeleteAsync<T>(string id)
            where T : class, IRestResource
         {
-            // default(T) only works with public parameterless constructors but most of our business classes
-            // have only internal constructors, so we need to activate a new instance by hand
-            var defaultInstance = (T)Activator.CreateInstance(typeof(T), nonPublic: true);
-
-            await heidelpay.RestClient.HttpDeleteAsync<T>(BuildApiEndpointUri(defaultInstance, id));
+            await heidelpay.RestClient.HttpDeleteAsync<T>(BuildApiEndpointUri<Customer>(id));
         }
 
         /// <summary>
@@ -668,6 +663,12 @@ namespace Heidelpay.Payment.Service
         private Uri BuildApiEndpointUri(IRestResource resource, string id = null)
         {
             return BuildApiEndpointUri(resource.ResolveResourceUrl(), id);
+        }
+
+        private Uri BuildApiEndpointUri<T>(string id = null)
+            where T : class, IRestResource
+        {
+            return BuildApiEndpointUri(TypeUrlExtensions.ResolveResourceUrl<T>(), id);
         }
 
         /// <summary>

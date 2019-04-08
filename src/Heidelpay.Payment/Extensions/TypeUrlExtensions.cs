@@ -100,11 +100,6 @@ namespace Heidelpay.Payment.Interfaces
             return InternalResolveRefundUrl(paymentId, chargeId);
         }
 
-        /// <summary>
-        /// Internals the resolve resource URL.
-        /// </summary>
-        /// <param name="resourceType">Type of the resource.</param>
-        /// <returns>System.String.</returns>
         private static string InternalResolveResourceUrl(Type resourceType)
         {
             return HeidelpayRegistry.GetPath(resourceType)
@@ -112,25 +107,14 @@ namespace Heidelpay.Payment.Interfaces
                 .EnsureTrailingSlash();
         }
 
-        /// <summary>
-        /// Internals the resolve payment URL.
-        /// </summary>
-        /// <param name="resourceType">Type of the resource.</param>
-        /// <param name="paymentId">The payment identifier.</param>
-        /// <returns>System.String.</returns>
-        public static string InternalResolvePaymentUrl(Type resourceType, string paymentId)
+        private static string InternalResolvePaymentUrl(Type resourceType, string paymentId)
         {
             return HeidelpayRegistry.GetPath(resourceType)
                 .Replace(PLACEHOLDER_PAYMENT_ID, paymentId)
                 .EnsureTrailingSlash();
         }
-        /// <summary>
-        /// Internals the resolve refund URL.
-        /// </summary>
-        /// <param name="paymentId">The payment identifier.</param>
-        /// <param name="chargeId">The charge identifier.</param>
-        /// <returns>System.String.</returns>
-        public static string InternalResolveRefundUrl(string paymentId, string chargeId)
+
+        private static string InternalResolveRefundUrl(string paymentId, string chargeId)
         {
             return REFUND_URL
                 .Replace(PLACEHOLDER_PAYMENT_ID, paymentId)
