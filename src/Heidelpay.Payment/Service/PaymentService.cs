@@ -13,7 +13,6 @@
 // ***********************************************************************
 using Heidelpay.Payment.Communication.Internal;
 using Heidelpay.Payment.Interfaces;
-using Heidelpay.Payment.PaymentTypes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -92,8 +91,8 @@ namespace Heidelpay.Payment.Service
         {
             Check.ThrowIfNull(metadata, nameof(metadata));
 
-            var created = await heidelpay.RestClient.HttpPostAsync<MetaData>(BuildApiEndpointUri<MetaData>(), metadata.MetadataMap);
-            created.MetadataMap = await heidelpay.RestClient.HttpGetAsync<Dictionary<string,string>>(BuildApiEndpointUri<MetaData>(created.Id));
+            var created = await heidelpay.RestClient.HttpPostAsync<MetaData>(BuildUri<MetaData>(), metadata.MetadataMap);
+            created.MetadataMap = await heidelpay.RestClient.HttpGetAsync<Dictionary<string,string>>(BuildUri<MetaData>(created.Id));
             return created;
         }
 
@@ -310,7 +309,7 @@ namespace Heidelpay.Payment.Service
         {
             Check.ThrowIfNullOrEmpty(metaDataId, nameof(metaDataId));
 
-            var fetched = await heidelpay.RestClient.HttpGetAsync<Dictionary<string, string>>(BuildApiEndpointUri<MetaData>(metaDataId));
+            var fetched = await heidelpay.RestClient.HttpGetAsync<Dictionary<string, string>>(BuildUri<MetaData>(metaDataId));
 
             return new MetaData { Id = metaDataId, MetadataMap = fetched };
         }
@@ -324,7 +323,7 @@ namespace Heidelpay.Payment.Service
         public async Task<string> EnsureRestResourceIdAsync<T>(T resource)
             where T : class, IRestResource
         {
-            var response = (await heidelpay.RestClient.HttpPostAsync(BuildApiEndpointUri(resource.GetType()), resource, typeof(IdResponse))) as IdResponse;
+            var response = (await heidelpay.RestClient.HttpPostAsync(BuildUri(resource.GetType()), resource, typeof(IdResponse))) as IdResponse;
             return response?.Id;
         }
 
@@ -338,7 +337,7 @@ namespace Heidelpay.Payment.Service
         {
             var shipment = new Shipment { InvoiceId = invoiceId };
 
-            var paymentUri = BuildApiEndpointUri(HeidelpayRegistry.ResolvePaymentUrl<Shipment>(paymentId), null);
+            var paymentUri = BuildUri(HeidelpayRegistry.ResolvePaymentUrl<Shipment>(paymentId), null);
             var result = await ApiPostAsync(shipment, paymentUri, false);
 
             result.Payment = await FetchPaymentAsync(result.Resources.PaymentId);
@@ -357,7 +356,7 @@ namespace Heidelpay.Payment.Service
             Check.ThrowIfNull(charge, nameof(charge));
             Check.ThrowIfNullOrEmpty(paymentId, nameof(paymentId));
 
-            var result = await ApiPostAsync(charge, BuildApiEndpointUri(HeidelpayRegistry.ResolvePaymentUrl<Charge>(paymentId), null), getAfterPost: false);
+            var result = await ApiPostAsync(charge, BuildUri(HeidelpayRegistry.ResolvePaymentUrl<Charge>(paymentId), null), getAfterPost: false);
 
             result.Payment = await FetchPaymentAsync(result.Resources.PaymentId);
 
@@ -375,7 +374,7 @@ namespace Heidelpay.Payment.Service
             Check.ThrowIfNull(cancel, nameof(cancel));
             Check.ThrowIfNullOrEmpty(paymentId, nameof(paymentId));
 
-            var result = await ApiPostAsync(cancel, BuildApiEndpointUri(HeidelpayRegistry.ResolvePaymentUrl<Cancel>(paymentId), null), getAfterPost: false);
+            var result = await ApiPostAsync(cancel, BuildUri(HeidelpayRegistry.ResolvePaymentUrl<Cancel>(paymentId), null), getAfterPost: false);
 
             result.Payment = await FetchPaymentAsync(result.PaymentId);
 
@@ -395,7 +394,9 @@ namespace Heidelpay.Payment.Service
             Check.ThrowIfNullOrEmpty(chargeId, nameof(chargeId));
             Check.ThrowIfNullOrEmpty(paymentId, nameof(paymentId));
 
-            var result = await ApiPostAsync(cancel, BuildApiEndpointUri(HeidelpayRegistry.ResolveRefundUrl(paymentId, chargeId), null), getAfterPost: false);
+            var result = await ApiPostAsync(cancel, 
+                BuildUri(HeidelpayRegistry.ResolveRefundUrl(paymentId, chargeId), null), 
+                getAfterPost: false);
 
             result.Payment = await FetchPaymentAsync(result.Resources.PaymentId);
 
@@ -540,7 +541,7 @@ namespace Heidelpay.Payment.Service
 
         private async Task<object> ApiGetAsync(Type resourceType, string id)
         {
-            var result = await heidelpay.RestClient.HttpGetAsync(BuildApiEndpointUri(resourceType, id), resourceType);
+            var result = await heidelpay.RestClient.HttpGetAsync(BuildUri(resourceType, id), resourceType);
             return PostProcessApiResource(result);
         }
 
@@ -566,7 +567,7 @@ namespace Heidelpay.Payment.Service
         private async Task<T> ApiGetAsync<T>(string id)
              where T : class, IRestResource
         {
-            var result = await heidelpay.RestClient.HttpGetAsync<T>(BuildApiEndpointUri<T>(id));
+            var result = await heidelpay.RestClient.HttpGetAsync<T>(BuildUri<T>(id));
             return PostProcessApiResource(result);
         }
 
@@ -581,7 +582,7 @@ namespace Heidelpay.Payment.Service
         private async Task<T> ApiPostAsync<T>(T resource, Uri uri = null, bool getAfterPost = true)
            where T : class, IRestResource
         {
-            var posted = await heidelpay.RestClient.HttpPostAsync<T>(uri ?? BuildApiEndpointUri<T>(), resource);
+            var posted = await heidelpay.RestClient.HttpPostAsync<T>(uri ?? BuildUri<T>(), resource);
             return getAfterPost 
                 ? await ApiGetAsync<T>(posted.Id) 
                 : PostProcessApiResource(posted);
@@ -598,7 +599,7 @@ namespace Heidelpay.Payment.Service
         private async Task<T> ApiPutAsync<T>(string id, T resource, bool getAfterPut = false)
            where T : class, IRestResource
         {
-            var putted = await heidelpay.RestClient.HttpPutAsync<T>(BuildApiEndpointUri<T>(id), resource);
+            var putted = await heidelpay.RestClient.HttpPutAsync<T>(BuildUri<T>(id), resource);
             return getAfterPut
                 ? await ApiGetAsync<T>(putted.Id)
                 : PostProcessApiResource(putted);
@@ -613,18 +614,18 @@ namespace Heidelpay.Payment.Service
         private async Task ApiDeleteAsync<T>(string id)
            where T : class, IRestResource
         {
-            await heidelpay.RestClient.HttpDeleteAsync<T>(BuildApiEndpointUri<Customer>(id));
+            await heidelpay.RestClient.HttpDeleteAsync<T>(BuildUri<Customer>(id));
         }
 
-        private Uri BuildApiEndpointUri<T>(string id = null)
+        private Uri BuildUri<T>(string id = null)
             where T : class, IRestResource
         {
-            return BuildApiEndpointUri(HeidelpayRegistry.ResolveResourceUrl<T>(), id);
+            return BuildUri(HeidelpayRegistry.ResolveResourceUrl<T>(), id);
         }
 
-        private Uri BuildApiEndpointUri(Type resourceType, string id = null)
+        private Uri BuildUri(Type resourceType, string id = null)
         {
-            return BuildApiEndpointUri(HeidelpayRegistry.ResolveResourceUrl(resourceType), id);
+            return BuildUri(HeidelpayRegistry.ResolveResourceUrl(resourceType), id);
         }
 
         /// <summary>
@@ -633,7 +634,7 @@ namespace Heidelpay.Payment.Service
         /// <param name="resourceUrl">The resource URL.</param>
         /// <param name="id">The identifier.</param>
         /// <returns>Uri.</returns>
-        private Uri BuildApiEndpointUri(string resourceUrl, string id)
+        private Uri BuildUri(string resourceUrl, string id)
         {
             var rootPath = new Uri(heidelpay.RestClient?.Options?.ApiEndpoint, heidelpay.RestClient?.Options?.ApiVersion.EnsureTrailingSlash());
             var combinedPaths = new Uri(rootPath, resourceUrl);
@@ -683,12 +684,6 @@ namespace Heidelpay.Payment.Service
     /// <seealso cref="Heidelpay.Payment.Interfaces.IRestResource" />
     internal class IdResponse : IRestResource
     {
-        /// <summary>
-        /// Gets the type URL.
-        /// </summary>
-        /// <value>The type URL.</value>
-        public string TypeUrl => null;
-
         /// <summary>
         /// Gets or sets the identifier.
         /// </summary>

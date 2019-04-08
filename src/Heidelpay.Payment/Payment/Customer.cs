@@ -102,12 +102,6 @@ namespace Heidelpay.Payment
         {
 
         }
-
-        /// <summary>
-        /// Gets the type URL.
-        /// </summary>
-        /// <value>The type URL.</value>
-        public string TypeUrl => "customers";
     }
 
     /// <summary>

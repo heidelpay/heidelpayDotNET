@@ -87,11 +87,5 @@ namespace Heidelpay.Payment
         {
             return MetadataMap.ContainsKey(key);
         }
-
-        /// <summary>
-        /// Gets the type URL.
-        /// </summary>
-        /// <value>The type URL.</value>
-        public string TypeUrl => "metadata";
     }
 }

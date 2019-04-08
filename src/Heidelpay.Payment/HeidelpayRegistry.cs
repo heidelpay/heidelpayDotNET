@@ -1,9 +1,7 @@
-﻿using Heidelpay.Payment.Interfaces;
-using Heidelpay.Payment.PaymentTypes;
+﻿using Heidelpay.Payment.PaymentTypes;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
 
 namespace Heidelpay.Payment
 {
