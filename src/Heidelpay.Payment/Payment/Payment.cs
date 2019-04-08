@@ -157,25 +157,25 @@ namespace Heidelpay.Payment
         /// Gets the amount total.
         /// </summary>
         /// <value>The amount total.</value>
-        public decimal AmountTotal { get => Amount.Total; }
+        public decimal? AmountTotal { get => Amount?.Total; }
 
         /// <summary>
         /// Gets the amount charged.
         /// </summary>
         /// <value>The amount charged.</value>
-        public decimal AmountCharged { get => Amount.Charged; }
+        public decimal? AmountCharged { get => Amount?.Charged; }
 
         /// <summary>
         /// Gets the amount canceled.
         /// </summary>
         /// <value>The amount canceled.</value>
-        public decimal AmountCanceled { get => Amount.Canceled; }
+        public decimal? AmountCanceled { get => Amount?.Canceled; }
 
         /// <summary>
         /// Gets the amount remaining.
         /// </summary>
         /// <value>The amount remaining.</value>
-        public decimal AmountRemaining { get => Amount.Remaining; }
+        public decimal? AmountRemaining { get => Amount?.Remaining; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Payment" /> class.
@@ -192,7 +192,7 @@ namespace Heidelpay.Payment
         /// </summary>
         /// <value>The amount.</value>
         [JsonProperty]
-        internal Amount Amount { get; set; } = new Amount();
+        internal Amount Amount { get; set; }
 
         /// <summary>
         /// Gets or sets the transactions.
@@ -383,12 +383,6 @@ namespace Heidelpay.Payment
         /// The is not empty
         /// </summary>
         static readonly Func<string, bool> IsNotEmpty = CoreExtensions.IsNotEmpty;
-
-        /// <summary>
-        /// Gets the type URL.
-        /// </summary>
-        /// <value>The type URL.</value>
-        public override string TypeUrl => "payments";
     }
 
     /// <summary>
@@ -397,27 +391,27 @@ namespace Heidelpay.Payment
     public enum State
     {
         /// <summary>
-        /// The pending
+        /// Payment pending
         /// </summary>
         Pending = 0,
         /// <summary>
-        /// The completed
+        /// Payment completed
         /// </summary>
         Completed = 1,
         /// <summary>
-        /// The canceled
+        /// Payment canceled
         /// </summary>
         Canceled = 2,
         /// <summary>
-        /// The partly
+        /// Payment partly completed
         /// </summary>
         Partly = 3,
         /// <summary>
-        /// The payment review
+        /// Payment in review
         /// </summary>
         Payment_review = 4,
         /// <summary>
-        /// The chargeback
+        /// Payment chargeback
         /// </summary>
         Chargeback = 5,
     }

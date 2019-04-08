@@ -37,7 +37,6 @@ namespace Heidelpay.Payment.PaymentTypes
         [JsonConstructor]
         internal Ideal()
         {
-
         }
 
         /// <summary>
@@ -47,14 +46,7 @@ namespace Heidelpay.Payment.PaymentTypes
         public Ideal(IHeidelpay heidelpayClient)
             : base(heidelpayClient)
         {
-
         }
-
-        /// <summary>
-        /// Gets the type URL.
-        /// </summary>
-        /// <value>The type URL.</value>
-        public override string TypeUrl => "types/ideal";
 
         /// <summary>
         /// Gets the heidelpay.

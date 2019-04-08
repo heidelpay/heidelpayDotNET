@@ -58,11 +58,5 @@ namespace Heidelpay.Payment
         /// <value>The resources.</value>
         [JsonProperty]
         internal Resources Resources { get; set; } = new Resources();
-
-        /// <summary>
-        /// Gets the type URL.
-        /// </summary>
-        /// <value>The type URL.</value>
-        public override string TypeUrl => "payments/<paymentId>/shipments";
     }
 }

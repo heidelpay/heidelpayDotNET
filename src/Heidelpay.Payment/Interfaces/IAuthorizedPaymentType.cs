@@ -21,7 +21,7 @@ namespace Heidelpay.Payment.Interfaces
     public interface IAuthorizedPaymentType : IPaymentType
     {
         /// <summary>
-        /// Gets the heidelpay.
+        /// Gets the heidelpay client.
         /// </summary>
         /// <value>The heidelpay.</value>
         IHeidelpay Heidelpay { get; }

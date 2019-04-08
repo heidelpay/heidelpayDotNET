@@ -28,26 +28,31 @@ namespace Heidelpay.Payment
         /// </summary>
         /// <value>The identifier.</value>
         public string Id { get; set; }
+
         /// <summary>
         /// Gets or sets the amount total.
         /// </summary>
         /// <value>The amount total.</value>
         public decimal AmountTotal { get; set; }
+
         /// <summary>
         /// Gets or sets the amount total discount.
         /// </summary>
         /// <value>The amount total discount.</value>
         public decimal AmountTotalDiscount { get; set; }
+
         /// <summary>
         /// Gets or sets the currency code.
         /// </summary>
         /// <value>The currency code.</value>
         public string CurrencyCode { get; set; }
+
         /// <summary>
         /// Gets or sets the order identifier.
         /// </summary>
         /// <value>The order identifier.</value>
         public string OrderId { get; set; }
+
         /// <summary>
         /// Gets or sets the note.
         /// </summary>
@@ -79,11 +84,5 @@ namespace Heidelpay.Payment
         {
             basketItems.Add(item);
         }
-
-        /// <summary>
-        /// Gets the type URL.
-        /// </summary>
-        /// <value>The type URL.</value>
-        public string TypeUrl => "baskets";
     }
 }

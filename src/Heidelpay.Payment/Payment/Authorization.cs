@@ -26,7 +26,7 @@ namespace Heidelpay.Payment
     /// Implements the <see cref="Heidelpay.Payment.PaymentTransactionBase" />
     /// </summary>
     /// <seealso cref="Heidelpay.Payment.PaymentTransactionBase" />
-    public class Authorization : PaymentTransactionBase
+    public sealed class Authorization : PaymentTransactionBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Authorization"/> class.
@@ -77,11 +77,5 @@ namespace Heidelpay.Payment
         {
             return await Heidelpay.ChargeAuthorizationAsync(Payment?.Id ?? Resources?.PaymentId, amount);
         }
-
-        /// <summary>
-        /// Gets the type URL.
-        /// </summary>
-        /// <value>The type URL.</value>
-        public override string TypeUrl => "payments/<paymentId>/authorize";
     }
 }

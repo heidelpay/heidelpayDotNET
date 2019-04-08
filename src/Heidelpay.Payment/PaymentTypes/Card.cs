@@ -32,16 +32,19 @@ namespace Heidelpay.Payment.PaymentTypes
         /// </summary>
         /// <value>The number.</value>
         public string Number { get; set; } = string.Empty;
+
         /// <summary>
         /// Gets or sets the CVC.
         /// </summary>
         /// <value>The CVC.</value>
         public string CVC { get; set; }
+
         /// <summary>
         /// Gets or sets the expiry date.
         /// </summary>
         /// <value>The expiry date.</value>
         public string ExpiryDate { get; set; } = string.Empty;
+
         /// <summary>
         /// Gets or sets the brand.
         /// </summary>
@@ -70,20 +73,14 @@ namespace Heidelpay.Payment.PaymentTypes
         public Card(IHeidelpay heidelpayClient)
             : base(heidelpayClient)
         {
-
         }
-
-        /// <summary>
-        /// Gets the type URL.
-        /// </summary>
-        /// <value>The type URL.</value>
-        public override string TypeUrl => "types/card";
-
+              
         /// <summary>
         /// Gets the heidelpay.
         /// </summary>
         /// <value>The heidelpay.</value>
         IHeidelpay IChargeablePaymentType.Heidelpay => Heidelpay;
+
         /// <summary>
         /// Gets the heidelpay.
         /// </summary>

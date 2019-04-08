@@ -19,7 +19,7 @@ namespace Heidelpay.Payment.Interfaces
     internal interface IHeidelpayProvider
     {
         /// <summary>
-        /// Gets or sets the heidelpay.
+        /// Gets or sets the heidelpay client.
         /// </summary>
         /// <value>The heidelpay.</value>
         IHeidelpay Heidelpay { get; set; }

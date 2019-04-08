@@ -37,7 +37,6 @@ namespace Heidelpay.Payment.PaymentTypes
         [JsonConstructor]
         internal Eps()
         {
-
         }
 
         /// <summary>
@@ -47,14 +46,8 @@ namespace Heidelpay.Payment.PaymentTypes
         public Eps(IHeidelpay heidelpayClient)
             : base(heidelpayClient)
         {
-
         }
-        /// <summary>
-        /// Gets the type URL.
-        /// </summary>
-        /// <value>The type URL.</value>
-        public override string TypeUrl => "types/eps";
-
+       
         /// <summary>
         /// Gets the heidelpay.
         /// </summary>

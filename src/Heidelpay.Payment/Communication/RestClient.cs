@@ -160,7 +160,7 @@ namespace Heidelpay.Payment.Communication
         /// <returns>Task&lt;System.String&gt;.</returns>
         private async Task<string> HttpExecute(HttpMethod method, Uri uri, object data = null)
         {
-            Check.NotNull(uri, nameof(uri));
+            Check.ThrowIfNull(uri, nameof(uri));
 
             var response = await SendRequestAsync(CreateRequest(uri, method, data));
             var content = await response.Content.ReadAsStringAsync();
@@ -207,7 +207,7 @@ namespace Heidelpay.Payment.Communication
         /// <returns>Task&lt;HttpResponseMessage&gt;.</returns>
         protected async Task<HttpResponseMessage> SendRequestAsync(HttpRequestMessage request)
         {
-            Check.NotNull(request, nameof(request));
+            Check.ThrowIfNull(request, nameof(request));
 
             request.AddUserAgent(GetType().FullName);
             request.AddAuthentication(apiOptions?.Value?.ApiKey);

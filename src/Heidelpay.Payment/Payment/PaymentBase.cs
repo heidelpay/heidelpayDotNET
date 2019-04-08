@@ -28,13 +28,6 @@ namespace Heidelpay.Payment
     public abstract class PaymentBase : IRestResource, IHeidelpayProvider
     {
         /// <summary>
-        /// Gets the type URL.
-        /// </summary>
-        /// <value>The type URL.</value>
-        [JsonIgnore]
-        public abstract string TypeUrl { get; }
-
-        /// <summary>
         /// Gets or sets the identifier.
         /// </summary>
         /// <value>The identifier.</value>
@@ -68,7 +61,7 @@ namespace Heidelpay.Payment
         /// <param name="heidelpayClient">The heidelpay client instance.</param>
         internal PaymentBase(IHeidelpay heidelpayClient)
         {
-            Check.NotNull(heidelpayClient, nameof(heidelpayClient));
+            Check.ThrowIfNull(heidelpayClient, nameof(heidelpayClient));
 
             ((IHeidelpayProvider)this).Heidelpay = heidelpayClient;
         }

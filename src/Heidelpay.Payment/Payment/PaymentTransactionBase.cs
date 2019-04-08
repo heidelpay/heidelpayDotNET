@@ -263,7 +263,7 @@ namespace Heidelpay.Payment
         /// </summary>
         /// <value>The processing.</value>
         [JsonProperty]
-        public Processing Processing { get; internal set; } = new Processing();
+        public Processing Processing { get; internal set; }
 
         /// <summary>
         /// Gets or sets the resources.

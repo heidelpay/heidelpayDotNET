@@ -33,7 +33,6 @@ namespace Heidelpay.Payment.PaymentTypes
         [JsonConstructor]
         internal InvoiceFactoring()
         {
-
         }
 
         /// <summary>
@@ -43,7 +42,6 @@ namespace Heidelpay.Payment.PaymentTypes
         public InvoiceFactoring(IHeidelpay heidelpayClient)
             : base(heidelpayClient)
         {
-
         }
 
         /// <summary>
@@ -60,12 +58,6 @@ namespace Heidelpay.Payment.PaymentTypes
         {
             return await Heidelpay.ChargeAsync(amount, currency, this, returnUrl, customer, basket, invoiceId);
         }
-
-        /// <summary>
-        /// Gets the type URL.
-        /// </summary>
-        /// <value>The type URL.</value>
-        public override string TypeUrl => "types/invoice-factoring";
 
         /// <summary>
         /// Gets the heidelpay.

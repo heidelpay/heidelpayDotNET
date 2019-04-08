@@ -21,7 +21,7 @@ namespace Heidelpay.Payment
     /// Implements the <see cref="Heidelpay.Payment.PaymentBase" />
     /// </summary>
     /// <seealso cref="Heidelpay.Payment.PaymentBase" />
-    public class Refund : PaymentBase
+    public sealed class Refund : PaymentBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Refund"/> class.
@@ -38,11 +38,5 @@ namespace Heidelpay.Payment
             : base(heidelpayClient)
         {
         }
-
-        /// <summary>
-        /// Gets the type URL.
-        /// </summary>
-        /// <value>The type URL.</value>
-        public override string TypeUrl => string.Empty;
     }
 }

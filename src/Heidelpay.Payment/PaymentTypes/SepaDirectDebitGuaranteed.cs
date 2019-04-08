@@ -30,11 +30,13 @@ namespace Heidelpay.Payment.PaymentTypes
         /// </summary>
         /// <value>The iban.</value>
         public string Iban { get; set; }
+
         /// <summary>
         /// Gets or sets the bic.
         /// </summary>
         /// <value>The bic.</value>
         public string Bic { get; set; }
+
         /// <summary>
         /// Gets or sets the holder.
         /// </summary>
@@ -47,7 +49,6 @@ namespace Heidelpay.Payment.PaymentTypes
         [JsonConstructor]
         internal SepaDirectDebitGuaranteed()
         {
-
         }
 
         /// <summary>
@@ -57,14 +58,7 @@ namespace Heidelpay.Payment.PaymentTypes
         public SepaDirectDebitGuaranteed(IHeidelpay heidelpayClient)
             : base(heidelpayClient)
         {
-
         }
-
-        /// <summary>
-        /// Gets the type URL.
-        /// </summary>
-        /// <value>The type URL.</value>
-        public override string TypeUrl => "types/sepa-direct-debit-guaranteed";
 
         /// <summary>
         /// Gets the heidelpay.

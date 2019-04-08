@@ -45,11 +45,7 @@ namespace Heidelpay.Payment.PaymentTypes
         /// </summary>
         /// <value>The identifier.</value>
         public string Id { get; set; }
-        /// <summary>
-        /// Gets the type URL.
-        /// </summary>
-        /// <value>The type URL.</value>
-        public abstract string TypeUrl { get; }
+       
         /// <summary>
         /// Gets or sets the heidelpay.
         /// </summary>

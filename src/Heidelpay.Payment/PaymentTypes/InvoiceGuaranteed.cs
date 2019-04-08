@@ -31,7 +31,6 @@ namespace Heidelpay.Payment.PaymentTypes
         [JsonConstructor]
         internal InvoiceGuaranteed()
         {
-
         }
 
         /// <summary>
@@ -41,13 +40,7 @@ namespace Heidelpay.Payment.PaymentTypes
         public InvoiceGuaranteed(IHeidelpay heidelpayClient)
             : base(heidelpayClient)
         {
-
-        }
-        /// <summary>
-        /// Gets the type URL.
-        /// </summary>
-        /// <value>The type URL.</value>
-        public override string TypeUrl => "types/invoice-guaranteed";
+        }        
 
         /// <summary>
         /// Gets the heidelpay.

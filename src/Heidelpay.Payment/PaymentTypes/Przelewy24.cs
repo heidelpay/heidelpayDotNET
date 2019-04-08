@@ -31,7 +31,6 @@ namespace Heidelpay.Payment.PaymentTypes
         [JsonConstructor]
         internal Przelewy24()
         {
-
         }
 
         /// <summary>
@@ -41,13 +40,7 @@ namespace Heidelpay.Payment.PaymentTypes
         public Przelewy24(IHeidelpay heidelpayClient)
             : base(heidelpayClient)
         {
-
         }
-        /// <summary>
-        /// Gets the type URL.
-        /// </summary>
-        /// <value>The type URL.</value>
-        public override string TypeUrl => "types/przelewy24";
 
         /// <summary>
         /// Gets the heidelpay.

@@ -40,7 +40,7 @@ namespace System.Net.Http
         /// <returns>Task.</returns>
         public static async Task ThrowIfErroneousResponseAsync(this HttpResponseMessage response)
         {
-            Check.NotNull(response, nameof(response));
+            Check.ThrowIfNull(response, nameof(response));
 
             if (SuccessStatusCodes.Contains(response.StatusCode))
                 return;
@@ -52,7 +52,7 @@ namespace System.Net.Http
         }
 
         /// <summary>
-        /// Ases the exception.
+        /// Returns an error object as respective payment exception.
         /// </summary>
         /// <param name="error">The error.</param>
         /// <param name="statusCode">The status code.</param>

@@ -28,7 +28,7 @@ namespace Heidelpay.Payment
     /// Implements the <see cref="Heidelpay.Payment.PaymentTransactionBase" />
     /// </summary>
     /// <seealso cref="Heidelpay.Payment.PaymentTransactionBase" />
-    public class Charge : PaymentTransactionBase
+    public sealed class Charge : PaymentTransactionBase
     {
         /// <summary>
         /// Gets or sets the invoice identifier.
@@ -76,12 +76,6 @@ namespace Heidelpay.Payment
         {
             return CancelList?.FirstOrDefault(x => string.Equals(x.Id, cancelId, StringComparison.InvariantCultureIgnoreCase));
         }
-
-        /// <summary>
-        /// Gets the type URL.
-        /// </summary>
-        /// <value>The type URL.</value>
-        public override string TypeUrl => "payments/<paymentId>/charges";
     }
 
     /// <summary>
@@ -90,19 +84,19 @@ namespace Heidelpay.Payment
     public enum Status
     {
         /// <summary>
-        /// The success
+        /// Success
         /// </summary>
         Success,
         /// <summary>
-        /// The pending
+        /// Pending
         /// </summary>
         Pending,
         /// <summary>
-        /// The error
+        /// Error
         /// </summary>
         Error,
         /// <summary>
-        /// The undefined
+        /// Undefined
         /// </summary>
         Undefined,
     }

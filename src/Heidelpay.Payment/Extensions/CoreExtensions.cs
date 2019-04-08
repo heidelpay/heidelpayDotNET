@@ -28,7 +28,7 @@ namespace System
         /// <returns>System.String.</returns>
         public static string EncodeToBase64(this string plainText)
         {
-            Check.NotNull(plainText, nameof(plainText));
+            Check.ThrowIfNull(plainText, nameof(plainText));
 
             var plainTextBytes = Encoding.UTF8.GetBytes(plainText);
             return Convert.ToBase64String(plainTextBytes);
@@ -41,7 +41,7 @@ namespace System
         /// <returns>System.String.</returns>
         public static string DecodeFromBase64(this string base64EncodedData)
         {
-            Check.NotNull(base64EncodedData, nameof(base64EncodedData));
+            Check.ThrowIfNull(base64EncodedData, nameof(base64EncodedData));
 
             var base64EncodedBytes = Convert.FromBase64String(base64EncodedData);
             return Encoding.UTF8.GetString(base64EncodedBytes);
@@ -66,7 +66,7 @@ namespace System
         public const string DateTimeFormat = "yyyy-MM-dd HH:mm:ss";
 
         /// <summary>
-        /// Tries the parse date time.
+        /// Tries to parse date time.
         /// </summary>
         /// <param name="value">The value.</param>
         /// <param name="result">The result.</param>
@@ -83,7 +83,7 @@ namespace System
         }
 
         /// <summary>
-        /// Determines whether [is not empty] [the specified value].
+        /// Determines whether [the specified value] [is not empty].
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns><c>true</c> if [is not empty] [the specified value]; otherwise, <c>false</c>.</returns>

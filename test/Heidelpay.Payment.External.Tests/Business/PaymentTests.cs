@@ -145,6 +145,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             var payment = await Heidelpay.FetchPaymentAsync(charge.PaymentId);
             var cancel = await payment.GetCharge("s-chg-1").CancelAsync();
             Assert.NotNull(cancel?.Id);
+            Assert.Equal(10m, cancel.Payment.AmountCanceled);
         }
 
         [Fact]
@@ -162,6 +163,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             var cancel = await payment.GetCharge("s-chg-1").CancelAsync(decimal.One);
             Assert.NotNull(cancel?.Id);
             Assert.Equal(decimal.One, cancel.Amount);
+            Assert.Equal(decimal.One, cancel.Payment.AmountCanceled);
         }
 
         [Fact]
@@ -187,6 +189,22 @@ namespace Heidelpay.Payment.External.Tests.Business
 
             Assert.NotNull(chargeUsingPayment);
             Assert.NotNull(chargeUsingHeidelpay);
+        }
+
+        [Fact]
+        public async Task Charge_Payment_Amount()
+        {
+            var card = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCardNo3DS);
+            var chargeUsingPayment = await new Payment(card).ChargeAsync(decimal.One, "EUR", TestReturnUri);
+            Assert.Equal(decimal.One, chargeUsingPayment.Payment.AmountCharged);
+        }
+
+        [Fact]
+        public async Task Charge_Heidelpay_Amount()
+        {
+            var card = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCardNo3DS);
+            var chargeUsingHeidelpay = await Heidelpay.ChargeAsync(decimal.One, "EUR", card, TestReturnUri);
+            Assert.Equal(decimal.One, chargeUsingHeidelpay.Payment.AmountCharged);
         }
     }
 }

@@ -33,7 +33,6 @@ namespace Heidelpay.Payment.PaymentTypes
         [JsonConstructor]
         internal Paypal()
         {
-
         }
 
         /// <summary>
@@ -43,20 +42,14 @@ namespace Heidelpay.Payment.PaymentTypes
         public Paypal(IHeidelpay heidelpayClient)
             : base(heidelpayClient)
         {
-
         }
-
-        /// <summary>
-        /// Gets the type URL.
-        /// </summary>
-        /// <value>The type URL.</value>
-        public override string TypeUrl => "types/paypal";
 
         /// <summary>
         /// Gets the heidelpay.
         /// </summary>
         /// <value>The heidelpay.</value>
         IHeidelpay IChargeablePaymentType.Heidelpay => Heidelpay;
+
         /// <summary>
         /// Gets the heidelpay.
         /// </summary>

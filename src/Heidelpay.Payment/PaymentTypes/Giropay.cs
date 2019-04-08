@@ -31,7 +31,6 @@ namespace Heidelpay.Payment.PaymentTypes
         [JsonConstructor]
         internal Giropay()
         {
-
         }
 
         /// <summary>
@@ -41,14 +40,8 @@ namespace Heidelpay.Payment.PaymentTypes
         public Giropay(IHeidelpay heidelpayClient)
             : base(heidelpayClient)
         {
-
         }
-        /// <summary>
-        /// Gets the type URL.
-        /// </summary>
-        /// <value>The type URL.</value>
-        public override string TypeUrl => "types/giropay";
-
+       
         /// <summary>
         /// Gets the heidelpay.
         /// </summary>
