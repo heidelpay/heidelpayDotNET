@@ -89,32 +89,6 @@ namespace Heidelpay.Payment
         /// <summary>
         /// Resolves the resource URL.
         /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>System.String.</returns>
-        public static string ResolveResourceUrl(IRestResource value)
-        {
-            Check.ThrowIfNull(value, nameof(value));
-
-            return ResolveResourceUrl(value.GetType());
-        }
-
-        /// <summary>
-        /// Resolves the payment URL.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <param name="paymentId">The payment identifier.</param>
-        /// <returns>System.String.</returns>
-        public static string ResolvePaymentUrl(IRestResource value, string paymentId)
-        {
-            Check.ThrowIfNull(value, nameof(value));
-            Check.ThrowIfNullOrEmpty(paymentId, nameof(paymentId));
-
-            return InternalResolvePaymentUrl(value.GetType(), paymentId);
-        }
-
-        /// <summary>
-        /// Resolves the resource URL.
-        /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns>System.String.</returns>
         public static string ResolveResourceUrl<T>()
@@ -132,13 +106,14 @@ namespace Heidelpay.Payment
         {
             Check.ThrowIfNullOrEmpty(paymentId, nameof(paymentId));
 
-            return InternalResolvePaymentUrl(typeof(T), paymentId);
+            return GetPath(typeof(T))
+                .Replace(PLACEHOLDER_PAYMENT_ID, paymentId)
+                .EnsureTrailingSlash();
         }
 
         /// <summary>
         /// Resolves the refund URL.
         /// </summary>
-        /// <param name="value">The value.</param>
         /// <param name="paymentId">The payment identifier.</param>
         /// <param name="chargeId">The charge identifier.</param>
         /// <returns>System.String.</returns>
@@ -157,13 +132,6 @@ namespace Heidelpay.Payment
         {
             return GetPath(resourceType)
                 .Replace(PLACEHOLDER_PAYMENT_ID + "/", string.Empty)
-                .EnsureTrailingSlash();
-        }
-
-        private static string InternalResolvePaymentUrl(Type resourceType, string paymentId)
-        {
-            return GetPath(resourceType)
-                .Replace(PLACEHOLDER_PAYMENT_ID, paymentId)
                 .EnsureTrailingSlash();
         }
     }

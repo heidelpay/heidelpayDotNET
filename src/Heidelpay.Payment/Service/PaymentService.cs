@@ -590,7 +590,7 @@ namespace Heidelpay.Payment.Service
         /// API get as an asynchronous operation.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="resource">The resource.</param>
+        /// <param name="id">The identifier.</param>
         /// <returns>Task&lt;T&gt;.</returns>
         private async Task<T> ApiGetAsync<T>(string id)
              where T : class, IRestResource
