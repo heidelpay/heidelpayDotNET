@@ -42,12 +42,7 @@ namespace Heidelpay.Payment.PaymentTypes
             : base(heidelpayClient)
         {
 
-        }
-        /// <summary>
-        /// Gets the type URL.
-        /// </summary>
-        /// <value>The type URL.</value>
-        public override string TypeUrl => "types/invoice-guaranteed";
+        }        
 
         /// <summary>
         /// Gets the heidelpay.

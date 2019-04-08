@@ -383,12 +383,6 @@ namespace Heidelpay.Payment
         /// The is not empty
         /// </summary>
         static readonly Func<string, bool> IsNotEmpty = CoreExtensions.IsNotEmpty;
-
-        /// <summary>
-        /// Gets the type URL.
-        /// </summary>
-        /// <value>The type URL.</value>
-        public override string TypeUrl => "payments";
     }
 
     /// <summary>

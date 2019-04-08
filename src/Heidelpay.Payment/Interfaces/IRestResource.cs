@@ -19,11 +19,6 @@ namespace Heidelpay.Payment.Interfaces
     public interface IRestResource 
     {
         /// <summary>
-        /// Gets the type URL.
-        /// </summary>
-        /// <value>The type URL.</value>
-        string TypeUrl { get; }
-        /// <summary>
         /// Gets or sets the identifier.
         /// </summary>
         /// <value>The identifier.</value>

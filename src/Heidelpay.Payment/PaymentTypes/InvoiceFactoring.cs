@@ -61,11 +61,7 @@ namespace Heidelpay.Payment.PaymentTypes
             return await Heidelpay.ChargeAsync(amount, currency, this, returnUrl, customer, basket, invoiceId);
         }
 
-        /// <summary>
-        /// Gets the type URL.
-        /// </summary>
-        /// <value>The type URL.</value>
-        public override string TypeUrl => "types/invoice-factoring";
+        
 
         /// <summary>
         /// Gets the heidelpay.

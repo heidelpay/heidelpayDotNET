@@ -51,12 +51,6 @@ namespace Heidelpay.Payment.PaymentTypes
         }
 
         /// <summary>
-        /// Gets the type URL.
-        /// </summary>
-        /// <value>The type URL.</value>
-        public override string TypeUrl => "types/ideal";
-
-        /// <summary>
         /// Gets the heidelpay.
         /// </summary>
         /// <value>The heidelpay.</value>

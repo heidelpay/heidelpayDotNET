@@ -77,11 +77,5 @@ namespace Heidelpay.Payment
         {
             return await Heidelpay.ChargeAuthorizationAsync(Payment?.Id ?? Resources?.PaymentId, amount);
         }
-
-        /// <summary>
-        /// Gets the type URL.
-        /// </summary>
-        /// <value>The type URL.</value>
-        public override string TypeUrl => "payments/<paymentId>/authorize";
     }
 }

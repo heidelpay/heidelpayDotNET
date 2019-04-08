@@ -40,11 +40,5 @@ namespace Heidelpay.Payment
             : base(heidelpayClient)
         {
         }
-
-        /// <summary>
-        /// Gets the type URL.
-        /// </summary>
-        /// <value>The type URL.</value>
-        public override string TypeUrl => "payments/<paymentId>/authorize/cancels";
     }
 }

@@ -6,7 +6,7 @@
 // Last Modified By : berghtho
 // Last Modified On : 04-01-2019
 // ***********************************************************************
-// <copyright file="Refund.cs" company="Heidelpay">
+// <copyright file="Shipment.cs" company="Heidelpay">
 //     Copyright (c) . All rights reserved.
 // </copyright>
 // <summary></summary>
@@ -17,32 +17,46 @@ using Newtonsoft.Json;
 namespace Heidelpay.Payment
 {
     /// <summary>
-    /// Class Refund.
+    /// Class Shipment.
     /// Implements the <see cref="Heidelpay.Payment.PaymentBase" />
     /// </summary>
     /// <seealso cref="Heidelpay.Payment.PaymentBase" />
-    public class Refund : PaymentBase
+    public class Shipment : PaymentBase
     {
+        /// <summary>
+        /// Gets or sets the invoice identifier.
+        /// </summary>
+        /// <value>The invoice identifier.</value>
+        public string InvoiceId { get; set; }
+
+        /// <summary>
+        /// Gets the payment.
+        /// </summary>
+        /// <value>The payment.</value>
+        [JsonProperty]
+        public Payment Payment { get; internal set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Refund"/> class.
         /// </summary>
         [JsonConstructor]
-        internal Refund()
+        internal Shipment()
         {
 
         }
 
-        /// <summary>Initializes a new instance of the <see cref="T:Heidelpay.Payment.Refund"/> class.</summary>
+        /// <summary>Initializes a new instance of the <see cref="T:Heidelpay.Payment.Shipment"/> class.</summary>
         /// <param name="heidelpayClient">The heidelpay client instance.</param>
-        public Refund(IHeidelpay heidelpayClient)
+        public Shipment(IHeidelpay heidelpayClient)
             : base(heidelpayClient)
         {
         }
 
         /// <summary>
-        /// Gets the type URL.
+        /// Gets or sets the resources.
         /// </summary>
-        /// <value>The type URL.</value>
-        public override string TypeUrl => string.Empty;
+        /// <value>The resources.</value>
+        [JsonProperty]
+        internal Resources Resources { get; set; } = new Resources();
     }
 }
