@@ -191,9 +191,9 @@ namespace Heidelpay.Payment.Service
             where TPaymentBase : class, IPaymentType
         {
             Check.ThrowIfNullOrEmpty(paymentTypeId, nameof(paymentTypeId));
-            var paymentType = ResolvePaymentTypeFromTypeId(paymentTypeId, postProcess: true);
+            var paymentType = ResolvePaymentTypeFromTypeId(paymentTypeId);
 
-            return await ApiGetAsync(paymentTypeId, paymentType) as TPaymentBase;
+            return await ApiGetAsync(paymentType, paymentTypeId) as TPaymentBase;
         }
 
         /// <summary>
@@ -338,7 +338,7 @@ namespace Heidelpay.Payment.Service
         {
             var shipment = new Shipment { InvoiceId = invoiceId };
 
-            var paymentUri = BuildApiEndpointUri(shipment.ResolvePaymentUrl(paymentId), null);
+            var paymentUri = BuildApiEndpointUri(HeidelpayRegistry.ResolvePaymentUrl(shipment, paymentId), null);
             var result = await ApiPostAsync(shipment, paymentUri, false);
 
             result.Payment = await FetchPaymentAsync(result.Resources.PaymentId);
@@ -357,7 +357,7 @@ namespace Heidelpay.Payment.Service
             Check.ThrowIfNull(charge, nameof(charge));
             Check.ThrowIfNullOrEmpty(paymentId, nameof(paymentId));
 
-            var result = await ApiPostAsync(charge, BuildApiEndpointUri(charge.ResolvePaymentUrl(paymentId), null), getAfterPost: false);
+            var result = await ApiPostAsync(charge, BuildApiEndpointUri(HeidelpayRegistry.ResolvePaymentUrl(charge, paymentId), null), getAfterPost: false);
 
             result.Payment = await FetchPaymentAsync(result.Resources.PaymentId);
 
@@ -375,7 +375,7 @@ namespace Heidelpay.Payment.Service
             Check.ThrowIfNull(cancel, nameof(cancel));
             Check.ThrowIfNullOrEmpty(paymentId, nameof(paymentId));
 
-            var result = await ApiPostAsync(cancel, BuildApiEndpointUri(cancel.ResolvePaymentUrl(paymentId), null), getAfterPost: false);
+            var result = await ApiPostAsync(cancel, BuildApiEndpointUri(HeidelpayRegistry.ResolvePaymentUrl(cancel, paymentId), null), getAfterPost: false);
 
             result.Payment = await FetchPaymentAsync(result.PaymentId);
 
@@ -395,7 +395,7 @@ namespace Heidelpay.Payment.Service
             Check.ThrowIfNullOrEmpty(chargeId, nameof(chargeId));
             Check.ThrowIfNullOrEmpty(paymentId, nameof(paymentId));
 
-            var result = await ApiPostAsync(cancel, BuildApiEndpointUri(cancel.ResolveRefundUrl(paymentId, chargeId), null), getAfterPost: false);
+            var result = await ApiPostAsync(cancel, BuildApiEndpointUri(HeidelpayRegistry.ResolveRefundUrl(paymentId, chargeId), null), getAfterPost: false);
 
             result.Payment = await FetchPaymentAsync(result.Resources.PaymentId);
 
@@ -406,10 +406,9 @@ namespace Heidelpay.Payment.Service
         /// Resolves the payment type from type identifier.
         /// </summary>
         /// <param name="typeId">The type identifier.</param>
-        /// <param name="postProcess">if set to <c>true</c> [post process].</param>
         /// <returns>PaymentTypeBase.</returns>
         /// <exception cref="PaymentException">Type '" + shortTypeId + "' is currently not supported by the SDK</exception>
-        internal PaymentTypeBase ResolvePaymentTypeFromTypeId(string typeId, bool postProcess)
+        internal Type ResolvePaymentTypeFromTypeId(string typeId)
         {
             Check.ThrowIfNullOrEmpty(typeId, nameof(typeId));
             Check.ThrowIfTrue(typeId.Length < 5, "TypeId '" + typeId + "' is invalid");
@@ -418,28 +417,26 @@ namespace Heidelpay.Payment.Service
                 .Substring(2, 3)
                 .ToLower();
 
-            PaymentTypeBase result = null;
+            Type result = null;
 
             switch (shortTypeId)
             {
-                case "crd": result = new Card(); break;
-                case "eps": result = new Eps(); break;
-                case "gro": result = new Giropay(); break;
-                case "idl": result = new Ideal(); break;
-                case "ivc": result = new Invoice(); break;
-                case "ivf": result = new InvoiceFactoring(); break;
-                case "ivg": result = new InvoiceGuaranteed(); break;
-                case "ppl": result = new Paypal(); break;
-                case "ppy": result = new Prepayment(); break;
-                case "p24": result = new Przelewy24(); break;
-                case "sdd": result = new SepaDirectDebit(); break;
-                case "ddg": result = new SepaDirectDebitGuaranteed(); break;
-                case "sft": result = new Sofort(); break;
-                case "pis": result = new Pis(); break;
+                case "crd": result = typeof(Card); break;
+                case "eps": result = typeof(Eps); break;
+                case "gro": result = typeof(Giropay); break;
+                case "idl": result = typeof(Ideal); break;
+                case "ivc": result = typeof(Invoice); break;
+                case "ivf": result = typeof(InvoiceFactoring); break;
+                case "ivg": result = typeof(InvoiceGuaranteed); break;
+                case "ppl": result = typeof(Paypal); break;
+                case "ppy": result = typeof(Prepayment); break;
+                case "p24": result = typeof(Przelewy24); break;
+                case "sdd": result = typeof(SepaDirectDebit); break;
+                case "ddg": result = typeof(SepaDirectDebitGuaranteed); break;
+                case "sft": result = typeof(Sofort); break;
+                case "pis": result = typeof(Pis); break;
                 default: throw new PaymentException("Type '" + shortTypeId + "' is currently not supported by the SDK");
             }
-
-            if (postProcess) PostProcessApiResource(result);
 
             return result;
         }
@@ -582,6 +579,12 @@ namespace Heidelpay.Payment.Service
             return PostProcessApiResource(result);
         }
 
+        private async Task<object> ApiGetAsync(Type resourceType, string id)
+        {
+            var result = await heidelpay.RestClient.HttpGetAsync(BuildApiEndpointUri(resourceType, id), resourceType);
+            return PostProcessApiResource(result);
+        }
+
         /// <summary>
         /// API get as an asynchronous operation.
         /// </summary>
@@ -662,13 +665,18 @@ namespace Heidelpay.Payment.Service
         /// <returns>Uri.</returns>
         private Uri BuildApiEndpointUri(IRestResource resource, string id = null)
         {
-            return BuildApiEndpointUri(resource.ResolveResourceUrl(), id);
+            return BuildApiEndpointUri(HeidelpayRegistry.ResolveResourceUrl(resource), id);
         }
 
         private Uri BuildApiEndpointUri<T>(string id = null)
             where T : class, IRestResource
         {
-            return BuildApiEndpointUri(TypeUrlExtensions.ResolveResourceUrl<T>(), id);
+            return BuildApiEndpointUri(HeidelpayRegistry.ResolveResourceUrl<T>(), id);
+        }
+
+        private Uri BuildApiEndpointUri(Type resourceType, string id = null)
+        {
+            return BuildApiEndpointUri(HeidelpayRegistry.ResolveResourceUrl(resourceType), id);
         }
 
         /// <summary>
