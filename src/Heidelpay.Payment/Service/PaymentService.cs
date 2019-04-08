@@ -324,7 +324,7 @@ namespace Heidelpay.Payment.Service
         public async Task<string> EnsureRestResourceIdAsync<T>(T resource)
             where T : class, IRestResource
         {
-            var response = (await heidelpay.RestClient.HttpPostAsync(BuildApiEndpointUri<T>(), resource, typeof(IdResponse))) as IdResponse;
+            var response = (await heidelpay.RestClient.HttpPostAsync(BuildApiEndpointUri(resource.GetType()), resource, typeof(IdResponse))) as IdResponse;
             return response?.Id;
         }
 
