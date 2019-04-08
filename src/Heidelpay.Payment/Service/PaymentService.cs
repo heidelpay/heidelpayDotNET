@@ -92,8 +92,8 @@ namespace Heidelpay.Payment.Service
         {
             Check.ThrowIfNull(metadata, nameof(metadata));
 
-            var created = await heidelpay.RestClient.HttpPostAsync<MetaData>(BuildApiEndpointUri(metadata), metadata.MetadataMap);
-            created.MetadataMap = await heidelpay.RestClient.HttpGetAsync<Dictionary<string,string>>(BuildApiEndpointUri(created, created.Id));
+            var created = await heidelpay.RestClient.HttpPostAsync<MetaData>(BuildApiEndpointUri<MetaData>(), metadata.MetadataMap);
+            created.MetadataMap = await heidelpay.RestClient.HttpGetAsync<Dictionary<string,string>>(BuildApiEndpointUri<MetaData>(created.Id));
             return created;
         }
 
@@ -324,7 +324,7 @@ namespace Heidelpay.Payment.Service
         public async Task<string> EnsureRestResourceIdAsync<T>(T resource)
             where T : class, IRestResource
         {
-            var response = (await heidelpay.RestClient.HttpPostAsync(BuildApiEndpointUri(resource), resource, typeof(IdResponse))) as IdResponse;
+            var response = (await heidelpay.RestClient.HttpPostAsync(BuildApiEndpointUri<T>(), resource, typeof(IdResponse))) as IdResponse;
             return response?.Id;
         }
 
@@ -338,7 +338,7 @@ namespace Heidelpay.Payment.Service
         {
             var shipment = new Shipment { InvoiceId = invoiceId };
 
-            var paymentUri = BuildApiEndpointUri(HeidelpayRegistry.ResolvePaymentUrl(shipment, paymentId), null);
+            var paymentUri = BuildApiEndpointUri(HeidelpayRegistry.ResolvePaymentUrl<Shipment>(paymentId), null);
             var result = await ApiPostAsync(shipment, paymentUri, false);
 
             result.Payment = await FetchPaymentAsync(result.Resources.PaymentId);
@@ -357,7 +357,7 @@ namespace Heidelpay.Payment.Service
             Check.ThrowIfNull(charge, nameof(charge));
             Check.ThrowIfNullOrEmpty(paymentId, nameof(paymentId));
 
-            var result = await ApiPostAsync(charge, BuildApiEndpointUri(HeidelpayRegistry.ResolvePaymentUrl(charge, paymentId), null), getAfterPost: false);
+            var result = await ApiPostAsync(charge, BuildApiEndpointUri(HeidelpayRegistry.ResolvePaymentUrl<Charge>(paymentId), null), getAfterPost: false);
 
             result.Payment = await FetchPaymentAsync(result.Resources.PaymentId);
 
@@ -375,7 +375,7 @@ namespace Heidelpay.Payment.Service
             Check.ThrowIfNull(cancel, nameof(cancel));
             Check.ThrowIfNullOrEmpty(paymentId, nameof(paymentId));
 
-            var result = await ApiPostAsync(cancel, BuildApiEndpointUri(HeidelpayRegistry.ResolvePaymentUrl(cancel, paymentId), null), getAfterPost: false);
+            var result = await ApiPostAsync(cancel, BuildApiEndpointUri(HeidelpayRegistry.ResolvePaymentUrl<Cancel>(paymentId), null), getAfterPost: false);
 
             result.Payment = await FetchPaymentAsync(result.PaymentId);
 
@@ -567,18 +567,6 @@ namespace Heidelpay.Payment.Service
                 .ToList();
         }
 
-        /// <summary>
-        /// API get as an asynchronous operation.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <param name="resource">The resource.</param>
-        /// <returns>Task&lt;System.Object&gt;.</returns>
-        private async Task<object> ApiGetAsync(string id, IRestResource resource)
-        {
-            var result = await heidelpay.RestClient.HttpGetAsync(BuildApiEndpointUri(resource, id), resource.GetType());
-            return PostProcessApiResource(result);
-        }
-
         private async Task<object> ApiGetAsync(Type resourceType, string id)
         {
             var result = await heidelpay.RestClient.HttpGetAsync(BuildApiEndpointUri(resourceType, id), resourceType);
@@ -655,17 +643,6 @@ namespace Heidelpay.Payment.Service
            where T : class, IRestResource
         {
             await heidelpay.RestClient.HttpDeleteAsync<T>(BuildApiEndpointUri<Customer>(id));
-        }
-
-        /// <summary>
-        /// Builds the API endpoint URI.
-        /// </summary>
-        /// <param name="resource">The resource.</param>
-        /// <param name="id">The identifier.</param>
-        /// <returns>Uri.</returns>
-        private Uri BuildApiEndpointUri(IRestResource resource, string id = null)
-        {
-            return BuildApiEndpointUri(HeidelpayRegistry.ResolveResourceUrl(resource), id);
         }
 
         private Uri BuildApiEndpointUri<T>(string id = null)
