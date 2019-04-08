@@ -19,13 +19,10 @@ namespace Heidelpay.Payment
         /// </summary>
         private const string PLACEHOLDER_PAYMENT_ID = "<paymentId>";
 
-        /// <summary>
-        /// The refund URL
-        /// </summary>
-        private const string REFUND_URL = "payments/<paymentId>/charges/<chargeId>/cancels";
-
-        private const string PAYMENT_PREFIX = "payments/<paymentId>/";
         private const string PAYMENTTYPE_PREFIX = "types/";
+        private const string PAYMENT_PREFIX = "payments/<paymentId>/";
+        private const string REFUND_PREFIX = PAYMENT_PREFIX + "charges/<chargeId>/cancels";
+
 
         static ReadOnlyDictionary<Type, ValueTuple<string, RegistryType>> ResourcePathRegistry { get; } = new ReadOnlyDictionary<Type, ValueTuple<string, RegistryType>>(new Dictionary<Type, ValueTuple<string, RegistryType>>
         {
@@ -120,7 +117,7 @@ namespace Heidelpay.Payment
             Check.ThrowIfNullOrEmpty(paymentId, nameof(paymentId));
             Check.ThrowIfNullOrEmpty(chargeId, nameof(chargeId));
 
-            return REFUND_URL
+            return REFUND_PREFIX
                 .Replace(PLACEHOLDER_PAYMENT_ID, paymentId)
                 .Replace(PLACEHOLDER_CHARGE_ID, chargeId)
                 .EnsureTrailingSlash();
