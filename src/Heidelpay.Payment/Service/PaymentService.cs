@@ -54,7 +54,7 @@ namespace Heidelpay.Payment.Service
         /// <param name="heidelpay">The heidelpay client instance.</param>
         public PaymentService(HeidelpayClient heidelpay)
         {
-            Check.NotNull(heidelpay, nameof(heidelpay));
+            Check.ThrowIfNull(heidelpay, nameof(heidelpay));
 
             this.heidelpay = heidelpay;
         }
@@ -78,7 +78,7 @@ namespace Heidelpay.Payment.Service
         /// <returns>Task&lt;Basket&gt;.</returns>
         public async Task<Basket> CreateBasketAsync(Basket basket)
         {
-            Check.NotNull(basket, nameof(basket));
+            Check.ThrowIfNull(basket, nameof(basket));
 
             return await ApiPostAsync(basket);
         }
@@ -90,7 +90,7 @@ namespace Heidelpay.Payment.Service
         /// <returns>Task&lt;MetaData&gt;.</returns>
         public async Task<MetaData> CreateMetaDataAsync(MetaData metadata)
         {
-            Check.NotNull(metadata, nameof(metadata));
+            Check.ThrowIfNull(metadata, nameof(metadata));
 
             var created = await heidelpay.RestClient.HttpPostAsync<MetaData>(BuildApiEndpointUri(metadata), metadata.MetadataMap);
             created.MetadataMap = await heidelpay.RestClient.HttpGetAsync<Dictionary<string,string>>(BuildApiEndpointUri(created, created.Id));
@@ -105,8 +105,8 @@ namespace Heidelpay.Payment.Service
         /// <returns>Task&lt;Basket&gt;.</returns>
         public async Task<Basket> UpdateBasketAsync(string id, Basket basket)
         {
-            Check.NotNullOrEmpty(id, nameof(id));
-            Check.NotNull(basket, nameof(basket));
+            Check.ThrowIfNullOrEmpty(id, nameof(id));
+            Check.ThrowIfNull(basket, nameof(basket));
 
             return await ApiPutAsync(id, basket, getAfterPut: true);
         }
@@ -118,7 +118,7 @@ namespace Heidelpay.Payment.Service
         /// <returns>Task&lt;Customer&gt;.</returns>
         public async Task<Customer> CreateCustomerAsync(Customer customer)
         {
-            Check.NotNull(customer, nameof(customer));
+            Check.ThrowIfNull(customer, nameof(customer));
 
             return await ApiPostAsync(customer, getAfterPost: true);
         }
@@ -131,8 +131,8 @@ namespace Heidelpay.Payment.Service
         /// <returns>Task&lt;Customer&gt;.</returns>
         public async Task<Customer> UpdateCustomerAsync(string id, Customer customer)
         {
-            Check.NotNullOrEmpty(id, nameof(id));
-            Check.NotNull(customer, nameof(customer));
+            Check.ThrowIfNullOrEmpty(id, nameof(id));
+            Check.ThrowIfNull(customer, nameof(customer));
 
             return await ApiPutAsync(id, customer, getAfterPut: true);
         }
@@ -144,7 +144,7 @@ namespace Heidelpay.Payment.Service
         /// <returns>Task.</returns>
         public async Task DeleteCustomerAsync(string id)
         {
-            Check.NotNullOrEmpty(id, nameof(id));
+            Check.ThrowIfNullOrEmpty(id, nameof(id));
 
             await ApiDeleteAsync<Customer>(id);
         }
@@ -156,7 +156,7 @@ namespace Heidelpay.Payment.Service
         /// <returns>Task&lt;Charge&gt;.</returns>
         public async Task<Charge> ChargeAsync(Charge charge)
         {
-            Check.NotNull(charge, nameof(charge));
+            Check.ThrowIfNull(charge, nameof(charge));
 
             var result = await ApiPostAsync(charge, getAfterPost: false);
 
@@ -172,7 +172,7 @@ namespace Heidelpay.Payment.Service
         /// <returns>Task&lt;Authorization&gt;.</returns>
         public async Task<Authorization> AuthorizeAsync(Authorization authorization)
         {
-            Check.NotNull(authorization, nameof(authorization));
+            Check.ThrowIfNull(authorization, nameof(authorization));
 
             var result = await ApiPostAsync(authorization, getAfterPost: false);
 
@@ -190,7 +190,7 @@ namespace Heidelpay.Payment.Service
         public async Task<TPaymentBase> FetchPaymentTypeAsync<TPaymentBase>(string paymentTypeId)
             where TPaymentBase : class, IPaymentType
         {
-            Check.NotNullOrEmpty(paymentTypeId, nameof(paymentTypeId));
+            Check.ThrowIfNullOrEmpty(paymentTypeId, nameof(paymentTypeId));
             var paymentType = ResolvePaymentTypeFromTypeId(paymentTypeId, postProcess: true);
 
             return await ApiGetAsync(paymentTypeId, paymentType) as TPaymentBase;
@@ -203,7 +203,7 @@ namespace Heidelpay.Payment.Service
         /// <returns>Task&lt;Authorization&gt;.</returns>
         public async Task<Authorization> FetchAuthorizationAsync(string paymentId)
         {
-            Check.NotNullOrEmpty(paymentId, nameof(paymentId));
+            Check.ThrowIfNullOrEmpty(paymentId, nameof(paymentId));
             var payment = await FetchPaymentAsync(paymentId);
 
             return payment?.Authorization;
@@ -217,8 +217,8 @@ namespace Heidelpay.Payment.Service
         /// <returns>Task&lt;Charge&gt;.</returns>
         public async Task<Charge> FetchChargeAsync(string paymentId, string chargeId)
         {
-            Check.NotNullOrEmpty(paymentId, nameof(paymentId));
-            Check.NotNullOrEmpty(chargeId, nameof(chargeId));
+            Check.ThrowIfNullOrEmpty(paymentId, nameof(paymentId));
+            Check.ThrowIfNullOrEmpty(chargeId, nameof(chargeId));
 
             var payment = await FetchPaymentAsync(paymentId);
 
@@ -233,8 +233,8 @@ namespace Heidelpay.Payment.Service
         /// <returns>Task&lt;Cancel&gt;.</returns>
         public async Task<Cancel> FetchCancelAsync(string paymentId, string cancelId)
         {
-            Check.NotNullOrEmpty(paymentId, nameof(paymentId));
-            Check.NotNullOrEmpty(cancelId, nameof(cancelId));
+            Check.ThrowIfNullOrEmpty(paymentId, nameof(paymentId));
+            Check.ThrowIfNullOrEmpty(cancelId, nameof(cancelId));
 
             var payment = await FetchPaymentAsync(paymentId);
 
@@ -250,9 +250,9 @@ namespace Heidelpay.Payment.Service
         /// <returns>Task&lt;Cancel&gt;.</returns>
         public async Task<Cancel> FetchCancelAsync(string paymentId, string chargeId, string cancelId)
         {
-            Check.NotNullOrEmpty(paymentId, nameof(paymentId));
-            Check.NotNullOrEmpty(cancelId, nameof(cancelId));
-            Check.NotNullOrEmpty(chargeId, nameof(chargeId));
+            Check.ThrowIfNullOrEmpty(paymentId, nameof(paymentId));
+            Check.ThrowIfNullOrEmpty(cancelId, nameof(cancelId));
+            Check.ThrowIfNullOrEmpty(chargeId, nameof(chargeId));
 
             var payment = await FetchPaymentAsync(paymentId);
 
@@ -270,7 +270,7 @@ namespace Heidelpay.Payment.Service
         /// <returns>Task&lt;Payment&gt;.</returns>
         public async Task<Payment> FetchPaymentAsync(string paymentId)
         {
-            Check.NotNullOrEmpty(paymentId, nameof(paymentId));
+            Check.ThrowIfNullOrEmpty(paymentId, nameof(paymentId));
 
             var payment = await ApiGetAsync(new Payment { Id = paymentId });
 
@@ -284,7 +284,7 @@ namespace Heidelpay.Payment.Service
         /// <returns>Task&lt;Basket&gt;.</returns>
         public async Task<Basket> FetchBasketAsync(string basketId)
         {
-            Check.NotNullOrEmpty(basketId, nameof(basketId));
+            Check.ThrowIfNullOrEmpty(basketId, nameof(basketId));
 
             return await ApiGetAsync(new Basket { Id = basketId });
         }
@@ -296,7 +296,7 @@ namespace Heidelpay.Payment.Service
         /// <returns>Task&lt;Customer&gt;.</returns>
         public async Task<Customer> FetchCustomerAsync(string customerId)
         {
-            Check.NotNullOrEmpty(customerId, nameof(customerId));
+            Check.ThrowIfNullOrEmpty(customerId, nameof(customerId));
 
             return await ApiGetAsync(new Customer { Id = customerId });
         }
@@ -308,7 +308,7 @@ namespace Heidelpay.Payment.Service
         /// <returns>Task&lt;MetaData&gt;.</returns>
         public async Task<MetaData> FetchMetaDataAsync(string metaDataId)
         {
-            Check.NotNullOrEmpty(metaDataId, nameof(metaDataId));
+            Check.ThrowIfNullOrEmpty(metaDataId, nameof(metaDataId));
 
             var fetched = new MetaData { Id = metaDataId };
             fetched.MetadataMap = await heidelpay.RestClient.HttpGetAsync<Dictionary<string, string>>(BuildApiEndpointUri(fetched, fetched.Id));
@@ -355,8 +355,8 @@ namespace Heidelpay.Payment.Service
         /// <returns>Task&lt;Charge&gt;.</returns>
         internal async Task<Charge> ChargeAsync(Charge charge, string paymentId)
         {
-            Check.NotNull(charge, nameof(charge));
-            Check.NotNullOrEmpty(paymentId, nameof(paymentId));
+            Check.ThrowIfNull(charge, nameof(charge));
+            Check.ThrowIfNullOrEmpty(paymentId, nameof(paymentId));
 
             var result = await ApiPostAsync(charge, BuildApiEndpointUri(charge.ResolvePaymentUrl(paymentId), null), getAfterPost: false);
 
@@ -373,8 +373,8 @@ namespace Heidelpay.Payment.Service
         /// <returns>Task&lt;Cancel&gt;.</returns>
         internal async Task<Cancel> CancelAsync(Cancel cancel, string paymentId)
         {
-            Check.NotNull(cancel, nameof(cancel));
-            Check.NotNullOrEmpty(paymentId, nameof(paymentId));
+            Check.ThrowIfNull(cancel, nameof(cancel));
+            Check.ThrowIfNullOrEmpty(paymentId, nameof(paymentId));
 
             var result = await ApiPostAsync(cancel, BuildApiEndpointUri(cancel.ResolvePaymentUrl(paymentId), null), getAfterPost: false);
 
@@ -392,9 +392,9 @@ namespace Heidelpay.Payment.Service
         /// <returns>Task&lt;Cancel&gt;.</returns>
         public async Task<Cancel> CancelChargeAsync(Cancel cancel, string chargeId, string paymentId)
         { 
-            Check.NotNull(cancel, nameof(cancel));
-            Check.NotNullOrEmpty(chargeId, nameof(chargeId));
-            Check.NotNullOrEmpty(paymentId, nameof(paymentId));
+            Check.ThrowIfNull(cancel, nameof(cancel));
+            Check.ThrowIfNullOrEmpty(chargeId, nameof(chargeId));
+            Check.ThrowIfNullOrEmpty(paymentId, nameof(paymentId));
 
             var result = await ApiPostAsync(cancel, BuildApiEndpointUri(cancel.ResolveRefundUrl(paymentId, chargeId), null), getAfterPost: false);
 
@@ -412,7 +412,7 @@ namespace Heidelpay.Payment.Service
         /// <exception cref="PaymentException">Type '" + shortTypeId + "' is currently not supported by the SDK</exception>
         internal PaymentTypeBase ResolvePaymentTypeFromTypeId(string typeId, bool postProcess)
         {
-            Check.NotNullOrEmpty(typeId, nameof(typeId));
+            Check.ThrowIfNullOrEmpty(typeId, nameof(typeId));
             Check.ThrowIfTrue(typeId.Length < 5, "TypeId '" + typeId + "' is invalid");
 
             var shortTypeId = typeId

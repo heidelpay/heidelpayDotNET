@@ -40,7 +40,7 @@ namespace System.Net.Http
         /// <returns>Task.</returns>
         public static async Task ThrowIfErroneousResponseAsync(this HttpResponseMessage response)
         {
-            Check.NotNull(response, nameof(response));
+            Check.ThrowIfNull(response, nameof(response));
 
             if (SuccessStatusCodes.Contains(response.StatusCode))
                 return;

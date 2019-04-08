@@ -38,8 +38,8 @@ namespace Heidelpay.Payment.Extensions
         public static IServiceCollection AddHeidelpay(this IServiceCollection serviceCollection,
             Action<HeidelpayApiOptions> setupAction)
         {
-            Check.NotNull(serviceCollection, (nameof(serviceCollection)));
-            Check.NotNull(setupAction, (nameof(setupAction)));
+            Check.ThrowIfNull(serviceCollection, (nameof(serviceCollection)));
+            Check.ThrowIfNull(setupAction, (nameof(setupAction)));
 
             serviceCollection.Configure(setupAction);
 
@@ -55,8 +55,8 @@ namespace Heidelpay.Payment.Extensions
         public static IServiceCollection AddHeidelpay(this IServiceCollection serviceCollection,
             IConfiguration configuration)
         {
-            Check.NotNull(serviceCollection, (nameof(serviceCollection)));
-            Check.NotNull(configuration, (nameof(configuration)));
+            Check.ThrowIfNull(serviceCollection, (nameof(serviceCollection)));
+            Check.ThrowIfNull(configuration, (nameof(configuration)));
 
             serviceCollection.Configure<HeidelpayApiOptions>(configuration);
 

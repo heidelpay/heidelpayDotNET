@@ -21,14 +21,14 @@ namespace System
     internal static class Check
     {
         /// <summary>
-        /// Nots the null.
+        /// Throws if null.
         /// </summary>
         /// <param name="obj">The object.</param>
         /// <param name="parameterName">Name of the parameter.</param>
         /// <param name="message">The message.</param>
         /// <exception cref="ArgumentNullException">
         /// </exception>
-        public static void NotNull(object obj, string parameterName, string message = null)
+        public static void ThrowIfNull(object obj, string parameterName, string message = null)
         {
             if (obj == null)
                 throw string.IsNullOrEmpty(message) 
@@ -37,14 +37,14 @@ namespace System
         }
 
         /// <summary>
-        /// Nots the null or empty.
+        /// Throws if null or empty.
         /// </summary>
         /// <param name="obj">The object.</param>
         /// <param name="parameterName">Name of the parameter.</param>
         /// <param name="message">The message.</param>
         /// <exception cref="ArgumentNullException">
         /// </exception>
-        public static void NotNullOrEmpty(string obj, string parameterName, string message = null)
+        public static void ThrowIfNullOrEmpty(string obj, string parameterName, string message = null)
         {
             if (string.IsNullOrWhiteSpace(obj))
                 throw string.IsNullOrEmpty(message)
@@ -61,20 +61,6 @@ namespace System
         public static void ThrowIfTrue(bool func, string message)
         {
             if(func)
-            {
-                throw new PaymentException(message);
-            }
-        }
-
-        /// <summary>
-        /// Throws if false.
-        /// </summary>
-        /// <param name="func">if set to <c>true</c> [function].</param>
-        /// <param name="message">The message.</param>
-        /// <exception cref="PaymentException"></exception>
-        public static void ThrowIfFalse(bool func, string message)
-        {
-            if (!func)
             {
                 throw new PaymentException(message);
             }

@@ -28,7 +28,7 @@ namespace System.Net.Http
         /// <param name="privateKey">The private key.</param>
         public static void AddAuthentication(this HttpRequestMessage request, string privateKey)
         {
-            Check.NotNull(request, nameof(request));
+            Check.ThrowIfNull(request, nameof(request));
             Check.ThrowIfTrue(string.IsNullOrEmpty(privateKey),
                  merchantMessage: "PrivateKey/PublicKey is missing",
                  customerMessage: "There was a problem authenticating your request. Please contact us for more information.",
@@ -51,8 +51,8 @@ namespace System.Net.Http
         /// <param name="callerName">Name of the caller.</param>
         public static void AddUserAgent(this HttpRequestMessage request, string callerName)
         {
-            Check.NotNull(request, nameof(request));
-            Check.NotNullOrEmpty(callerName, nameof(callerName));
+            Check.ThrowIfNull(request, nameof(request));
+            Check.ThrowIfNullOrEmpty(callerName, nameof(callerName));
 
             request.Headers.Add(RestClientConstants.USER_AGENT, $"{RestClientConstants.USER_AGENT_PREFIX}{SDKInfo.Version} - {callerName}");
         }
@@ -64,7 +64,7 @@ namespace System.Net.Http
         /// <param name="locale">The locale.</param>
         public static void AddLocale(this HttpRequestMessage request, string locale = null)
         {
-            Check.NotNull(request, nameof(request));
+            Check.ThrowIfNull(request, nameof(request));
 
             request.Headers.Add(RestClientConstants.ACCEPT_LANGUAGE, locale ?? RestClientConstants.ACCEPT_LANGUAGE_DEFAULT_VALUE);
         }

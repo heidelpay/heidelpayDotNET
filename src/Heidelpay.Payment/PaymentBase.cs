@@ -68,7 +68,7 @@ namespace Heidelpay.Payment
         /// <param name="heidelpayClient">The heidelpay client instance.</param>
         internal PaymentBase(IHeidelpay heidelpayClient)
         {
-            Check.NotNull(heidelpayClient, nameof(heidelpayClient));
+            Check.ThrowIfNull(heidelpayClient, nameof(heidelpayClient));
 
             ((IHeidelpayProvider)this).Heidelpay = heidelpayClient;
         }
