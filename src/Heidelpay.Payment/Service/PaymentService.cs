@@ -191,7 +191,7 @@ namespace Heidelpay.Payment.Service
             where TPaymentBase : class, IPaymentType
         {
             Check.ThrowIfNullOrEmpty(paymentTypeId, nameof(paymentTypeId));
-            var paymentType = ResolvePaymentTypeFromTypeId(paymentTypeId);
+            var paymentType = HeidelpayRegistry.ResolvePaymentType(paymentTypeId);
 
             return await ApiGetAsync(paymentType, paymentTypeId) as TPaymentBase;
         }
@@ -402,44 +402,15 @@ namespace Heidelpay.Payment.Service
             return result;
         }
 
+       
+
         /// <summary>
         /// Resolves the payment type from type identifier.
         /// </summary>
         /// <param name="typeId">The type identifier.</param>
         /// <returns>PaymentTypeBase.</returns>
         /// <exception cref="PaymentException">Type '" + shortTypeId + "' is currently not supported by the SDK</exception>
-        internal Type ResolvePaymentTypeFromTypeId(string typeId)
-        {
-            Check.ThrowIfNullOrEmpty(typeId, nameof(typeId));
-            Check.ThrowIfTrue(typeId.Length < 5, "TypeId '" + typeId + "' is invalid");
-
-            var shortTypeId = typeId
-                .Substring(2, 3)
-                .ToLower();
-
-            Type result = null;
-
-            switch (shortTypeId)
-            {
-                case "crd": result = typeof(Card); break;
-                case "eps": result = typeof(Eps); break;
-                case "gro": result = typeof(Giropay); break;
-                case "idl": result = typeof(Ideal); break;
-                case "ivc": result = typeof(Invoice); break;
-                case "ivf": result = typeof(InvoiceFactoring); break;
-                case "ivg": result = typeof(InvoiceGuaranteed); break;
-                case "ppl": result = typeof(Paypal); break;
-                case "ppy": result = typeof(Prepayment); break;
-                case "p24": result = typeof(Przelewy24); break;
-                case "sdd": result = typeof(SepaDirectDebit); break;
-                case "ddg": result = typeof(SepaDirectDebitGuaranteed); break;
-                case "sft": result = typeof(Sofort); break;
-                case "pis": result = typeof(Pis); break;
-                default: throw new PaymentException("Type '" + shortTypeId + "' is currently not supported by the SDK");
-            }
-
-            return result;
-        }
+        
 
         /// <summary>
         /// fetch authorization as an asynchronous operation.
