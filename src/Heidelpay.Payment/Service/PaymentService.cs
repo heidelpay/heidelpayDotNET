@@ -25,25 +25,13 @@ namespace Heidelpay.Payment.Service
     /// </summary>
     internal sealed class PaymentService
     {
-        /// <summary>
-        /// The transaction type authorization
-        /// </summary>
         private static readonly string TRANSACTION_TYPE_AUTHORIZATION = "authorize";
-        /// <summary>
-        /// The transaction type charge
-        /// </summary>
         private static readonly string TRANSACTION_TYPE_CHARGE = "charge";
-        /// <summary>
-        /// The transaction type cancel authorize
-        /// </summary>
         private static readonly string TRANSACTION_TYPE_CANCEL_AUTHORIZE = "cancel-authorize";
-        /// <summary>
-        /// The transaction type cancel charge
-        /// </summary>
         private static readonly string TRANSACTION_TYPE_CANCEL_CHARGE = "cancel-charge";
 
         /// <summary>
-        /// The heidelpay
+        /// The heidelpay client instance
         /// </summary>
         private readonly HeidelpayClient heidelpay;
 
@@ -403,16 +391,6 @@ namespace Heidelpay.Payment.Service
             return result;
         }
 
-       
-
-        /// <summary>
-        /// Resolves the payment type from type identifier.
-        /// </summary>
-        /// <param name="typeId">The type identifier.</param>
-        /// <returns>PaymentTypeBase.</returns>
-        /// <exception cref="PaymentException">Type '" + shortTypeId + "' is currently not supported by the SDK</exception>
-        
-
         /// <summary>
         /// fetch authorization as an asynchronous operation.
         /// </summary>
@@ -617,12 +595,24 @@ namespace Heidelpay.Payment.Service
             await heidelpay.RestClient.HttpDeleteAsync<T>(BuildUri<Customer>(id));
         }
 
+        /// <summary>
+        /// Builds the URI.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="id">The identifier.</param>
+        /// <returns>Uri.</returns>
         private Uri BuildUri<T>(string id = null)
             where T : class, IRestResource
         {
             return BuildUri(HeidelpayRegistry.ResolveResourceUrl<T>(), id);
         }
 
+        /// <summary>
+        /// Builds the URI.
+        /// </summary>
+        /// <param name="resourceType">Type of the resource.</param>
+        /// <param name="id">The identifier.</param>
+        /// <returns>Uri.</returns>
         private Uri BuildUri(Type resourceType, string id = null)
         {
             return BuildUri(HeidelpayRegistry.ResolveResourceUrl(resourceType), id);
@@ -662,7 +652,7 @@ namespace Heidelpay.Payment.Service
         }
 
         /// <summary>
-        /// Posts the process API resource.
+        /// Postprocess API resource.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="resource">The resource.</param>
@@ -676,18 +666,19 @@ namespace Heidelpay.Payment.Service
 
             return resource;
         }
-    }
-    /// <summary>
-    /// Class IdResponse.
-    /// Implements the <see cref="Heidelpay.Payment.Interfaces.IRestResource" />
-    /// </summary>
-    /// <seealso cref="Heidelpay.Payment.Interfaces.IRestResource" />
-    internal class IdResponse : IRestResource
-    {
+
         /// <summary>
-        /// Gets or sets the identifier.
+        /// Class IdResponse.
+        /// Implements the <see cref="Heidelpay.Payment.Interfaces.IRestResource" />
         /// </summary>
-        /// <value>The identifier.</value>
-        public string Id { get; set; }
+        /// <seealso cref="Heidelpay.Payment.Interfaces.IRestResource" />
+        internal class IdResponse : IRestResource
+        {
+            /// <summary>
+            /// Gets or sets the identifier.
+            /// </summary>
+            /// <value>The identifier.</value>
+            public string Id { get; set; }
+        }
     }
 }

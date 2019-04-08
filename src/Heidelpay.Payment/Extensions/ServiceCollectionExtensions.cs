@@ -30,7 +30,7 @@ namespace Heidelpay.Payment.Extensions
     public static class ServiceCollectionExtensions
     {
         /// <summary>
-        /// Adds the heidelpay.
+        /// Adds the heidelpay client default implementation.
         /// </summary>
         /// <param name="serviceCollection">The service collection.</param>
         /// <param name="setupAction">The setup action.</param>
@@ -47,7 +47,7 @@ namespace Heidelpay.Payment.Extensions
         }
 
         /// <summary>
-        /// Adds the heidelpay.
+        /// Adds the heidelpay client default implementation.
         /// </summary>
         /// <param name="serviceCollection">The service collection.</param>
         /// <param name="configuration">The configuration.</param>
@@ -64,7 +64,7 @@ namespace Heidelpay.Payment.Extensions
         }
 
         /// <summary>
-        /// Adds the heidelpay.
+        /// Adds the heidelpay client default implementation.
         /// </summary>
         /// <param name="serviceCollection">The service collection.</param>
         /// <returns>IServiceCollection.</returns>

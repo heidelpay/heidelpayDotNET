@@ -66,7 +66,7 @@ namespace System
         public const string DateTimeFormat = "yyyy-MM-dd HH:mm:ss";
 
         /// <summary>
-        /// Tries the parse date time.
+        /// Tries to parse date time.
         /// </summary>
         /// <param name="value">The value.</param>
         /// <param name="result">The result.</param>
@@ -83,7 +83,7 @@ namespace System
         }
 
         /// <summary>
-        /// Determines whether [is not empty] [the specified value].
+        /// Determines whether [the specified value] [is not empty].
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns><c>true</c> if [is not empty] [the specified value]; otherwise, <c>false</c>.</returns>

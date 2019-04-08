@@ -391,27 +391,27 @@ namespace Heidelpay.Payment
     public enum State
     {
         /// <summary>
-        /// The pending
+        /// Payment pending
         /// </summary>
         Pending = 0,
         /// <summary>
-        /// The completed
+        /// Payment completed
         /// </summary>
         Completed = 1,
         /// <summary>
-        /// The canceled
+        /// Payment canceled
         /// </summary>
         Canceled = 2,
         /// <summary>
-        /// The partly
+        /// Payment partly completed
         /// </summary>
         Partly = 3,
         /// <summary>
-        /// The payment review
+        /// Payment in review
         /// </summary>
         Payment_review = 4,
         /// <summary>
-        /// The chargeback
+        /// Payment chargeback
         /// </summary>
         Chargeback = 5,
     }

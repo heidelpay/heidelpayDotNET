@@ -31,7 +31,6 @@ namespace Heidelpay.Payment.PaymentTypes
         [JsonConstructor]
         internal Pis()
         {
-
         }
 
         /// <summary>
@@ -41,7 +40,6 @@ namespace Heidelpay.Payment.PaymentTypes
         public Pis(IHeidelpay heidelpayClient)
             : base(heidelpayClient)
         {
-
         }
 
         /// <summary>

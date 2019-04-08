@@ -29,14 +29,15 @@ namespace Heidelpay.Payment.Interfaces
         HeidelpayApiOptions Options { get; }
 
         /// <summary>
-        /// HTTPs the get asynchronous.
+        /// HTTP GET as an asynchronous operation.
         /// </summary>
         /// <param name="uri">The URI.</param>
         /// <param name="responseType">Type of the response.</param>
         /// <returns>Task&lt;System.Object&gt;.</returns>
         Task<object> HttpGetAsync(Uri uri, Type responseType);
+
         /// <summary>
-        /// HTTPs the post asynchronous.
+        /// HTTP POST as an asynchronous operation.
         /// </summary>
         /// <param name="uri">The URI.</param>
         /// <param name="content">The content.</param>
@@ -45,22 +46,24 @@ namespace Heidelpay.Payment.Interfaces
         Task<object> HttpPostAsync(Uri uri, object content, Type responseType);
 
         /// <summary>
-        /// HTTPs the get asynchronous.
+        /// HTTP GET as an asynchronous operation.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="uri">The URI.</param>
         /// <returns>Task&lt;T&gt;.</returns>
         Task<T> HttpGetAsync<T>(Uri uri) where T : class;
+
         /// <summary>
-        /// HTTPs the post asynchronous.
+        /// HTTP POST as an asynchronous operation.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="uri">The URI.</param>
         /// <param name="content">The content.</param>
         /// <returns>Task&lt;T&gt;.</returns>
         Task<T> HttpPostAsync<T>(Uri uri, object content) where T : class;
+
         /// <summary>
-        /// HTTPs the put asynchronous.
+        /// HTTP PUT as an asynchronous operation.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="uri">The URI.</param>
@@ -69,7 +72,7 @@ namespace Heidelpay.Payment.Interfaces
         Task<T> HttpPutAsync<T>(Uri uri, object content) where T : class;
 
         /// <summary>
-        /// HTTPs the delete asynchronous.
+        /// HTTP DELETE as an asynchronous operation.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="uri">The URI.</param>

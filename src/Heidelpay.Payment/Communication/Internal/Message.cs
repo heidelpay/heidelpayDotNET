@@ -23,6 +23,7 @@ namespace Heidelpay.Payment.Communication.Internal
         /// <summary>
         /// Initializes a new instance of the <see cref="Message"/> class.
         /// </summary>
+        [JsonConstructor]
         internal Message()
         {
 

@@ -31,7 +31,6 @@ namespace Heidelpay.Payment.PaymentTypes
         [JsonConstructor]
         internal Prepayment()
         {
-
         }
 
         /// <summary>
@@ -41,7 +40,6 @@ namespace Heidelpay.Payment.PaymentTypes
         public Prepayment(IHeidelpay heidelpayClient)
             : base(heidelpayClient)
         {
-
         }
 
         /// <summary>

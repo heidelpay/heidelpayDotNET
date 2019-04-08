@@ -36,6 +36,7 @@ namespace Heidelpay.Payment
         /// </summary>
         /// <value>The rest client.</value>
         internal IRestClient RestClient { get; }
+
         /// <summary>
         /// Gets the payment service.
         /// </summary>
@@ -113,7 +114,7 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
-        /// create customer as an asynchronous operation.
+        /// Create customer as an asynchronous operation.
         /// </summary>
         /// <param name="customer">The customer.</param>
         /// <returns>Task&lt;Customer&gt;.</returns>
@@ -127,7 +128,7 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
-        /// create basket as an asynchronous operation.
+        /// Create basket as an asynchronous operation.
         /// </summary>
         /// <param name="basket">The basket.</param>
         /// <returns>Task&lt;Basket&gt;.</returns>
@@ -141,7 +142,7 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
-        /// create metadata as an asynchronous operation.
+        /// Create metadata as an asynchronous operation.
         /// </summary>
         /// <param name="metadata">The metadata.</param>
         /// <returns>Task&lt;MetaData&gt;.</returns>
@@ -155,7 +156,7 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
-        /// update customer as an asynchronous operation.
+        /// Update customer as an asynchronous operation.
         /// </summary>
         /// <param name="customer">The customer.</param>
         /// <returns>Task&lt;Customer&gt;.</returns>
@@ -169,7 +170,7 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
-        /// update basket as an asynchronous operation.
+        /// Update basket as an asynchronous operation.
         /// </summary>
         /// <param name="basket">The basket.</param>
         /// <returns>Task&lt;Basket&gt;.</returns>
@@ -183,7 +184,7 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
-        /// delete customer as an asynchronous operation.
+        /// Delete customer as an asynchronous operation.
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns>Task.</returns>
@@ -195,7 +196,7 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
-        /// charge authorization as an asynchronous operation.
+        /// Charge authorization as an asynchronous operation.
         /// </summary>
         /// <param name="paymentId">The payment identifier.</param>
         /// <param name="amount">The amount.</param>
@@ -208,7 +209,7 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
-        /// cancel authorization as an asynchronous operation.
+        /// Cancel authorization as an asynchronous operation.
         /// </summary>
         /// <param name="paymentId">The payment identifier.</param>
         /// <param name="amount">The amount.</param>
@@ -221,14 +222,14 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
-        /// charge as an asynchronous operation.
+        /// Charge as an asynchronous operation.
         /// </summary>
         /// <param name="amount">The amount.</param>
         /// <param name="currency">The currency.</param>
         /// <param name="chargeablePaymentTypeId">The chargeable payment type identifier.</param>
         /// <param name="returnUrl">The return URL.</param>
         /// <param name="customerId">The customer identifier.</param>
-        /// <param name="card3ds">if set to <c>true</c> [card3ds].</param>
+        /// <param name="card3ds">if set to <c>true</c> [3ds] is set, overriding setting of the payment type.</param>
         /// <returns>Task&lt;Charge&gt;.</returns>
         public async Task<Charge> ChargeAsync(decimal amount, string currency, string chargeablePaymentTypeId, Uri returnUrl = null, string customerId = null, bool? card3ds = null)
         {
@@ -259,12 +260,12 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
-        /// charge as an asynchronous operation.
+        /// Charge as an asynchronous operation.
         /// </summary>
         /// <param name="amount">The amount.</param>
         /// <param name="currency">The currency.</param>
         /// <param name="paymentType">Type of the payment.</param>
-        /// <param name="card3ds">if set to <c>true</c> [card3ds].</param>
+        /// <param name="card3ds">if set to <c>true</c> [3ds] is set, overriding setting of the payment type.</param>
         /// <returns>Task&lt;Charge&gt;.</returns>
         public async Task<Charge> ChargeAsync(decimal amount, string currency, IChargeablePaymentType paymentType, bool? card3ds = null)
         {
@@ -280,14 +281,14 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
-        /// charge as an asynchronous operation.
+        /// Charge as an asynchronous operation.
         /// </summary>
         /// <param name="amount">The amount.</param>
         /// <param name="currency">The currency.</param>
         /// <param name="paymentType">Type of the payment.</param>
         /// <param name="returnUrl">The return URL.</param>
         /// <param name="customer">The customer.</param>
-        /// <param name="card3ds">if set to <c>true</c> [card3ds].</param>
+        /// <param name="card3ds">if set to <c>true</c> [3ds] is set, overriding setting of the payment type.</param>
         /// <returns>Task&lt;Charge&gt;.</returns>
         public async Task<Charge> ChargeAsync(decimal amount, string currency, IChargeablePaymentType paymentType, Uri returnUrl, Customer customer = null, bool? card3ds = null)
         {
@@ -307,14 +308,14 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
-        /// charge as an asynchronous operation.
+        /// Charge as an asynchronous operation.
         /// </summary>
         /// <param name="amount">The amount.</param>
         /// <param name="currency">The currency.</param>
         /// <param name="paymentType">Type of the payment.</param>
         /// <param name="returnUrl">The return URL.</param>
         /// <param name="customerId">The customer identifier.</param>
-        /// <param name="card3ds">if set to <c>true</c> [card3ds].</param>
+        /// <param name="card3ds">if set to <c>true</c> [3ds] is set, overriding setting of the payment type.</param>
         /// <returns>Task&lt;Charge&gt;.</returns>
         public async Task<Charge> ChargeAsync(decimal amount, string currency, IChargeablePaymentType paymentType, Uri returnUrl, string customerId, bool? card3ds = null)
         {
@@ -345,7 +346,7 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
-        /// charge as an asynchronous operation.
+        /// Charge as an asynchronous operation.
         /// </summary>
         /// <param name="amount">The amount.</param>
         /// <param name="currency">The currency.</param>
@@ -354,7 +355,7 @@ namespace Heidelpay.Payment
         /// <param name="customer">The customer.</param>
         /// <param name="basket">The basket.</param>
         /// <param name="invoiceId">The invoice identifier.</param>
-        /// <param name="card3ds">if set to <c>true</c> [card3ds].</param>
+        /// <param name="card3ds">if set to <c>true</c> [3ds] is set, overriding setting of the payment type.</param>
         /// <returns>Task&lt;Charge&gt;.</returns>
         public async Task<Charge> ChargeAsync(decimal amount, string currency, IChargeablePaymentType paymentType, Uri returnUrl, Customer customer, Basket basket, string invoiceId = null, bool? card3ds = null)
         {
@@ -390,7 +391,7 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
-        /// charge as an asynchronous operation.
+        /// Charge as an asynchronous operation.
         /// </summary>
         /// <param name="charge">The charge.</param>
         /// <returns>Task&lt;Charge&gt;.</returns>
@@ -402,14 +403,14 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
-        /// authorize as an asynchronous operation.
+        /// Authorize as an asynchronous operation.
         /// </summary>
         /// <param name="amount">The amount.</param>
         /// <param name="currency">The currency.</param>
         /// <param name="authorizedPaymentTypeId">The authorized payment type identifier.</param>
         /// <param name="returnUrl">The return URL.</param>
         /// <param name="customerId">The customer identifier.</param>
-        /// <param name="card3ds"></param>
+        /// <param name="card3ds">if set to <c>true</c> [3ds] is set, overriding setting of the payment type.</param>
         /// <returns>Task&lt;Authorization&gt;.</returns>
         public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, string authorizedPaymentTypeId, Uri returnUrl = null, string customerId = null, bool? card3ds = null)
         {
@@ -440,7 +441,7 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
-        /// authorize as an asynchronous operation.
+        /// Authorize as an asynchronous operation.
         /// </summary>
         /// <param name="amount">The amount.</param>
         /// <param name="currency">The currency.</param>
@@ -463,7 +464,7 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
-        /// authorize as an asynchronous operation.
+        /// Authorize as an asynchronous operation.
         /// </summary>
         /// <param name="amount">The amount.</param>
         /// <param name="currency">The currency.</param>
@@ -489,13 +490,15 @@ namespace Heidelpay.Payment
             return await AuthorizeAsync(amount, currency, authorizedPaymentTypeId: typeId, returnUrl: returnUrl, customerId: customerId, card3ds: threeDS);
         }
 
-        /// <summary>authorize as an asynchronous operation.</summary>
+        /// <summary>
+        /// Authorize as an asynchronous operation.
+        /// </summary>
         /// <param name="amount">The amount.</param>
         /// <param name="currency">The currency.</param>
         /// <param name="paymentType">Type of the payment.</param>
         /// <param name="returnUrl">The return URL.</param>
         /// <param name="customer">The customer.</param>
-        /// <param name="card3ds">if set to <c>true</c> [card3ds].</param>
+        /// <param name="card3ds">if set to <c>true</c> [3ds] is set, overriding setting of the payment type.</param>
         /// <returns>Task&lt;Authorization&gt;.</returns>
         public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, IAuthorizedPaymentType paymentType, Uri returnUrl, 
             Customer customer = null, bool? card3ds = null)
@@ -517,7 +520,7 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
-        /// authorize as an asynchronous operation.
+        /// Authorize as an asynchronous operation.
         /// </summary>
         /// <param name="authorization">The authorization.</param>
         /// <returns>Task&lt;Authorization&gt;.</returns>
@@ -527,7 +530,7 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
-        /// cancel charge as an asynchronous operation.
+        /// Cancel charge as an asynchronous operation.
         /// </summary>
         /// <param name="paymentId">The payment identifier.</param>
         /// <param name="chargeId">The charge identifier.</param>
@@ -542,7 +545,7 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
-        /// fetch charge as an asynchronous operation.
+        /// Fetch charge as an asynchronous operation.
         /// </summary>
         /// <param name="paymentId">The payment identifier.</param>
         /// <param name="chargeId">The charge identifier.</param>
@@ -556,7 +559,7 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
-        /// fetch cancel as an asynchronous operation.
+        /// Fetch cancel as an asynchronous operation.
         /// </summary>
         /// <param name="paymentId">The payment identifier.</param>
         /// <param name="cancelId">The cancel identifier.</param>
@@ -570,7 +573,7 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
-        /// fetch cancel as an asynchronous operation.
+        /// Fetch cancel as an asynchronous operation.
         /// </summary>
         /// <param name="paymentId">The payment identifier.</param>
         /// <param name="chargeId">The charge identifier.</param>
@@ -586,7 +589,7 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
-        /// fetch customer as an asynchronous operation.
+        /// Fetch customer as an asynchronous operation.
         /// </summary>
         /// <param name="customerId">The customer identifier.</param>
         /// <returns>Task&lt;Customer&gt;.</returns>
@@ -598,7 +601,7 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
-        /// fetch payment type as an asynchronous operation.
+        /// Fetch payment type as an asynchronous operation.
         /// </summary>
         /// <typeparam name="TPaymentType">The type of the t payment type.</typeparam>
         /// <param name="typeId">The type identifier.</param>
@@ -612,7 +615,7 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
-        /// fetch meta data as an asynchronous operation.
+        /// Fetch meta data as an asynchronous operation.
         /// </summary>
         /// <param name="metaDataId">The meta data identifier.</param>
         /// <returns>Task&lt;MetaData&gt;.</returns>
@@ -636,7 +639,7 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
-        /// fetch authorization as an asynchronous operation.
+        /// Fetch authorization as an asynchronous operation.
         /// </summary>
         /// <param name="paymentId">The payment identifier.</param>
         /// <returns>Task&lt;Authorization&gt;.</returns>
@@ -648,7 +651,7 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
-        /// fetch payment as an asynchronous operation.
+        /// Fetch payment as an asynchronous operation.
         /// </summary>
         /// <param name="paymentId">The payment identifier.</param>
         /// <returns>Task&lt;Payment&gt;.</returns>
@@ -660,7 +663,7 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
-        /// create payment type as an asynchronous operation.
+        /// Create payment type as an asynchronous operation.
         /// </summary>
         /// <typeparam name="TPaymentBase">The type of the t payment base.</typeparam>
         /// <param name="config">The configuration.</param>
@@ -676,7 +679,7 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
-        /// shipment as an asynchronous operation.
+        /// Shipment as an asynchronous operation.
         /// </summary>
         /// <param name="paymentId">The payment identifier.</param>
         /// <param name="invoiceId">The invoice identifier.</param>

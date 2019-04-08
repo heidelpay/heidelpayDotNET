@@ -34,21 +34,25 @@ namespace Heidelpay.Payment
         /// </summary>
         /// <value>The identifier.</value>
         public string Id { get; set; }
+
         /// <summary>
         /// Gets or sets the firstname.
         /// </summary>
         /// <value>The firstname.</value>
         public string Firstname { get; set; }
         /// <summary>
+        /// 
         /// Gets or sets the lastname.
         /// </summary>
         /// <value>The lastname.</value>
         public string Lastname { get; set; }
+
         /// <summary>
         /// Gets or sets the salutation.
         /// </summary>
         /// <value>The salutation.</value>
         public Salutation? Salutation { get; set; }
+
         /// <summary>
         /// Gets or sets the customer identifier.
         /// </summary>
@@ -67,21 +71,25 @@ namespace Heidelpay.Payment
         /// </summary>
         /// <value>The email.</value>
         public string Email { get; set; }
+
         /// <summary>
         /// Gets or sets the phone.
         /// </summary>
         /// <value>The phone.</value>
         public string Phone { get; set; }
+
         /// <summary>
         /// Gets or sets the mobile.
         /// </summary>
         /// <value>The mobile.</value>
         public string Mobile { get; set; }
+
         /// <summary>
         /// Gets or sets the billing address.
         /// </summary>
         /// <value>The billing address.</value>
         public Address BillingAddress { get; set; }
+
         /// <summary>
         /// Gets or sets the shipping address.
         /// </summary>
@@ -111,17 +119,17 @@ namespace Heidelpay.Payment
     public enum Salutation
     {
         /// <summary>
-        /// The mr
+        /// Mr
         /// </summary>
         [EnumMember(Value="mr")]
         Mr,
         /// <summary>
-        /// The ms
+        /// Ms
         /// </summary>
         [EnumMember(Value = "ms")]
         Ms,
         /// <summary>
-        /// The unknown
+        /// Unknown
         /// </summary>
         [EnumMember(Value = "unknown")]
         Unknown,

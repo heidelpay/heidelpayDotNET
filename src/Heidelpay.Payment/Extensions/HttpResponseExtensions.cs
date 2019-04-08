@@ -52,7 +52,7 @@ namespace System.Net.Http
         }
 
         /// <summary>
-        /// Ases the exception.
+        /// Returns an error object as respective payment exception.
         /// </summary>
         /// <param name="error">The error.</param>
         /// <param name="statusCode">The status code.</param>

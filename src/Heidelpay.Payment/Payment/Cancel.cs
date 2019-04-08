@@ -22,7 +22,7 @@ namespace Heidelpay.Payment
     /// Implements the <see cref="Heidelpay.Payment.PaymentTransactionBase" />
     /// </summary>
     /// <seealso cref="Heidelpay.Payment.PaymentTransactionBase" />
-    public class Cancel : PaymentTransactionBase
+    public sealed class Cancel : PaymentTransactionBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Cancel"/> class.

@@ -31,7 +31,6 @@ namespace Heidelpay.Payment.PaymentTypes
         [JsonConstructor]
         internal InvoiceGuaranteed()
         {
-
         }
 
         /// <summary>
@@ -41,7 +40,6 @@ namespace Heidelpay.Payment.PaymentTypes
         public InvoiceGuaranteed(IHeidelpay heidelpayClient)
             : base(heidelpayClient)
         {
-
         }        
 
         /// <summary>
