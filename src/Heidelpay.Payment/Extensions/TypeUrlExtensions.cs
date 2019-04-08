@@ -42,6 +42,8 @@ namespace Heidelpay.Payment.Interfaces
         /// <returns>System.String.</returns>
         public static string ResolveResourceUrl(this IRestResource value)
         {
+            Check.ThrowIfNull(value, nameof(value));
+            
             return HeidelpayRegistry.GetPath(value.GetType())
                 .Replace(PLACEHOLDER_PAYMENT_ID + "/", string.Empty)
                 .EnsureTrailingSlash();
@@ -55,6 +57,9 @@ namespace Heidelpay.Payment.Interfaces
         /// <returns>System.String.</returns>
         public static string ResolvePaymentUrl(this IRestResource value, string paymentId)
         {
+            Check.ThrowIfNull(value, nameof(value));
+            Check.ThrowIfNullOrEmpty(paymentId, nameof(paymentId));
+
             return HeidelpayRegistry.GetPath(value.GetType())
                 .Replace(PLACEHOLDER_PAYMENT_ID, paymentId)
                 .EnsureTrailingSlash();
@@ -68,6 +73,10 @@ namespace Heidelpay.Payment.Interfaces
         /// <returns>System.String.</returns>
         public static string ResolveRefundUrl(this IRestResource value, string paymentId, string chargeId)
         {
+            Check.ThrowIfNull(value, nameof(value));
+            Check.ThrowIfNullOrEmpty(paymentId, nameof(paymentId));
+            Check.ThrowIfNullOrEmpty(chargeId, nameof(chargeId));
+
             return REFUND_URL
                 .Replace(PLACEHOLDER_PAYMENT_ID, paymentId)
                 .Replace(PLACEHOLDER_CHARGE_ID, chargeId)
