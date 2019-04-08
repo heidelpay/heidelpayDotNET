@@ -43,10 +43,8 @@ namespace Heidelpay.Payment.Interfaces
         public static string ResolveResourceUrl(this IRestResource value)
         {
             Check.ThrowIfNull(value, nameof(value));
-            
-            return HeidelpayRegistry.GetPath(value.GetType())
-                .Replace(PLACEHOLDER_PAYMENT_ID + "/", string.Empty)
-                .EnsureTrailingSlash();
+
+            return InternalResolveResourceUrl(value.GetType());
         }
 
         /// <summary>
@@ -60,10 +58,32 @@ namespace Heidelpay.Payment.Interfaces
             Check.ThrowIfNull(value, nameof(value));
             Check.ThrowIfNullOrEmpty(paymentId, nameof(paymentId));
 
-            return HeidelpayRegistry.GetPath(value.GetType())
-                .Replace(PLACEHOLDER_PAYMENT_ID, paymentId)
-                .EnsureTrailingSlash();
+            return InternalResolvePaymentUrl(value.GetType(), paymentId);
         }
+
+        /// <summary>
+        /// Resolves the resource URL.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns>System.String.</returns>
+        public static string ResolveResourceUrl<T>()
+        {
+            return InternalResolveResourceUrl(typeof(T));
+        }
+
+        /// <summary>
+        /// Resolves the payment URL.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="paymentId">The payment identifier.</param>
+        /// <returns>System.String.</returns>
+        public static string ResolvePaymentUrl<T>(string paymentId)
+        {
+            Check.ThrowIfNullOrEmpty(paymentId, nameof(paymentId));
+
+            return InternalResolvePaymentUrl(typeof(T), paymentId);
+        }
+
         /// <summary>
         /// Resolves the refund URL.
         /// </summary>
@@ -77,6 +97,41 @@ namespace Heidelpay.Payment.Interfaces
             Check.ThrowIfNullOrEmpty(paymentId, nameof(paymentId));
             Check.ThrowIfNullOrEmpty(chargeId, nameof(chargeId));
 
+            return InternalResolveRefundUrl(paymentId, chargeId);
+        }
+
+        /// <summary>
+        /// Internals the resolve resource URL.
+        /// </summary>
+        /// <param name="resourceType">Type of the resource.</param>
+        /// <returns>System.String.</returns>
+        private static string InternalResolveResourceUrl(Type resourceType)
+        {
+            return HeidelpayRegistry.GetPath(resourceType)
+                .Replace(PLACEHOLDER_PAYMENT_ID + "/", string.Empty)
+                .EnsureTrailingSlash();
+        }
+
+        /// <summary>
+        /// Internals the resolve payment URL.
+        /// </summary>
+        /// <param name="resourceType">Type of the resource.</param>
+        /// <param name="paymentId">The payment identifier.</param>
+        /// <returns>System.String.</returns>
+        public static string InternalResolvePaymentUrl(Type resourceType, string paymentId)
+        {
+            return HeidelpayRegistry.GetPath(resourceType)
+                .Replace(PLACEHOLDER_PAYMENT_ID, paymentId)
+                .EnsureTrailingSlash();
+        }
+        /// <summary>
+        /// Internals the resolve refund URL.
+        /// </summary>
+        /// <param name="paymentId">The payment identifier.</param>
+        /// <param name="chargeId">The charge identifier.</param>
+        /// <returns>System.String.</returns>
+        public static string InternalResolveRefundUrl(string paymentId, string chargeId)
+        {
             return REFUND_URL
                 .Replace(PLACEHOLDER_PAYMENT_ID, paymentId)
                 .Replace(PLACEHOLDER_CHARGE_ID, chargeId)
