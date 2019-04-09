@@ -136,11 +136,11 @@ namespace Heidelpay.Payment.External.Tests.Business
             var payment = auth.Payment;
             Assert.NotNull(payment);
             
-            var paymentType = await payment.GetPaymentTypeAsync();
+            var paymentType = await payment.FetchPaymentTypeAsync();
             Assert.NotNull(paymentType);
             Assert.True(paymentType is Card);
 
-            var cust = await payment.GetCustomerAsync();
+            var cust = await payment.FetchCustomerAsync();
             Assert.NotNull(cust);
 
             Assert.Equal("Max", cust.Firstname);

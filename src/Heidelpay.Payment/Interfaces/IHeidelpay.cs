@@ -11,6 +11,7 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+using Heidelpay.Payment.PaymentTypes;
 using System;
 using System.Threading.Tasks;
 
@@ -174,7 +175,7 @@ namespace Heidelpay.Payment.Interfaces
         /// <typeparam name="TPaymentBase">The type of the t payment base.</typeparam>
         /// <param name="config">The configuration.</param>
         /// <returns>Task&lt;TPaymentBase&gt;.</returns>
-        Task<TPaymentBase> CreatePaymentTypeAsync<TPaymentBase>(Action<TPaymentBase> config = null) where TPaymentBase : class, IPaymentType;
+        Task<TPaymentBase> CreatePaymentTypeAsync<TPaymentBase>(Action<TPaymentBase> config = null) where TPaymentBase : PaymentTypeBase;
 
         /// <summary>
         /// Deletes the customer as an asynchronous operation.
@@ -249,7 +250,7 @@ namespace Heidelpay.Payment.Interfaces
         /// <typeparam name="TPaymentType">The type of the t payment type.</typeparam>
         /// <param name="typeId">The type identifier.</param>
         /// <returns>Task&lt;TPaymentType&gt;.</returns>
-        Task<TPaymentType> FetchPaymentTypeAsync<TPaymentType>(string typeId) where TPaymentType : class, IPaymentType;
+        Task<TPaymentType> FetchPaymentTypeAsync<TPaymentType>(string typeId) where TPaymentType : PaymentTypeBase;
         
         /// <summary>
         /// Shipments as an asynchronous operation.

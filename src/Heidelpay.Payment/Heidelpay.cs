@@ -607,7 +607,7 @@ namespace Heidelpay.Payment
         /// <param name="typeId">The type identifier.</param>
         /// <returns>Task&lt;TPaymentType&gt;.</returns>
         public async Task<TPaymentType> FetchPaymentTypeAsync<TPaymentType>(string typeId)
-            where TPaymentType : class, IPaymentType
+            where TPaymentType : PaymentTypeBase
         {
             Check.ThrowIfNullOrEmpty(typeId, nameof(typeId));
 
@@ -669,7 +669,7 @@ namespace Heidelpay.Payment
         /// <param name="config">The configuration.</param>
         /// <returns>Task&lt;TPaymentBase&gt;.</returns>
         public async Task<TPaymentBase> CreatePaymentTypeAsync<TPaymentBase>(Action<TPaymentBase> config = null)
-             where TPaymentBase : class, IPaymentType
+             where TPaymentBase : PaymentTypeBase
         {
             var instance = (TPaymentBase)Activator.CreateInstance(typeof(TPaymentBase), nonPublic: true);
 

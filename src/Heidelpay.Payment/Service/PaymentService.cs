@@ -13,6 +13,7 @@
 // ***********************************************************************
 using Heidelpay.Payment.Communication.Internal;
 using Heidelpay.Payment.Interfaces;
+using Heidelpay.Payment.PaymentTypes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,7 +54,7 @@ namespace Heidelpay.Payment.Service
         /// <param name="paymentType">Type of the payment.</param>
         /// <returns>Task&lt;TPaymentBase&gt;.</returns>
         public async Task<TPaymentBase> CreatePaymentTypeAsync<TPaymentBase>(TPaymentBase paymentType)
-            where TPaymentBase : class, IPaymentType
+            where TPaymentBase : PaymentTypeBase
         {
             return await ApiPostAsync(paymentType);
         }
@@ -175,7 +176,7 @@ namespace Heidelpay.Payment.Service
         /// <param name="paymentTypeId">The payment type identifier.</param>
         /// <returns>Task&lt;TPaymentBase&gt;.</returns>
         public async Task<TPaymentBase> FetchPaymentTypeAsync<TPaymentBase>(string paymentTypeId)
-            where TPaymentBase : class, IPaymentType
+            where TPaymentBase : PaymentTypeBase
         {
             Check.ThrowIfNullOrEmpty(paymentTypeId, nameof(paymentTypeId));
             var paymentType = Registry.ResolvePaymentType(paymentTypeId);

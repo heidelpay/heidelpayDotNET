@@ -72,7 +72,8 @@ namespace Heidelpay.Payment.External.Tests.Business
             Assert.NotNull(cancel?.Id);
             Assert.Equal(10.01m, cancel.Amount);
 
-            var fetched = Heidelpay.FetchCancelAsync(auth.PaymentId, cancel.Id); 
+            var fetched = Heidelpay.FetchCancelAsync(auth.PaymentId, cancel.Id);
+            Assert.NotNull(fetched?.Id);
         }
 
         [Fact]
