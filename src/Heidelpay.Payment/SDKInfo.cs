@@ -25,20 +25,6 @@ namespace Heidelpay.Payment
         /// Gets the version.
         /// </summary>
         /// <value>The version.</value>
-        public static string Version { get; }
-
-        /// <summary>
-        /// Initializes static members of the <see cref="SDKInfo"/> class.
-        /// </summary>
-        static SDKInfo()
-        {
-            var assembly = Assembly.GetExecutingAssembly();
-
-            var attr = Attribute
-                .GetCustomAttribute(assembly, typeof(AssemblyInformationalVersionAttribute))
-                    as AssemblyInformationalVersionAttribute;
-
-            Version = attr?.InformationalVersion;
-        }
+        public static string Version { get; } = ThisAssembly.AssemblyInformationalVersion;
     }
 }

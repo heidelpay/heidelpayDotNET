@@ -181,7 +181,7 @@ namespace Heidelpay.Payment
         /// Initializes a new instance of the <see cref="Payment" /> class.
         /// </summary>
         /// <param name="paymentType">Type of the payment.</param>
-        public Payment(IPaymentType paymentType)
+        public Payment(PaymentTypeBase paymentType)
             : this(((IHeidelpayProvider)paymentType).Heidelpay)
         {
             Resources.TypeId = paymentType.Id;
@@ -315,15 +315,12 @@ namespace Heidelpay.Payment
             return CancelList?.FirstOrDefault(x => string.Equals(x.Id, cancelId, StringComparison.InvariantCultureIgnoreCase));
         }
 
-        /// <summary>
-        /// The customer
-        /// </summary>
         Customer customer;
         /// <summary>
-        /// get customer as an asynchronous operation.
+        /// fetch customer as an asynchronous operation.
         /// </summary>
         /// <returns>Task&lt;Customer&gt;.</returns>
-        public async Task<Customer> GetCustomerAsync()
+        public async Task<Customer> FetchCustomerAsync()
         {
             if (customer == null && IsNotEmpty(Resources?.CustomerId))
                 customer = await Heidelpay.FetchCustomerAsync(Resources?.CustomerId);
@@ -331,15 +328,12 @@ namespace Heidelpay.Payment
             return customer;
         }
 
+        PaymentTypeBase paymentType;
         /// <summary>
-        /// The payment type
+        /// fetch payment type as an asynchronous operation.
         /// </summary>
-        IPaymentType paymentType;
-        /// <summary>
-        /// get payment type as an asynchronous operation.
-        /// </summary>
-        /// <returns>Task&lt;IPaymentType&gt;.</returns>
-        public async Task<IPaymentType> GetPaymentTypeAsync()
+        /// <returns>Task&lt;PaymentTypeBase&gt;.</returns>
+        public async Task<PaymentTypeBase> FetchPaymentTypeAsync()
         {
             if (paymentType == null && IsNotEmpty(Resources?.TypeId))
                 paymentType = await Heidelpay.FetchPaymentTypeAsync<PaymentTypeBase>(Resources?.TypeId);
@@ -347,15 +341,12 @@ namespace Heidelpay.Payment
             return paymentType;
         }
 
-        /// <summary>
-        /// The meta data
-        /// </summary>
         MetaData metaData;
         /// <summary>
-        /// get meta data as an asynchronous operation.
+        /// fetch meta data as an asynchronous operation.
         /// </summary>
         /// <returns>Task&lt;MetaData&gt;.</returns>
-        public async Task<MetaData> GetMetaDataAsync()
+        public async Task<MetaData> FetchMetaDataAsync()
         {
             if (metaData == null && IsNotEmpty(Resources?.MetadataId))
                 metaData = await Heidelpay.FetchMetaDataAsync(Resources?.MetadataId);
@@ -363,15 +354,12 @@ namespace Heidelpay.Payment
             return metaData;
         }
 
-        /// <summary>
-        /// The basket
-        /// </summary>
         Basket basket;
         /// <summary>
-        /// get basket as an asynchronous operation.
+        /// fetch basket as an asynchronous operation.
         /// </summary>
         /// <returns>Task&lt;Basket&gt;.</returns>
-        public async Task<Basket> GetBasketAsync()
+        public async Task<Basket> FetchBasketAsync()
         {
             if (basket == null && IsNotEmpty(Resources?.BasketId))
                 basket = await Heidelpay.FetchBasketAsync(Resources?.BasketId);

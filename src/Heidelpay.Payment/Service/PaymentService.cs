@@ -13,6 +13,7 @@
 // ***********************************************************************
 using Heidelpay.Payment.Communication.Internal;
 using Heidelpay.Payment.Interfaces;
+using Heidelpay.Payment.PaymentTypes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,7 +54,7 @@ namespace Heidelpay.Payment.Service
         /// <param name="paymentType">Type of the payment.</param>
         /// <returns>Task&lt;TPaymentBase&gt;.</returns>
         public async Task<TPaymentBase> CreatePaymentTypeAsync<TPaymentBase>(TPaymentBase paymentType)
-            where TPaymentBase : class, IPaymentType
+            where TPaymentBase : PaymentTypeBase
         {
             return await ApiPostAsync(paymentType);
         }
@@ -175,10 +176,10 @@ namespace Heidelpay.Payment.Service
         /// <param name="paymentTypeId">The payment type identifier.</param>
         /// <returns>Task&lt;TPaymentBase&gt;.</returns>
         public async Task<TPaymentBase> FetchPaymentTypeAsync<TPaymentBase>(string paymentTypeId)
-            where TPaymentBase : class, IPaymentType
+            where TPaymentBase : PaymentTypeBase
         {
             Check.ThrowIfNullOrEmpty(paymentTypeId, nameof(paymentTypeId));
-            var paymentType = HeidelpayRegistry.ResolvePaymentType(paymentTypeId);
+            var paymentType = Registry.ResolvePaymentType(paymentTypeId);
 
             return await ApiGetAsync(paymentType, paymentTypeId) as TPaymentBase;
         }
@@ -325,7 +326,7 @@ namespace Heidelpay.Payment.Service
         {
             var shipment = new Shipment { InvoiceId = invoiceId };
 
-            var paymentUri = BuildUri(HeidelpayRegistry.ResolvePaymentUrl<Shipment>(paymentId), null);
+            var paymentUri = BuildUri(Registry.ResolvePaymentUrl<Shipment>(paymentId), null);
             var result = await ApiPostAsync(shipment, paymentUri, false);
 
             result.Payment = await FetchPaymentAsync(result.Resources.PaymentId);
@@ -344,7 +345,7 @@ namespace Heidelpay.Payment.Service
             Check.ThrowIfNull(charge, nameof(charge));
             Check.ThrowIfNullOrEmpty(paymentId, nameof(paymentId));
 
-            var result = await ApiPostAsync(charge, BuildUri(HeidelpayRegistry.ResolvePaymentUrl<Charge>(paymentId), null), getAfterPost: false);
+            var result = await ApiPostAsync(charge, BuildUri(Registry.ResolvePaymentUrl<Charge>(paymentId), null), getAfterPost: false);
 
             result.Payment = await FetchPaymentAsync(result.Resources.PaymentId);
 
@@ -362,7 +363,7 @@ namespace Heidelpay.Payment.Service
             Check.ThrowIfNull(cancel, nameof(cancel));
             Check.ThrowIfNullOrEmpty(paymentId, nameof(paymentId));
 
-            var result = await ApiPostAsync(cancel, BuildUri(HeidelpayRegistry.ResolvePaymentUrl<Cancel>(paymentId), null), getAfterPost: false);
+            var result = await ApiPostAsync(cancel, BuildUri(Registry.ResolvePaymentUrl<Cancel>(paymentId), null), getAfterPost: false);
 
             result.Payment = await FetchPaymentAsync(result.PaymentId);
 
@@ -383,7 +384,7 @@ namespace Heidelpay.Payment.Service
             Check.ThrowIfNullOrEmpty(paymentId, nameof(paymentId));
 
             var result = await ApiPostAsync(cancel, 
-                BuildUri(HeidelpayRegistry.ResolveRefundUrl(paymentId, chargeId), null), 
+                BuildUri(Registry.ResolveRefundUrl(paymentId, chargeId), null), 
                 getAfterPost: false);
 
             result.Payment = await FetchPaymentAsync(result.Resources.PaymentId);
@@ -604,7 +605,7 @@ namespace Heidelpay.Payment.Service
         private Uri BuildUri<T>(string id = null)
             where T : class, IRestResource
         {
-            return BuildUri(HeidelpayRegistry.ResolveResourceUrl<T>(), id);
+            return BuildUri(Registry.ResolveResourceUrl<T>(), id);
         }
 
         /// <summary>
@@ -615,7 +616,7 @@ namespace Heidelpay.Payment.Service
         /// <returns>Uri.</returns>
         private Uri BuildUri(Type resourceType, string id = null)
         {
-            return BuildUri(HeidelpayRegistry.ResolveResourceUrl(resourceType), id);
+            return BuildUri(Registry.ResolveResourceUrl(resourceType), id);
         }
 
         /// <summary>

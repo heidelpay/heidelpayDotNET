@@ -37,7 +37,7 @@ namespace System.Net.Http
 
             if (!privateKey.EndsWith(":"))
             {
-                privateKey = privateKey + ":";
+                privateKey += ":";
             }
 
             var privateKeyBase64 = privateKey.EncodeToBase64();

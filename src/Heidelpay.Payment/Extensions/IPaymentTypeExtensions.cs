@@ -25,35 +25,35 @@ namespace Heidelpay.Payment.PaymentTypes
         /// <summary>
         /// authorize as an asynchronous operation.
         /// </summary>
-        /// <param name="payment">The payment.</param>
+        /// <param name="paymentType">The payment.</param>
         /// <param name="amount">The amount.</param>
         /// <param name="currency">The currency.</param>
         /// <param name="returnUrl">The return URL.</param>
         /// <param name="customer">The customer.</param>
         /// <returns>Task&lt;Authorization&gt;.</returns>
-        public static async Task<Authorization> AuthorizeAsync(this IAuthorizedPaymentType payment, 
+        public static async Task<Authorization> AuthorizeAsync(this IAuthorizedPaymentType paymentType, 
             decimal amount, string currency, Uri returnUrl, Customer customer = null)
         {
-            Check.ThrowIfNull(payment.Heidelpay, "Heidelpay", "You cannot call authorize methods on an unattached resource. Please either inject or use heidelpay instance directly.");
+            Check.ThrowIfNull(paymentType.Heidelpay, "Heidelpay", "You cannot call authorize methods on an unattached resource. Please either inject or use heidelpay instance directly.");
 
-            return await payment.Heidelpay.AuthorizeAsync(amount, currency, payment, returnUrl, customer);
+            return await paymentType.Heidelpay.AuthorizeAsync(amount, currency, paymentType, returnUrl, customer);
         }
 
         /// <summary>
         /// charge as an asynchronous operation.
         /// </summary>
-        /// <param name="payment">The payment.</param>
+        /// <param name="paymentType">The payment.</param>
         /// <param name="amount">The amount.</param>
         /// <param name="currency">The currency.</param>
         /// <param name="returnUrl">The return URL.</param>
         /// <param name="customer">The customer.</param>
         /// <returns>Task&lt;Charge&gt;.</returns>
-        public static async Task<Charge> ChargeAsync(this IChargeablePaymentType payment, 
+        public static async Task<Charge> ChargeAsync(this IChargeablePaymentType paymentType, 
             decimal amount, string currency, Uri returnUrl, Customer customer = null)
         {
-            Check.ThrowIfNull(payment.Heidelpay, "Heidelpay", "You cannot call charge methods on an unattached resource. Please either inject or use heidelpay instance directly.");
+            Check.ThrowIfNull(paymentType.Heidelpay, "Heidelpay", "You cannot call charge methods on an unattached resource. Please either inject or use heidelpay instance directly.");
 
-            return await payment.Heidelpay.ChargeAsync(amount, currency, payment, returnUrl, customer);
+            return await paymentType.Heidelpay.ChargeAsync(amount, currency, paymentType, returnUrl, customer);
         }
     }
 }

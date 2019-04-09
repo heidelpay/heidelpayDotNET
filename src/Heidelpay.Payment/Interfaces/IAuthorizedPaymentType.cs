@@ -15,10 +15,10 @@ namespace Heidelpay.Payment.Interfaces
 {
     /// <summary>
     /// Interface IAuthorizedPaymentType
-    /// Implements the <see cref="Heidelpay.Payment.Interfaces.IPaymentType" />
+    /// Implements the <see cref="Heidelpay.Payment.Interfaces.IRestResource" />
     /// </summary>
-    /// <seealso cref="Heidelpay.Payment.Interfaces.IPaymentType" />
-    public interface IAuthorizedPaymentType : IPaymentType
+    /// <seealso cref="Heidelpay.Payment.Interfaces.IRestResource" />
+    public interface IAuthorizedPaymentType : IRestResource
     {
         /// <summary>
         /// Gets the heidelpay client.

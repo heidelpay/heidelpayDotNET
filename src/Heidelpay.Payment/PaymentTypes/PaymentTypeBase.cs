@@ -17,12 +17,12 @@ namespace Heidelpay.Payment.PaymentTypes
 {
     /// <summary>
     /// Class PaymentTypeBase.
-    /// Implements the <see cref="Heidelpay.Payment.Interfaces.IPaymentType" />
+    /// Implements the <see cref="Heidelpay.Payment.Interfaces.IRestResource" />
     /// Implements the <see cref="Heidelpay.Payment.Interfaces.IHeidelpayProvider" />
     /// </summary>
-    /// <seealso cref="Heidelpay.Payment.Interfaces.IPaymentType" />
+    /// <seealso cref="Heidelpay.Payment.Interfaces.IRestResource" />
     /// <seealso cref="Heidelpay.Payment.Interfaces.IHeidelpayProvider" />
-    public abstract class PaymentTypeBase : IPaymentType, IHeidelpayProvider
+    public abstract class PaymentTypeBase : IRestResource, IHeidelpayProvider
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PaymentTypeBase"/> class.
