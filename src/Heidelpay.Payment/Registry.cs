@@ -2,19 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace Heidelpay.Payment
 {
-    internal static class HeidelpayRegistry
+    internal static class Registry
     {
-        /// <summary>
-        /// The placeholder charge identifier
-        /// </summary>
         private const string PLACEHOLDER_CHARGE_ID = "<chargeId>";
-
-        /// <summary>
-        /// The placeholder payment identifier
-        /// </summary>
         private const string PLACEHOLDER_PAYMENT_ID = "<paymentId>";
 
         private const string PAYMENTTYPE_PREFIX = "types/";
@@ -22,52 +16,44 @@ namespace Heidelpay.Payment
         private const string REFUND_PREFIX = PAYMENT_PREFIX + "charges/<chargeId>/cancels";
 
 
-        static ReadOnlyDictionary<Type, ValueTuple<string, RegistryType>> ResourcePathRegistry { get; } = new ReadOnlyDictionary<Type, ValueTuple<string, RegistryType>>(new Dictionary<Type, ValueTuple<string, RegistryType>>
+        static ReadOnlyDictionary<Type, ValueTuple<string, string, RegistryType>> ResourcePathRegistry { get; } = new ReadOnlyDictionary<Type, ValueTuple<string, string, RegistryType>>(new Dictionary<Type, ValueTuple<string, string, RegistryType>>
         {
-            [typeof(Basket)] = ("baskets", RegistryType.Root),
-            [typeof(Customer)] = ("customers", RegistryType.Root),
-            [typeof(MetaData)] = ("metadata", RegistryType.Root),
-            [typeof(Payment)] = ("payments", RegistryType.Root),
+            [typeof(Basket)] = ("baskets", null, RegistryType.Root),
+            [typeof(Customer)] = ("customers", null, RegistryType.Root),
+            [typeof(MetaData)] = ("metadata", null, RegistryType.Root),
+            [typeof(Payment)] = ("payments", null, RegistryType.Root),
 
-            [typeof(Authorization)] = ("authorize", RegistryType.Payment),
-            [typeof(Cancel)] = ("authorize/cancels", RegistryType.Payment),
-            [typeof(Charge)] = ("charges", RegistryType.Payment),
-            [typeof(Shipment)] = ("shipments", RegistryType.Payment),
+            [typeof(Authorization)] = ("authorize", null, RegistryType.Payment),
+            [typeof(Cancel)] = ("authorize/cancels", null, RegistryType.Payment),
+            [typeof(Charge)] = ("charges", null, RegistryType.Payment),
+            [typeof(Shipment)] = ("shipments", null, RegistryType.Payment),
 
-            [typeof(Card)] = ("card", RegistryType.PaymentType),
-            [typeof(Eps)] = ("eps", RegistryType.PaymentType),
-            [typeof(Giropay)] = ("giropay", RegistryType.PaymentType),
-            [typeof(Ideal)] = ("ideal", RegistryType.PaymentType),
-            [typeof(Invoice)] = ("invoice", RegistryType.PaymentType),
-            [typeof(InvoiceFactoring)] = ("invoice-factoring", RegistryType.PaymentType),
-            [typeof(InvoiceGuaranteed)] = ("invoice-guaranteed", RegistryType.PaymentType),
-            [typeof(Paypal)] = ("paypal", RegistryType.PaymentType),
-            [typeof(Pis)] = ("pis", RegistryType.PaymentType),
-            [typeof(Prepayment)] = ("prepayment", RegistryType.PaymentType),
-            [typeof(Przelewy24)] = ("przelewy24", RegistryType.PaymentType),
-            [typeof(SepaDirectDebit)] = ("sepa-direct-debit", RegistryType.PaymentType),
-            [typeof(SepaDirectDebitGuaranteed)] = ("sepa-direct-debit-guaranteed", RegistryType.PaymentType),
-            [typeof(Sofort)] = ("sofort", RegistryType.PaymentType),
+            [typeof(Card)] = ("card", "crd", RegistryType.PaymentType),
+            [typeof(Eps)] = ("eps", "eps", RegistryType.PaymentType),
+            [typeof(Giropay)] = ("giropay", "gro", RegistryType.PaymentType),
+            [typeof(Ideal)] = ("ideal", "idl", RegistryType.PaymentType),
+            [typeof(Invoice)] = ("invoice", "ivc", RegistryType.PaymentType),
+            [typeof(InvoiceFactoring)] = ("invoice-factoring", "ivf", RegistryType.PaymentType),
+            [typeof(InvoiceGuaranteed)] = ("invoice-guaranteed", "ivg", RegistryType.PaymentType),
+            [typeof(Paypal)] = ("paypal", "ppl", RegistryType.PaymentType),
+            [typeof(Pis)] = ("pis", "pis", RegistryType.PaymentType),
+            [typeof(Prepayment)] = ("prepayment", "ppy", RegistryType.PaymentType),
+            [typeof(Przelewy24)] = ("przelewy24", "p24", RegistryType.PaymentType),
+            [typeof(SepaDirectDebit)] = ("sepa-direct-debit", "sdd", RegistryType.PaymentType),
+            [typeof(SepaDirectDebitGuaranteed)] = ("sepa-direct-debit-guaranteed", "ddg", RegistryType.PaymentType),
+            [typeof(Sofort)] = ("sofort", "sft", RegistryType.PaymentType),
         });
 
-        static ReadOnlyDictionary<string, Type> PaymentTypeRegistry { get; } = new ReadOnlyDictionary<string, Type>(new Dictionary<string, Type>
-        {
-            ["crd"] = typeof(Card),
-            ["eps"] = typeof(Eps),
-            ["gro"] = typeof(Giropay),
-            ["idl"] = typeof(Ideal),
-            ["ivc"] = typeof(Invoice),
-            ["ivf"] = typeof(InvoiceFactoring),
-            ["ivg"] = typeof(InvoiceGuaranteed),
-            ["ppl"] = typeof(Paypal),
-            ["ppy"] = typeof(Prepayment),
-            ["p24"] = typeof(Przelewy24),
-            ["sdd"] = typeof(SepaDirectDebit),
-            ["ddg"] = typeof(SepaDirectDebitGuaranteed),
-            ["sft"] = typeof(Sofort),
-            ["pis"] = typeof(Pis),
-        });
+        static ReadOnlyDictionary<string, Type> PaymentTypeRegistry { get; } = new ReadOnlyDictionary<string, Type>(ResourcePathRegistry.Keys
+            .Where(x => ResourcePathRegistry[x].Item3 == RegistryType.PaymentType)
+            .ToDictionary(x => ResourcePathRegistry[x].Item2, x => x));
 
+        /// <summary>
+        /// Resolves the type of the payment.
+        /// </summary>
+        /// <param name="typeId">The type identifier.</param>
+        /// <returns>Type.</returns>
+        /// <exception cref="PaymentException">Type '" + shortTypeId + "' is currently not supported by the SDK</exception>
         public static Type ResolvePaymentType(string typeId)
         {
             var shortTypeId = ExtractTypeShortIdFromTypeId(typeId);
@@ -139,7 +125,7 @@ namespace Heidelpay.Payment
             if (!ResourcePathRegistry.ContainsKey(type))
                 return string.Empty;
 
-            (string Path, RegistryType Type) entry = ResourcePathRegistry[type];
+            (string Path, string ShortName, RegistryType Type) entry = ResourcePathRegistry[type];
             var result = entry.Path;
 
             switch (entry.Type)

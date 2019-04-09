@@ -31,14 +31,5 @@ namespace Heidelpay.Payment
         internal Cancel()
         {
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Cancel"/> class.
-        /// </summary>
-        /// <param name="heidelpayClient">The heidelpay client instance.</param>
-        public Cancel(IHeidelpay heidelpayClient)
-            : base(heidelpayClient)
-        {
-        }
     }
 }
