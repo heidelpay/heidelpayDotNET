@@ -6,6 +6,9 @@ using System.Linq;
 
 namespace Heidelpay.Payment
 {
+    /// <summary>
+    /// Class Registry.
+    /// </summary>
     internal static class Registry
     {
         private const string PLACEHOLDER_CHARGE_ID = "<chargeId>";
