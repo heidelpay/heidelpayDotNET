@@ -1,9 +1,12 @@
+using Heidelpay.Payment.Communication;
 using Heidelpay.Payment.Extensions;
 using Heidelpay.Payment.Interfaces;
 using Heidelpay.Payment.Options;
 using Heidelpay.Payment.PaymentTypes;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Moq;
 using System;
 using System.IO;
 using System.Net.Http;
@@ -173,6 +176,37 @@ namespace Heidelpay.Payment.External.Tests
             var factory = provider.GetService<IHttpClientFactory>();
 
             Assert.NotNull(factory);
+        }
+
+        [Fact]
+        public async Task LoggingTest()
+        {
+            var services = new ServiceCollection();
+
+            var logger = new Mock<ILogger<RestClient>>();
+
+            services.AddHttpClient();
+            services.AddTransient(x => logger.Object);
+
+            services.AddHeidelpay(opt =>
+            {
+                opt.ApiEndpoint = new Uri("https://api.heidelpay.com");
+                opt.ApiVersion = "v1";
+                opt.ApiKey = "s-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n";
+            });
+
+            var serviceProvider = services.BuildServiceProvider();
+
+            var heidelpay = serviceProvider.GetService<IHeidelpay>();
+
+            var card = await heidelpay.CreatePaymentTypeAsync(PaymentTypeCard);
+
+            logger.Verify(m => m.Log(
+                It.IsAny<LogLevel>(), 
+                It.IsAny<EventId>(),
+                It.IsAny<object>(), 
+                It.IsAny<TaskCanceledException>(), 
+                It.IsAny<Func<object, Exception, string>>()));
         }
 
         protected Action<Card> PaymentTypeCard { get; } = new Action<Card>(x =>
