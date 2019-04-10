@@ -49,5 +49,15 @@ namespace Heidelpay.Payment.Options
         /// </summary>
         /// <value>The locale.</value>
         public string Locale { get; set; }
+
+        internal static HeidelpayApiOptions BuildDefault(string key)
+        {
+            return new HeidelpayApiOptions
+            {
+                ApiKey = key,
+                ApiEndpoint = new Uri("https://api.heidelpay.com"),
+                ApiVersion = "v1",
+            };
+        }
     }
 }

@@ -44,6 +44,28 @@ namespace Heidelpay.Payment
         internal PaymentService PaymentService { get; }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="HeidelpayClient"/> class.
+        /// </summary>
+        /// <param name="apiKey">The API key.</param>
+        public HeidelpayClient(string apiKey)
+            : this(Microsoft.Extensions.Options.Options.Create(HeidelpayApiOptions.BuildDefault(apiKey)), new HttpClient())
+        {
+            Check.ThrowIfNullOrEmpty(apiKey, nameof(apiKey));
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HeidelpayClient"/> class.
+        /// </summary>
+        /// <param name="apiKey">The API key.</param>
+        /// <param name="httpClient">The HTTP client.</param>
+        public HeidelpayClient(string apiKey, HttpClient httpClient)
+            : this(Microsoft.Extensions.Options.Options.Create(HeidelpayApiOptions.BuildDefault(apiKey)), httpClient)
+        {
+            Check.ThrowIfNullOrEmpty(apiKey, nameof(apiKey));
+            Check.ThrowIfNull(httpClient, nameof(httpClient));
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Heidelpay"/> class.
         /// </summary>
         /// <param name="options">The options.</param>
