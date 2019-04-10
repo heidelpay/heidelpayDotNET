@@ -89,6 +89,15 @@ namespace Heidelpay.Payment.External.Tests
         }
 
         [Fact]
+        public async Task Heidelpay_Simplest_Usage()
+        {
+            var heidelpay = new HeidelpayClient("s-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n");
+            var authorization = await heidelpay.AuthorizeAsync(decimal.One, "EUR", "s-crd-fm7tifzkqewy", new Uri("https://www.heidelpay.com"));
+
+            Assert.NotNull(authorization?.Id);
+        }
+
+        [Fact]
         public async Task Heidelpay_Simple_Usage_Test_With_HttpClient()
         {
             var heidelpay = new HeidelpayClient(new HeidelpayApiOptions
