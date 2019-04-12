@@ -47,10 +47,6 @@ namespace Heidelpay.Payment.Communication
         /// </summary>
         private readonly IHttpClientFactory factory;
         /// <summary>
-        /// The API options
-        /// </summary>
-        private readonly IOptions<HeidelpayApiOptions> apiOptions;
-        /// <summary>
         /// The logger
         /// </summary>
         private readonly ILogger<RestClient> logger;
@@ -59,7 +55,7 @@ namespace Heidelpay.Payment.Communication
         /// Gets the options.
         /// </summary>
         /// <value>The options.</value>
-        public HeidelpayApiOptions Options { get => apiOptions?.Value; }
+        public HeidelpayApiOptions Options { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RestClient"/> class.
@@ -69,9 +65,15 @@ namespace Heidelpay.Payment.Communication
         /// <param name="logger">The logger.</param>
         public RestClient(IHttpClientFactory factory, IOptions<HeidelpayApiOptions> apiOptions, ILogger<RestClient> logger)
         {
+            Check.ThrowIfNull(factory, nameof(factory));
+            Check.ThrowIfNull(apiOptions?.Value, nameof(apiOptions));
+
+            apiOptions.Value.ThrowIfInvalid();
+
             this.factory = factory;
-            this.apiOptions = apiOptions;
             this.logger = logger;
+
+            Options = apiOptions.Value.EnsureDefaultSet();
         }
 
         /// <summary>
@@ -195,8 +197,8 @@ namespace Heidelpay.Payment.Communication
         {
             var resolvedFactory = (factory ?? this.factory);
 
-            return !string.IsNullOrWhiteSpace(apiOptions?.Value?.HttpClientName)
-                ? resolvedFactory.CreateClient(apiOptions.Value.HttpClientName)
+            return !string.IsNullOrWhiteSpace(Options?.HttpClientName)
+                ? resolvedFactory.CreateClient(Options.HttpClientName)
                 : resolvedFactory.CreateClient();
         }
 
@@ -210,8 +212,8 @@ namespace Heidelpay.Payment.Communication
             Check.ThrowIfNull(request, nameof(request));
 
             request.AddUserAgent(GetType().FullName);
-            request.AddAuthentication(apiOptions?.Value?.ApiKey);
-            request.AddLocale(apiOptions?.Value?.Locale);
+            request.AddAuthentication(Options?.ApiKey);
+            request.AddLocale(Options?.Locale);
 
             LogRequest(request);
 

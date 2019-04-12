@@ -9,11 +9,10 @@ namespace Heidelpay.Payment.External.Tests.Business.Errors
     public class ErrorTests : PaymentTypeTestsBase
     {
         [Fact]
-        public async Task Key_Missing()
+        public void Key_Missing()
         {
-            var heidelpay = BuildHeidelpay("");
-            var exception = await Assert.ThrowsAsync<PaymentException>(
-                () => heidelpay.AuthorizeAsync(10m, "EUR", "s-crd-200"));
+            var exception = Assert.Throws<PaymentException>(
+                () => BuildHeidelpay(""));
 
             Assert.NotNull(exception);
             Assert.Single(exception.PaymentErrorList);

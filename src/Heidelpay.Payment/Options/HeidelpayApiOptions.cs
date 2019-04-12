@@ -12,6 +12,8 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
+using System.Globalization;
+using System.Linq;
 
 namespace Heidelpay.Payment.Options
 {
@@ -20,6 +22,23 @@ namespace Heidelpay.Payment.Options
     /// </summary>
     public class HeidelpayApiOptions
     {
+        /// <summary>
+        /// Gets the default API endpoint.
+        /// </summary>
+        /// <value>The default API endpoint.</value>
+        public static Uri DefaultApiEndpoint { get; } = new Uri("https://api.heidelpay.com");
+        /// <summary>
+        /// Gets the default API version.
+        /// </summary>
+        /// <value>The default API version.</value>
+        public static string DefaultApiVersion { get; } = "v1";
+
+        /// <summary>
+        /// Gets the default locale.
+        /// </summary>
+        /// <value>The default locale.</value>
+        public static string DefaultLocale { get; } = "en-US";
+
         /// <summary>
         /// Gets or sets the API endpoint.
         /// </summary>
@@ -55,9 +74,43 @@ namespace Heidelpay.Payment.Options
             return new HeidelpayApiOptions
             {
                 ApiKey = key,
-                ApiEndpoint = new Uri("https://api.heidelpay.com"),
-                ApiVersion = "v1",
+                ApiEndpoint = DefaultApiEndpoint,
+                ApiVersion = DefaultApiVersion,
+                Locale = DefaultLocale,
             };
+        }
+
+        internal void ThrowIfInvalid()
+        {
+            Check.ThrowIfNullOrWhiteSpace(ApiKey, 
+                "PrivateKey/PublicKey is missing", "An error occured.", "API.000.000.001");
+
+            Check.ThrowIfFalse(string.IsNullOrWhiteSpace(Locale) || DoesCultureExist(Locale), 
+                "Options contain invalid configuration values");
+
+            Check.ThrowIfFalse(HttpClientName == null || !string.IsNullOrWhiteSpace(HttpClientName), 
+                "Options contain invalid configuration values");
+        }
+
+        private static bool DoesCultureExist(string cultureName)
+        {
+            return CultureInfo
+                .GetCultures(CultureTypes.AllCultures)
+                .Any(culture => string.Equals(culture.Name, cultureName, StringComparison.CurrentCultureIgnoreCase));
+        }
+
+        internal HeidelpayApiOptions EnsureDefaultSet()
+        {
+            if (ApiEndpoint == null)
+                ApiEndpoint = DefaultApiEndpoint;
+
+            if (string.IsNullOrWhiteSpace(ApiVersion))
+                ApiVersion = DefaultApiVersion;
+
+            if (string.IsNullOrWhiteSpace(Locale))
+                Locale = DefaultLocale;
+
+            return this;
         }
     }
 }

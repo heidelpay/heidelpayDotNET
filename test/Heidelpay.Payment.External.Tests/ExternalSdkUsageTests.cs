@@ -42,6 +42,30 @@ namespace Heidelpay.Payment.External.Tests
         }
 
         [Fact]
+        public async Task Heidelpay_DI_Usage_Test_With_Minimal_Settings_File()
+        {
+            var services = new ServiceCollection();
+
+            var configBuilder = new ConfigurationBuilder()
+               .SetBasePath(Directory.GetCurrentDirectory())
+               .AddJsonFile("appsettings.minimal.json", optional: true);
+
+            var config = configBuilder.Build();
+
+            services.AddHeidelpay(config.GetSection("Heidelpay"));
+
+            var serviceProvider = services.BuildServiceProvider();
+
+            var heidelpay = serviceProvider.GetService<IHeidelpay>();
+
+            Assert.NotNull(heidelpay);
+
+            var card = await heidelpay.CreatePaymentTypeAsync(PaymentTypeCard);
+
+            Assert.NotNull(card);
+        }
+
+        [Fact]
         public async Task Heidelpay_DI_Usage_Test_With_User_Setup()
         {
             var services = new ServiceCollection();
@@ -53,6 +77,30 @@ namespace Heidelpay.Payment.External.Tests
             {
                 opt.ApiEndpoint = new Uri("https://api.heidelpay.com");
                 opt.ApiVersion = "v1";
+                opt.ApiKey = "s-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n";
+            });
+
+            var serviceProvider = services.BuildServiceProvider();
+
+            var heidelpay = serviceProvider.GetService<IHeidelpay>();
+
+            Assert.NotNull(heidelpay);
+
+            var card = await heidelpay.CreatePaymentTypeAsync(PaymentTypeCard);
+
+            Assert.NotNull(card);
+        }
+
+        [Fact]
+        public async Task Heidelpay_DI_Usage_Test_With_Minimal_Setup()
+        {
+            var services = new ServiceCollection();
+
+            services.AddHttpClient();
+            services.AddLogging();
+
+            services.AddHeidelpay(opt =>
+            {
                 opt.ApiKey = "s-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n";
             });
 
@@ -215,5 +263,89 @@ namespace Heidelpay.Payment.External.Tests
             x.ExpiryDate = "03/20";
             x.CVC = "123";
         });
+
+        [Fact]
+        public void Invalid_Locale_Test()
+        {
+            var services = new ServiceCollection();
+
+            services.AddHttpClient();
+            services.AddLogging();
+
+            services.AddHeidelpay(opt =>
+            {
+                opt.ApiEndpoint = new Uri("https://api.heidelpay.com");
+                opt.ApiVersion = "v1";
+                opt.ApiKey = "s-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n";
+                opt.Locale = "xx-xx";
+            });
+
+            var serviceProvider = services.BuildServiceProvider();
+
+            var ex = Assert.Throws<PaymentException>(() => serviceProvider.GetService<IHeidelpay>());
+
+            Assert.Equal("Options contain invalid configuration values", ex.Message);
+        }
+
+        [Fact]
+        public void Valid_Locale_Test()
+        {
+            var services = new ServiceCollection();
+
+            services.AddHttpClient();
+            services.AddLogging();
+
+            services.AddHeidelpay(opt =>
+            {
+                opt.ApiKey = "s-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n";
+                opt.Locale = "de-de";
+            });
+
+            var serviceProvider = services.BuildServiceProvider();
+
+            var prov = serviceProvider.GetService<IHeidelpay>();
+        }
+
+        [Fact]
+        public void Missing_API_Key()
+        {
+            var services = new ServiceCollection();
+
+            services.AddHttpClient();
+            services.AddLogging();
+
+            services.AddHeidelpay(opt =>
+            {
+                opt.ApiEndpoint = new Uri("https://api.heidelpay.com");
+                opt.ApiVersion = "v1";
+            });
+
+            var serviceProvider = services.BuildServiceProvider();
+
+            var ex = Assert.Throws<PaymentException>(() => serviceProvider.GetService<IHeidelpay>());
+
+            Assert.Equal("PrivateKey/PublicKey is missing", ex.Message);
+        }
+
+        [Fact]
+        public void Invalid_Custom_HttpClientName()
+        {
+            var services = new ServiceCollection();
+
+            services.AddHttpClient();
+            services.AddLogging();
+
+            services.AddHeidelpay(opt =>
+            {
+                opt.ApiKey = "s-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n";
+                opt.HttpClientName = "   ";
+            });
+
+            var serviceProvider = services.BuildServiceProvider();
+
+            var ex = Assert.Throws<PaymentException>(() => serviceProvider.GetService<IHeidelpay>());
+
+            Assert.Equal("Options contain invalid configuration values", ex.Message);
+        }
     }
 }

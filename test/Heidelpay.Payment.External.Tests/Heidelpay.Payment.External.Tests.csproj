@@ -7,9 +7,13 @@
 
   <ItemGroup>
     <None Remove="appsettings.external.json" />
+    <None Remove="appsettings.minimal.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="appsettings.minimal.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="appsettings.external.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

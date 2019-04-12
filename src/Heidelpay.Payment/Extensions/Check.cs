@@ -53,6 +53,23 @@ namespace System
         }
 
         /// <summary>
+        /// Throws if null or white space.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <param name="merchantMessage">The merchant message.</param>
+        /// <param name="customerMessage">The customer message.</param>
+        /// <param name="code">The code.</param>
+        /// <param name="returnUrl">The return URL.</param>
+        /// <exception cref="PaymentException"></exception>
+        public static void ThrowIfNullOrWhiteSpace(string obj, string merchantMessage = null, string customerMessage = null, string code = null, Uri returnUrl = null)
+        {
+            if (string.IsNullOrWhiteSpace(obj))
+            {
+                throw new PaymentException(merchantMessage, customerMessage, code, returnUrl);
+            }
+        }
+
+        /// <summary>
         /// Throws if true.
         /// </summary>
         /// <param name="func">if set to <c>true</c> [function].</param>
@@ -61,6 +78,20 @@ namespace System
         public static void ThrowIfTrue(bool func, string message)
         {
             if(func)
+            {
+                throw new PaymentException(message);
+            }
+        }
+
+        /// <summary>
+        /// Throws if false.
+        /// </summary>
+        /// <param name="func">if set to <c>false</c> [function].</param>
+        /// <param name="message">The message.</param>
+        /// <exception cref="PaymentException"></exception>
+        public static void ThrowIfFalse(bool? func, string message)
+        {
+            if (!func.GetValueOrDefault())
             {
                 throw new PaymentException(message);
             }

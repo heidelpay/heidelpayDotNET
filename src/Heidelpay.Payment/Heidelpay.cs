@@ -66,6 +66,18 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="HeidelpayClient"/> class.
+        /// </summary>
+        /// <param name="apiKey">The API key.</param>
+        /// <param name="httpClientFactory">The HTTP client factory.</param>
+        public HeidelpayClient(string apiKey, IHttpClientFactory httpClientFactory)
+            : this(Microsoft.Extensions.Options.Options.Create(HeidelpayApiOptions.BuildDefault(apiKey)), httpClientFactory)
+        {
+            Check.ThrowIfNullOrEmpty(apiKey, nameof(apiKey));
+            Check.ThrowIfNull(httpClientFactory, nameof(httpClientFactory));
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Heidelpay"/> class.
         /// </summary>
         /// <param name="options">The options.</param>
@@ -721,6 +733,9 @@ namespace Heidelpay.Payment
         /// <returns>IRestClient.</returns>
         private IRestClient BuildRestClient(IHttpClientFactory httpClientFactory, IOptions<HeidelpayApiOptions> options)
         {
+            Check.ThrowIfNull(httpClientFactory, nameof(httpClientFactory));
+            Check.ThrowIfNull(options?.Value, nameof(options));
+
             return new RestClient(httpClientFactory, options, new NullLogger<RestClient>());
         }
 
