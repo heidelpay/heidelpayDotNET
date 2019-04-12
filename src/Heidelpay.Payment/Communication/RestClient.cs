@@ -67,7 +67,8 @@ namespace Heidelpay.Payment.Communication
         {
             Check.ThrowIfNull(factory, nameof(factory));
             Check.ThrowIfNull(apiOptions?.Value, nameof(apiOptions));
-            Check.ThrowIfFalse(apiOptions?.Value.IsValid(), "Options contain invalid configuration values");
+
+            apiOptions.Value.ThrowIfInvalid();
 
             this.factory = factory;
             this.logger = logger;

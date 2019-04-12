@@ -80,11 +80,16 @@ namespace Heidelpay.Payment.Options
             };
         }
 
-        internal bool IsValid()
+        internal void ThrowIfInvalid()
         {
-            return !string.IsNullOrWhiteSpace(ApiKey) &&
-                (string.IsNullOrWhiteSpace(Locale) || DoesCultureExist(Locale)) &&
-                (HttpClientName == null || !string.IsNullOrWhiteSpace(HttpClientName));
+            Check.ThrowIfNullOrWhiteSpace(ApiKey, 
+                "PrivateKey/PublicKey is missing", "An error occured.", "API.000.000.001");
+
+            Check.ThrowIfFalse(string.IsNullOrWhiteSpace(Locale) || DoesCultureExist(Locale), 
+                "Options contain invalid configuration values");
+
+            Check.ThrowIfFalse(HttpClientName == null || !string.IsNullOrWhiteSpace(HttpClientName), 
+                "Options contain invalid configuration values");
         }
 
         private static bool DoesCultureExist(string cultureName)
