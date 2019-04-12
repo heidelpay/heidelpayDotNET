@@ -12,6 +12,8 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
+using System.Globalization;
+using System.Linq;
 
 namespace Heidelpay.Payment.Options
 {
@@ -20,6 +22,23 @@ namespace Heidelpay.Payment.Options
     /// </summary>
     public class HeidelpayApiOptions
     {
+        /// <summary>
+        /// Gets the default API endpoint.
+        /// </summary>
+        /// <value>The default API endpoint.</value>
+        public static Uri DefaultApiEndpoint { get; } = new Uri("https://api.heidelpay.com");
+        /// <summary>
+        /// Gets the default API version.
+        /// </summary>
+        /// <value>The default API version.</value>
+        public static string DefaultApiVersion { get; } = "v1";
+
+        /// <summary>
+        /// Gets the default locale.
+        /// </summary>
+        /// <value>The default locale.</value>
+        public static string DefaultLocale { get; } = "en-US";
+
         /// <summary>
         /// Gets or sets the API endpoint.
         /// </summary>
@@ -55,9 +74,36 @@ namespace Heidelpay.Payment.Options
             return new HeidelpayApiOptions
             {
                 ApiKey = key,
-                ApiEndpoint = new Uri("https://api.heidelpay.com"),
-                ApiVersion = "v1",
+                ApiEndpoint = DefaultApiEndpoint,
+                ApiVersion = DefaultApiVersion,
+                Locale = DefaultLocale,
             };
+        }
+
+        internal bool IsValid()
+        {
+            return !string.IsNullOrWhiteSpace(ApiKey) &&
+                (string.IsNullOrWhiteSpace(Locale) || DoesCultureExist(Locale)) &&
+                (HttpClientName == null || !string.IsNullOrWhiteSpace(HttpClientName));
+        }
+
+        private static bool DoesCultureExist(string cultureName)
+        {
+            return CultureInfo
+                .GetCultures(CultureTypes.AllCultures)
+                .Any(culture => string.Equals(culture.Name, cultureName, StringComparison.CurrentCultureIgnoreCase));
+        }
+
+        internal void EnsureDefaultsSet()
+        {
+            if (ApiEndpoint == null)
+                ApiEndpoint = DefaultApiEndpoint;
+
+            if (string.IsNullOrWhiteSpace(ApiVersion))
+                ApiVersion = DefaultApiVersion;
+
+            if (string.IsNullOrWhiteSpace(Locale))
+                Locale = DefaultLocale;
         }
     }
 }

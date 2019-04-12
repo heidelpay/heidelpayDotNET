@@ -41,7 +41,7 @@ namespace System.Net.Http
             }
 
             var privateKeyBase64 = privateKey.EncodeToBase64();
-            request.Headers.Add(RestClientConstants.AUTHORIZATION, $"{RestClientConstants.BASIC}{privateKeyBase64}");
+            request.Headers.Add(RestClientConstants.AUTHORIZATION, $"{RestClientConstants.BASIC} {privateKeyBase64}");
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace System.Net.Http
         {
             Check.ThrowIfNull(request, nameof(request));
 
-            request.Headers.Add(RestClientConstants.ACCEPT_LANGUAGE, locale ?? RestClientConstants.ACCEPT_LANGUAGE_DEFAULT_VALUE);
+            request.Headers.Add(RestClientConstants.ACCEPT_LANGUAGE, locale);
         }
     }
 }

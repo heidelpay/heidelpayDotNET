@@ -69,6 +69,12 @@ namespace Heidelpay.Payment.Communication
         /// <param name="logger">The logger.</param>
         public RestClient(IHttpClientFactory factory, IOptions<HeidelpayApiOptions> apiOptions, ILogger<RestClient> logger)
         {
+            Check.ThrowIfNull(factory, nameof(factory));
+            Check.ThrowIfNull(apiOptions?.Value, nameof(apiOptions));
+            Check.ThrowIfFalse(apiOptions?.Value.IsValid(), "Options contain invalid configuration values");
+
+
+
             this.factory = factory;
             this.apiOptions = apiOptions;
             this.logger = logger;

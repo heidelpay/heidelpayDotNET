@@ -29,7 +29,7 @@ namespace Heidelpay.Payment.Communication
         /// <summary>
         /// The basic
         /// </summary>
-        public const string BASIC = "Basic ";
+        public const string BASIC = "Basic";
         /// <summary>
         /// The user agent prefix
         /// </summary>
@@ -46,9 +46,5 @@ namespace Heidelpay.Payment.Communication
         /// The accept language
         /// </summary>
         public const string ACCEPT_LANGUAGE = "Accept-Language";
-        /// <summary>
-        /// The accept language default value
-        /// </summary>
-        public const string ACCEPT_LANGUAGE_DEFAULT_VALUE = "en-US";
     }
 }

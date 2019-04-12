@@ -67,6 +67,20 @@ namespace System
         }
 
         /// <summary>
+        /// Throws if false.
+        /// </summary>
+        /// <param name="func">if set to <c>false</c> [function].</param>
+        /// <param name="message">The message.</param>
+        /// <exception cref="PaymentException"></exception>
+        public static void ThrowIfFalse(bool? func, string message)
+        {
+            if (!func.GetValueOrDefault())
+            {
+                throw new PaymentException(message);
+            }
+        }
+
+        /// <summary>
         /// Throws if true.
         /// </summary>
         /// <param name="func">if set to <c>true</c> [function].</param>

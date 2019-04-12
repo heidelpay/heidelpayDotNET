@@ -215,5 +215,89 @@ namespace Heidelpay.Payment.External.Tests
             x.ExpiryDate = "03/20";
             x.CVC = "123";
         });
+
+        [Fact]
+        public async Task Invalid_Locale_Test()
+        {
+            var services = new ServiceCollection();
+
+            services.AddHttpClient();
+            services.AddLogging();
+
+            services.AddHeidelpay(opt =>
+            {
+                opt.ApiEndpoint = new Uri("https://api.heidelpay.com");
+                opt.ApiVersion = "v1";
+                opt.ApiKey = "s-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n";
+                opt.Locale = "xx-xx";
+            });
+
+            var serviceProvider = services.BuildServiceProvider();
+
+            var ex = Assert.Throws<PaymentException>(() => serviceProvider.GetService<IHeidelpay>());
+
+            Assert.Equal("Options contain invalid configuration values", ex.Message);
+        }
+
+        [Fact]
+        public async Task Valid_Locale_Test()
+        {
+            var services = new ServiceCollection();
+
+            services.AddHttpClient();
+            services.AddLogging();
+
+            services.AddHeidelpay(opt =>
+            {
+                opt.ApiKey = "s-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n";
+                opt.Locale = "de-de";
+            });
+
+            var serviceProvider = services.BuildServiceProvider();
+
+            var prov = serviceProvider.GetService<IHeidelpay>();
+        }
+
+        [Fact]
+        public async Task Missing_API_Key()
+        {
+            var services = new ServiceCollection();
+
+            services.AddHttpClient();
+            services.AddLogging();
+
+            services.AddHeidelpay(opt =>
+            {
+                opt.ApiEndpoint = new Uri("https://api.heidelpay.com");
+                opt.ApiVersion = "v1";
+            });
+
+            var serviceProvider = services.BuildServiceProvider();
+
+            var ex = Assert.Throws<PaymentException>(() => serviceProvider.GetService<IHeidelpay>());
+
+            Assert.Equal("Options contain invalid configuration values", ex.Message);
+        }
+
+        [Fact]
+        public async Task Invalid_Custom_HttpClientName()
+        {
+            var services = new ServiceCollection();
+
+            services.AddHttpClient();
+            services.AddLogging();
+
+            services.AddHeidelpay(opt =>
+            {
+                opt.ApiKey = "s-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n";
+                opt.HttpClientName = "   ";
+            });
+
+            var serviceProvider = services.BuildServiceProvider();
+
+            var ex = Assert.Throws<PaymentException>(() => serviceProvider.GetService<IHeidelpay>());
+
+            Assert.Equal("Options contain invalid configuration values", ex.Message);
+        }
     }
 }
