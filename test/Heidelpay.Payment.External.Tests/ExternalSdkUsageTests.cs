@@ -42,6 +42,30 @@ namespace Heidelpay.Payment.External.Tests
         }
 
         [Fact]
+        public async Task Heidelpay_DI_Usage_Test_With_Minimal_Settings_File()
+        {
+            var services = new ServiceCollection();
+
+            var configBuilder = new ConfigurationBuilder()
+               .SetBasePath(Directory.GetCurrentDirectory())
+               .AddJsonFile("appsettings.minimal.json", optional: true);
+
+            var config = configBuilder.Build();
+
+            services.AddHeidelpay(config.GetSection("Heidelpay"));
+
+            var serviceProvider = services.BuildServiceProvider();
+
+            var heidelpay = serviceProvider.GetService<IHeidelpay>();
+
+            Assert.NotNull(heidelpay);
+
+            var card = await heidelpay.CreatePaymentTypeAsync(PaymentTypeCard);
+
+            Assert.NotNull(card);
+        }
+
+        [Fact]
         public async Task Heidelpay_DI_Usage_Test_With_User_Setup()
         {
             var services = new ServiceCollection();

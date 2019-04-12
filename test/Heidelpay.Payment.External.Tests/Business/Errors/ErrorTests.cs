@@ -8,7 +8,7 @@ namespace Heidelpay.Payment.External.Tests.Business.Errors
 {
     public class ErrorTests : PaymentTypeTestsBase
     {
-        [Fact]
+        [Fact(Skip = "This is no longer possible as this will be checked by the SDK already")]
         public async Task Key_Missing()
         {
             var heidelpay = BuildHeidelpay("");
