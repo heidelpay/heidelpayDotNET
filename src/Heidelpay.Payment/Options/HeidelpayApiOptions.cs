@@ -94,7 +94,7 @@ namespace Heidelpay.Payment.Options
                 .Any(culture => string.Equals(culture.Name, cultureName, StringComparison.CurrentCultureIgnoreCase));
         }
 
-        internal void EnsureDefaultsSet()
+        internal HeidelpayApiOptions EnsureDefaultSet()
         {
             if (ApiEndpoint == null)
                 ApiEndpoint = DefaultApiEndpoint;
@@ -104,6 +104,8 @@ namespace Heidelpay.Payment.Options
 
             if (string.IsNullOrWhiteSpace(Locale))
                 Locale = DefaultLocale;
+
+            return this;
         }
     }
 }

@@ -68,6 +68,30 @@ namespace Heidelpay.Payment.External.Tests
         }
 
         [Fact]
+        public async Task Heidelpay_DI_Usage_Test_With_Minimal_Setup()
+        {
+            var services = new ServiceCollection();
+
+            services.AddHttpClient();
+            services.AddLogging();
+
+            services.AddHeidelpay(opt =>
+            {
+                opt.ApiKey = "s-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n";
+            });
+
+            var serviceProvider = services.BuildServiceProvider();
+
+            var heidelpay = serviceProvider.GetService<IHeidelpay>();
+
+            Assert.NotNull(heidelpay);
+
+            var card = await heidelpay.CreatePaymentTypeAsync(PaymentTypeCard);
+
+            Assert.NotNull(card);
+        }
+
+        [Fact]
         public async Task Heidelpay_DI_Usage_Test_Without_User_Setup()
         {
             var services = new ServiceCollection();
@@ -217,7 +241,7 @@ namespace Heidelpay.Payment.External.Tests
         });
 
         [Fact]
-        public async Task Invalid_Locale_Test()
+        public void Invalid_Locale_Test()
         {
             var services = new ServiceCollection();
 
@@ -240,7 +264,7 @@ namespace Heidelpay.Payment.External.Tests
         }
 
         [Fact]
-        public async Task Valid_Locale_Test()
+        public void Valid_Locale_Test()
         {
             var services = new ServiceCollection();
 
@@ -259,7 +283,7 @@ namespace Heidelpay.Payment.External.Tests
         }
 
         [Fact]
-        public async Task Missing_API_Key()
+        public void Missing_API_Key()
         {
             var services = new ServiceCollection();
 
@@ -280,7 +304,7 @@ namespace Heidelpay.Payment.External.Tests
         }
 
         [Fact]
-        public async Task Invalid_Custom_HttpClientName()
+        public void Invalid_Custom_HttpClientName()
         {
             var services = new ServiceCollection();
 
