@@ -324,7 +324,7 @@ namespace Heidelpay.Payment.External.Tests
 
             var ex = Assert.Throws<PaymentException>(() => serviceProvider.GetService<IHeidelpay>());
 
-            Assert.Equal("Options contain invalid configuration values", ex.Message);
+            Assert.Equal("PrivateKey/PublicKey is missing", ex.Message);
         }
 
         [Fact]
