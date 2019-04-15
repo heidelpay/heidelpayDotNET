@@ -17,6 +17,8 @@
 // limitations under the License.
 // ***********************************************************************
 
+using System.Collections.Generic;
+
 namespace Heidelpay.Payment.Communication
 {
     /// <summary>
