@@ -1,8 +1,13 @@
-# heidelpayDotNET
-For any issues or questions please get in touch with us via support@heidelpay.com
+# heidelpay .NET SDK
+
+The .NET SDK is written in C# as a .NET Standard 2.0 library. 
 
 # Documentation
 
-Find the latest documentation here
+Find the latest developer documentation here
 
-https://dash.readme.io/project/heidelpay/v1.0/docs/net-sdk
+https://docs.heidelpay.com/docs/net-sdk
+
+# Issues and questions
+
+For any issues or questions please get in touch with us via support@heidelpay.com
