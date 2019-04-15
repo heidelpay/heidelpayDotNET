@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <Authors>Heidelpay</Authors>
+    <Authors>Heidelpay GmbH</Authors>
   </PropertyGroup>
   <PropertyGroup>
     <LangVersion>Latest</LangVersion>
