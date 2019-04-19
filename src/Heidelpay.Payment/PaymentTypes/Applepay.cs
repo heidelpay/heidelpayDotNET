@@ -25,14 +25,36 @@ namespace Heidelpay.Payment.PaymentTypes
     /// <summary>
     /// Class Applepay. This class cannot be inherited.
     /// Implements the <see cref="Heidelpay.Payment.PaymentTypes.PaymentTypeBase" />
-    /// Implements the <see cref="Heidelpay.Payment.Interfaces.IChargeablePaymentType" />
     /// </summary>
     /// <seealso cref="Heidelpay.Payment.PaymentTypes.PaymentTypeBase" />
-    /// <seealso cref="Heidelpay.Payment.Interfaces.IChargeablePaymentType" />
     public sealed class Applepay : PaymentTypeBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Applepay"/> class.
+        /// Gets or sets the version.
+        /// </summary>
+        /// <value>The version.</value>
+        public string Version { get; set; }
+
+        /// <summary>
+        /// Gets or sets the data.
+        /// </summary>
+        /// <value>The data.</value>
+        public string Data { get; set; }
+
+        /// <summary>
+        /// Gets or sets the signature.
+        /// </summary>
+        /// <value>The signature.</value>
+        public string Signature { get; set; }
+
+        /// <summary>
+        /// Gets or sets the header.
+        /// </summary>
+        /// <value>The header.</value>
+        public ApplepayHeader Header { get; set; } = new ApplepayHeader();
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Applepay" /> class.
         /// </summary>
         [JsonConstructor]
         internal Applepay()
@@ -40,11 +62,43 @@ namespace Heidelpay.Payment.PaymentTypes
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Applepay"/> class.
+        /// Initializes a new instance of the <see cref="Applepay" /> class.
         /// </summary>
         /// <param name="heidelpayClient">The heidelpay client instance.</param>
         public Applepay(IHeidelpay heidelpayClient)
             : base(heidelpayClient)
+        {
+        }
+
+    }
+
+    /// <summary>
+    /// Class ApplepayHeader. This class cannot be inherited.
+    /// </summary>
+    public sealed class ApplepayHeader
+    {
+        /// <summary>
+        /// Gets or sets the ephemeral public key.
+        /// </summary>
+        /// <value>The ephemeral public key.</value>
+        public string EphemeralPublicKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the public key hash.
+        /// </summary>
+        /// <value>The public key hash.</value>
+        public string PublicKeyHash { get; set; }
+
+        /// <summary>
+        /// Gets or sets the transaction identifier.
+        /// </summary>
+        /// <value>The transaction identifier.</value>
+        public string TransactionId { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ApplepayHeader"/> class.
+        /// </summary>
+        public ApplepayHeader()
         {
         }
     }
