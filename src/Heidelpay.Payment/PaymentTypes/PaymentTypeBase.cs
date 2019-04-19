@@ -53,15 +53,15 @@ namespace Heidelpay.Payment.PaymentTypes
         public string Id { get; set; }
        
         /// <summary>
-        /// Gets or sets the heidelpay.
+        /// Gets or sets the heidelpay client.
         /// </summary>
-        /// <value>The heidelpay.</value>
+        /// <value>The heidelpay client.</value>
         IHeidelpay IHeidelpayProvider.Heidelpay { get; set; }
 
         /// <summary>
-        /// Gets the heidelpay.
+        /// Gets the heidelpay client.
         /// </summary>
-        /// <value>The heidelpay.</value>
+        /// <value>The heidelpay client.</value>
         protected IHeidelpay Heidelpay { get => ((IHeidelpayProvider)this).Heidelpay; }
     }
 }

@@ -82,15 +82,15 @@ namespace Heidelpay.Payment.PaymentTypes
         }
               
         /// <summary>
-        /// Gets the heidelpay.
+        /// Gets the heidelpay client.
         /// </summary>
-        /// <value>The heidelpay.</value>
+        /// <value>The heidelpay client.</value>
         IHeidelpay IChargeablePaymentType.Heidelpay => Heidelpay;
 
         /// <summary>
-        /// Gets the heidelpay.
+        /// Gets the heidelpay client.
         /// </summary>
-        /// <value>The heidelpay.</value>
+        /// <value>The heidelpay client.</value>
         IHeidelpay IAuthorizedPaymentType.Heidelpay => Heidelpay;
     }
 }

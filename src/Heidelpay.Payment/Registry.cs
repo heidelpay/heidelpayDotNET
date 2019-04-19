@@ -64,6 +64,8 @@ namespace Heidelpay.Payment
             [typeof(SepaDirectDebit)] = ("sepa-direct-debit", "sdd", RegistryType.PaymentType),
             [typeof(SepaDirectDebitGuaranteed)] = ("sepa-direct-debit-guaranteed", "ddg", RegistryType.PaymentType),
             [typeof(Sofort)] = ("sofort", "sft", RegistryType.PaymentType),
+            [typeof(Alipay)] = ("alipay", "ali", RegistryType.PaymentType),
+            [typeof(WeChatPay)] = ("wechatpay", "wcp", RegistryType.PaymentType),
         });
 
         static ReadOnlyDictionary<string, Type> PaymentTypeRegistry { get; } = new ReadOnlyDictionary<string, Type>(ResourcePathRegistry.Keys
