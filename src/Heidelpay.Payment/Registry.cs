@@ -66,6 +66,7 @@ namespace Heidelpay.Payment
             [typeof(Sofort)] = ("sofort", "sft", RegistryType.PaymentType),
             [typeof(Alipay)] = ("alipay", "ali", RegistryType.PaymentType),
             [typeof(WeChatPay)] = ("wechatpay", "wcp", RegistryType.PaymentType),
+            [typeof(Applepay)] = ("applepay", "apl", RegistryType.PaymentType),
         });
 
         static ReadOnlyDictionary<string, Type> PaymentTypeRegistry { get; } = new ReadOnlyDictionary<string, Type>(ResourcePathRegistry.Keys
