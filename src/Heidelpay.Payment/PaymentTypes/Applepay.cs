@@ -27,7 +27,7 @@ namespace Heidelpay.Payment.PaymentTypes
     /// Implements the <see cref="Heidelpay.Payment.PaymentTypes.PaymentTypeBase" />
     /// </summary>
     /// <seealso cref="Heidelpay.Payment.PaymentTypes.PaymentTypeBase" />
-    public sealed class Applepay : PaymentTypeBase
+    public sealed class Applepay : PaymentTypeBase, IAuthorizedPaymentType, IChargeablePaymentType
     {
         /// <summary>
         /// Gets or sets the version.
@@ -70,6 +70,8 @@ namespace Heidelpay.Payment.PaymentTypes
         {
         }
 
+        IHeidelpay IAuthorizedPaymentType.Heidelpay => Heidelpay;
+        IHeidelpay IChargeablePaymentType.Heidelpay => Heidelpay;
     }
 
     /// <summary>
