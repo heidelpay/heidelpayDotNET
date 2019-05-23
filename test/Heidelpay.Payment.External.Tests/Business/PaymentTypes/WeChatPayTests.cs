@@ -37,7 +37,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
 
             Assert.NotNull(createdTypeInstance?.Id);
 
-            var fetchedCard = await Heidelpay.FetchPaymentTypeAsync<Alipay>(createdTypeInstance.Id);
+            var fetchedCard = await Heidelpay.FetchPaymentTypeAsync<WeChatPay>(createdTypeInstance.Id);
 
             Assert.NotNull(fetchedCard?.Id);
         }

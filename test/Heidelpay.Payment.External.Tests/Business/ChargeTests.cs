@@ -94,7 +94,7 @@ namespace Heidelpay.Payment.External.Tests.Business
 
             Assert.NotNull(charge?.Id);
             Assert.NotNull(charge?.RedirectUrl);
-            Assert.Equal("COR.000.200.000", charge.Message.Code);
+            Assert.Equal("COR.000.100.112", charge.Message.Code);
             Assert.NotNull(charge.Message.Customer);
             Assert.NotNull(charge.Payment?.Id);
             Assert.Equal(charge.PaymentId, charge.Payment.Id);
@@ -128,7 +128,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             Assert.Equal(builtCharge.OrderId, charge.OrderId);
         }
 
-        [Fact(Skip = "Bug in API, Ticket AHC-1197")]
+        [Fact]
         public async Task Charge_With_3ds_False()
         {
             var card = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCard);
@@ -148,7 +148,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             Assert.False(charge.Card3ds);
         }
 
-        [Fact(Skip = "Bug in API, Ticket AHC-1197")]
+        [Fact]
         public async Task Charge_With_3ds_True()
         {
             var card = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCard);
