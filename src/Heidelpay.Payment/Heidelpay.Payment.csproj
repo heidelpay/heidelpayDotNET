@@ -10,7 +10,7 @@
     <Authors>heidelpay GmbH, tieto Austria GmbH</Authors>
     <Description>The Heidelpay .NET SDK provides an easy way to integrate payment functionality on your backend .NET application server.</Description>
     <PackageId>Heidelpay.Payment</PackageId>
-    <PackageTags>heidelpay;payment;credit;cards;money;sdk;paypal;eps;giropay;sofort;przelewy24</PackageTags>
+    <PackageTags>heidelpay;payment;credit;cards;money;sdk;paypal;eps;giropay;sofort;przelewy24;alipay;wechatpay</PackageTags>
     <PackageProjectUrl>https://github.com/heidelpay/heidelpayDotNET</PackageProjectUrl>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
   </PropertyGroup>

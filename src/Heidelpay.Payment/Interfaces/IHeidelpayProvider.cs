@@ -27,7 +27,7 @@ namespace Heidelpay.Payment.Interfaces
         /// <summary>
         /// Gets or sets the heidelpay client.
         /// </summary>
-        /// <value>The heidelpay.</value>
+        /// <value>The heidelpay client.</value>
         IHeidelpay Heidelpay { get; set; }
     }
 }
