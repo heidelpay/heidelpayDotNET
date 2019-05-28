@@ -121,8 +121,10 @@ namespace Heidelpay.Payment.External.Tests.Business
                 AmountVat = 80.4m,
                 Quantity = 5,
                 Title = "Apple iPhone",
+                SubTitle = "Yet another Phone",
                 Unit = "Pc.",
                 Vat = 19,
+                ImageUrl = "https://www.heidelpay.com/typo3conf/ext/heidelpay_site/Resources/Public/Images/Heidelpay-Logo_weiss.svg"
             });
             return basket;
         }
