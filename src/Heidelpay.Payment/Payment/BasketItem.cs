@@ -83,5 +83,17 @@ namespace Heidelpay.Payment
         /// </summary>
         /// <value>The title.</value>
         public string Title { get; set; }
+
+        /// <summary>
+        /// Gets or sets the sub title.
+        /// </summary>
+        /// <value>The sub title.</value>
+        public string SubTitle { get; set; }
+
+        /// <summary>
+        /// Gets or sets the image URL.
+        /// </summary>
+        /// <value>The image URL.</value>
+        public string ImageUrl { get; set; }
     }
 }
