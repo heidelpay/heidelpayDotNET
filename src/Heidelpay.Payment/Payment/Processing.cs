@@ -48,5 +48,53 @@ namespace Heidelpay.Payment
         /// <value>The short identifier.</value>
         [JsonProperty]
         public string ShortId { get; internal set; }
+
+        /// <summary>
+        /// Gets or sets the descriptor.
+        /// </summary>
+        /// <value>
+        /// The descriptor.
+        /// </value>
+        public string Descriptor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the bic.
+        /// </summary>
+        /// <value>
+        /// The bic.
+        /// </value>
+        public string Bic { get; set; }
+
+        /// <summary>
+        /// Gets or sets the iban.
+        /// </summary>
+        /// <value>
+        /// The iban.
+        /// </value>
+        public string Iban { get; set; }
+
+        /// <summary>
+        /// Gets or sets the holder.
+        /// </summary>
+        /// <value>
+        /// The holder.
+        /// </value>
+        public string Holder { get; set; }
+
+        /// <summary>
+        /// Gets or sets the PDF link.
+        /// </summary>
+        /// <value>
+        /// The PDF link.
+        /// </value>
+        public string PdfLink { get; set; }
+
+        /// <summary>
+        /// Gets or sets the external order identifier.
+        /// </summary>
+        /// <value>
+        /// The external order identifier.
+        /// </value>
+        public string ExternalOrderId { get; set; }
     }
 }
