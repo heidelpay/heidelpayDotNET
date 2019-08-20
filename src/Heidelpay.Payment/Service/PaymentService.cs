@@ -216,7 +216,23 @@ namespace Heidelpay.Payment.Service
 
             var payment = await FetchPaymentAsync(paymentId);
 
-            return payment.ChargesList.FirstOrDefault(x => x.Id.Equals(chargeId, StringComparison.InvariantCultureIgnoreCase));
+            return payment.GetCharge(chargeId);
+        }
+
+        /// <summary>
+        /// fetch payout as an asynchronous operation.
+        /// </summary>
+        /// <param name="paymentId">The payment identifier.</param>
+        /// <param name="payoutId">The charge identifier.</param>
+        /// <returns>Task&lt;Charge&gt;.</returns>
+        public async Task<Payout> FetchPayoutAsync(string paymentId, string payoutId)
+        {
+            Check.ThrowIfNullOrEmpty(paymentId, nameof(paymentId));
+            Check.ThrowIfNullOrEmpty(payoutId, nameof(payoutId));
+
+            var payment = await FetchPaymentAsync(paymentId);
+
+            return payment.GetPayout(payoutId);
         }
 
         /// <summary>
@@ -473,6 +489,17 @@ namespace Heidelpay.Payment.Service
             return cancelList?
                 .Where(x => TRANSACTION_TYPE_CANCEL_AUTHORIZE.Equals(x.TransactionType, StringComparison.InvariantCultureIgnoreCase))
                 .ToList();
+        }
+
+        public async Task<Payout> PayoutAsync(Payout payout)
+        {
+            Check.ThrowIfNull(payout, nameof(payout));
+
+            var result = await ApiPostAsync(payout, getAfterPost: false);
+
+            result.Payment = await FetchPaymentAsync(result.Resources.PaymentId);
+
+            return result;
         }
 
         /// <summary>

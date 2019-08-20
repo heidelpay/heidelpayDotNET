@@ -34,6 +34,12 @@ namespace Heidelpay.Payment
     /// <seealso cref="Heidelpay.Payment.PaymentTransactionBase" />
     public sealed class Authorization : PaymentTransactionBase
     {
+        /// <summary>
+        /// Gets or sets the effective interest rate.
+        /// </summary>
+        /// <value>
+        /// The effective interest rate.
+        /// </value>
         public decimal EffectiveInterestRate { get; set; }
 
         /// <summary>

@@ -53,12 +53,28 @@ namespace Heidelpay.Payment.PaymentTypes
         /// <value>The header.</value>
         public ApplepayHeader Header { get; set; } = new ApplepayHeader();
 
+        /// <summary>Gets or sets the number.</summary>
+        /// <value>The number.</value>
         public string Number { get; set; }
 
+        /// <summary>Gets or sets the expiry date.</summary>
+        /// <value>The expiry date.</value>
         public string ExpiryDate { get; set; }
 
+        /// <summary>
+        /// Gets or sets the currency code.
+        /// </summary>
+        /// <value>
+        /// The currency code.
+        /// </value>
         public string CurrencyCode { get; set; }
 
+        /// <summary>
+        /// Gets or sets the transaction amount.
+        /// </summary>
+        /// <value>
+        /// The transaction amount.
+        /// </value>
         public decimal TransactionAmount { get; set; }
 
         /// <summary>
@@ -111,5 +127,59 @@ namespace Heidelpay.Payment.PaymentTypes
         public ApplepayHeader()
         {
         }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class ApplepayResponse
+    {
+        /// <summary>
+        /// Gets or sets the identifier.
+        /// </summary>
+        /// <value>
+        /// The identifier.
+        /// </value>
+        public string Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="ApplepayResponse"/> is recurring.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if recurring; otherwise, <c>false</c>.
+        /// </value>
+        public bool Recurring { get; set; }
+
+        /// <summary>
+        /// Gets or sets the application primary account number.
+        /// </summary>
+        /// <value>
+        /// The application primary account number.
+        /// </value>
+        public string ApplicationPrimaryAccountNumber { get; set; }
+
+        /// <summary>
+        /// Gets or sets the application expiration date.
+        /// </summary>
+        /// <value>
+        /// The application expiration date.
+        /// </value>
+        public string ApplicationExpirationDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the currency code.
+        /// </summary>
+        /// <value>
+        /// The currency code.
+        /// </value>
+        public string CurrencyCode { get; set; }
+
+        /// <summary>
+        /// Gets or sets the transaction amount.
+        /// </summary>
+        /// <value>
+        /// The transaction amount.
+        /// </value>
+        public decimal TransactionAmount { get; set; }
     }
 }

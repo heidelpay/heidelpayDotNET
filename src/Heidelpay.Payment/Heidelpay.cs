@@ -443,6 +443,45 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
+        /// Payout as an asynchronous operation.
+        /// </summary>
+        /// <param name="amount">The amount.</param>
+        /// <param name="currency">The currency.</param>
+        /// <param name="paymentType">Type of the payment.</param>
+        /// <param name="returnUrl">The return URL.</param>
+        /// <returns></returns>
+        public async Task<Payout> PayoutAsync(decimal amount, string currency, IChargeablePaymentType paymentType, Uri returnUrl)
+        {
+            Check.ThrowIfNullOrEmpty(currency, nameof(currency));
+
+            var typeId = await EnsureRestResourceCreatedAsync(paymentType);
+
+            return await PayoutAsync(new Payout
+            {
+                Amount = amount,
+                Currency = currency,
+                Resources = new Resources
+                {
+                    TypeId = typeId,
+                },
+                ReturnUrl = returnUrl,
+            });
+        }
+
+        /// <summary>
+        /// Payout as an asynchronous operation.
+        /// </summary>
+        /// <param name="payout">The payout.</param>
+        /// <returns></returns>
+        public async Task<Payout> PayoutAsync(Payout payout)
+        {
+            Check.ThrowIfNull(payout, nameof(payout));
+
+            return await PaymentService.PayoutAsync(payout);
+        }
+
+
+        /// <summary>
         /// Authorize as an asynchronous operation.
         /// </summary>
         /// <param name="amount">The amount.</param>
@@ -596,6 +635,20 @@ namespace Heidelpay.Payment
             Check.ThrowIfNullOrEmpty(chargeId, nameof(chargeId));
 
             return await PaymentService.FetchChargeAsync(paymentId, chargeId);
+        }
+
+        /// <summary>
+        /// Fetch payout as an asynchronous operation.
+        /// </summary>
+        /// <param name="paymentId">The payment identifier.</param>
+        /// <param name="payoutId">The charge identifier.</param>
+        /// <returns>Task&lt;Charge&gt;.</returns>
+        public async Task<Payout> FetchPayoutAsync(string paymentId, string payoutId)
+        {
+            Check.ThrowIfNullOrEmpty(paymentId, nameof(paymentId));
+            Check.ThrowIfNullOrEmpty(payoutId, nameof(payoutId));
+
+            return await PaymentService.FetchPayoutAsync(paymentId, payoutId);
         }
 
         /// <summary>

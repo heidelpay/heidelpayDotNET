@@ -51,6 +51,14 @@ namespace Heidelpay.Payment.PaymentTypes
         /// </summary>
         /// <value>The identifier.</value>
         public string Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="PaymentTypeBase"/> is recurring.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if recurring; otherwise, <c>false</c>.
+        /// </value>
+        public bool Recurring { get; set; }
        
         /// <summary>
         /// Gets or sets the heidelpay client.

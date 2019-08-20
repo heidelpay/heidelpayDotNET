@@ -49,6 +49,7 @@ namespace Heidelpay.Payment
             [typeof(Cancel)] = ("authorize/cancels", null, RegistryType.Payment),
             [typeof(Charge)] = ("charges", null, RegistryType.Payment),
             [typeof(Shipment)] = ("shipments", null, RegistryType.Payment),
+            [typeof(Payout)] = ("payouts", null, RegistryType.Payment),
 
             [typeof(Card)] = ("card", "crd", RegistryType.PaymentType),
             [typeof(Eps)] = ("eps", "eps", RegistryType.PaymentType),

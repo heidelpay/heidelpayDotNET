@@ -78,6 +78,14 @@ namespace Heidelpay.Payment
         public bool? Card3ds { get; set; }
 
         /// <summary>
+        /// Gets or sets the payment reference.
+        /// </summary>
+        /// <value>
+        /// The payment reference.
+        /// </value>
+        public string PaymentReference { get; set; }
+
+        /// <summary>
         /// Gets or sets the order identifier.
         /// </summary>
         /// <value>The order identifier.</value>

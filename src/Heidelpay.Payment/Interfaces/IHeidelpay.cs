@@ -64,7 +64,7 @@ namespace Heidelpay.Payment.Interfaces
         /// <param name="customerId">The customer identifier.</param>
         /// <returns>Task&lt;Authorization&gt;.</returns>
         Task<Authorization> AuthorizeAsync(decimal amount, string currency, IAuthorizedPaymentType paymentType, Uri returnUrl, string customerId);
-        
+
         /// <summary>
         /// Authorizes as an asynchronous operation.
         /// </summary>
@@ -76,7 +76,7 @@ namespace Heidelpay.Payment.Interfaces
         /// <param name="card3ds"></param>
         /// <returns>Task&lt;Authorization&gt;.</returns>
         Task<Authorization> AuthorizeAsync(decimal amount, string currency, string authorizedPaymentTypeId, Uri returnUrl = null, string customerId = null, bool? card3ds = null);
-       
+
         /// <summary>
         /// Cancels the authorization as an asynchronous operation.
         /// </summary>
@@ -84,7 +84,7 @@ namespace Heidelpay.Payment.Interfaces
         /// <param name="amount">The amount.</param>
         /// <returns>Task&lt;Cancel&gt;.</returns>
         Task<Cancel> CancelAuthorizationAsync(string paymentId, decimal? amount = null);
-        
+
         /// <summary>
         /// Cancels the charge as an asynchronous operation.
         /// </summary>
@@ -93,14 +93,14 @@ namespace Heidelpay.Payment.Interfaces
         /// <param name="amount">The amount.</param>
         /// <returns>Task&lt;Cancel&gt;.</returns>
         Task<Cancel> CancelChargeAsync(string paymentId, string chargeId, decimal? amount = null);
-       
+
         /// <summary>
         /// Charges as an asynchronous operation.
         /// </summary>
         /// <param name="charge">The charge.</param>
         /// <returns>Task&lt;Charge&gt;.</returns>
         Task<Charge> ChargeAsync(Charge charge);
-        
+
         /// <summary>
         /// Charges as an asynchronous operation.
         /// </summary>
@@ -110,7 +110,7 @@ namespace Heidelpay.Payment.Interfaces
         /// <param name="card3ds">if set to <c>true</c> [card3ds].</param>
         /// <returns>Task&lt;Charge&gt;.</returns>
         Task<Charge> ChargeAsync(decimal amount, string currency, IChargeablePaymentType paymentType, bool? card3ds = null);
-       
+
         /// <summary>
         /// Charges as an asynchronous operation.
         /// </summary>
@@ -135,7 +135,7 @@ namespace Heidelpay.Payment.Interfaces
         /// <param name="card3ds">if set to <c>true</c> [card3ds].</param>
         /// <returns>Task&lt;Charge&gt;.</returns>
         Task<Charge> ChargeAsync(decimal amount, string currency, IChargeablePaymentType paymentType, Uri returnUrl, Customer customer, Basket basket, string invoiceId = null, bool? card3ds = null);
-       
+
         /// <summary>
         /// Charges as an asynchronous operation.
         /// </summary>
@@ -147,7 +147,7 @@ namespace Heidelpay.Payment.Interfaces
         /// <param name="card3ds">if set to <c>true</c> [card3ds].</param>
         /// <returns>Task&lt;Charge&gt;.</returns>
         Task<Charge> ChargeAsync(decimal amount, string currency, IChargeablePaymentType paymentType, Uri returnUrl, string customerId, bool? card3ds = null);
-        
+
         /// <summary>
         /// Charges as an asynchronous operation.
         /// </summary>
@@ -167,7 +167,7 @@ namespace Heidelpay.Payment.Interfaces
         /// <param name="amount">The amount.</param>
         /// <returns>Task&lt;Charge&gt;.</returns>
         Task<Charge> ChargeAuthorizationAsync(string paymentId, decimal? amount = null);
-        
+
         /// <summary>
         /// Creates the customer as an asynchronous operation.
         /// </summary>
@@ -203,7 +203,7 @@ namespace Heidelpay.Payment.Interfaces
         /// <param name="basketId">The basket identifier.</param>
         /// <returns>Task&lt;Basket&gt;.</returns>
         Task<Basket> FetchBasketAsync(string basketId);
-        
+
         /// <summary>
         /// Fetches the charge as an asynchronous operation.
         /// </summary>
@@ -211,6 +211,14 @@ namespace Heidelpay.Payment.Interfaces
         /// <param name="chargeId">The charge identifier.</param>
         /// <returns>Task&lt;Charge&gt;.</returns>
         Task<Charge> FetchChargeAsync(string paymentId, string chargeId);
+
+        /// <summary>
+        /// Fetches the payout as an asynchronous operation.
+        /// </summary>
+        /// <param name="paymentId">The payment identifier.</param>
+        /// <param name="chargeId">The charge identifier.</param>
+        /// <returns>Task&lt;Charge&gt;.</returns>
+        Task<Payout> FetchPayoutAsync(string paymentId, string chargeId);
 
         /// <summary>
         /// Fetches the cancel as an asynchronous operation.
@@ -235,7 +243,7 @@ namespace Heidelpay.Payment.Interfaces
         /// <param name="customerId">The customer identifier.</param>
         /// <returns>Task&lt;Customer&gt;.</returns>
         Task<Customer> FetchCustomerAsync(string customerId);
-       
+
         /// <summary>
         /// Fetches the meta data as an asynchronous operation.
         /// </summary>
@@ -257,7 +265,7 @@ namespace Heidelpay.Payment.Interfaces
         /// <param name="typeId">The type identifier.</param>
         /// <returns>Task&lt;TPaymentType&gt;.</returns>
         Task<TPaymentType> FetchPaymentTypeAsync<TPaymentType>(string typeId) where TPaymentType : PaymentTypeBase;
-        
+
         /// <summary>
         /// Shipments as an asynchronous operation.
         /// </summary>
@@ -293,5 +301,22 @@ namespace Heidelpay.Payment.Interfaces
         /// <param name="customer">The customer.</param>
         /// <returns>Task&lt;Customer&gt;.</returns>
         Task<Basket> UpdateBasketAsync(Basket customer);
+
+        /// <summary>
+        /// Payout as an asynchronous operation.
+        /// </summary>
+        /// <param name="amount">The amount.</param>
+        /// <param name="currency">The currency.</param>
+        /// <param name="paymentType">Type of the payment.</param>
+        /// <param name="returnUrl">The return URL.</param>
+        /// <returns></returns>
+        Task<Payout> PayoutAsync(decimal amount, string currency, IChargeablePaymentType paymentType, Uri returnUrl);
+
+        /// <summary>
+        /// Payout as an asynchronous operation.
+        /// </summary>
+        /// <param name="payout">The payout.</param>
+        /// <returns></returns>
+        Task<Payout> PayoutAsync(Payout payout);
     }
 }
