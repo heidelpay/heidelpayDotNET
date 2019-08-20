@@ -64,6 +64,14 @@ namespace Heidelpay.Payment.PaymentTypes
         public bool? ThreeDs { get; set; }
 
         /// <summary>
+        /// Gets or sets the card details.
+        /// </summary>
+        /// <value>
+        /// The card details.
+        /// </value>
+        public CardDetails CardDetails { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Card"/> class.
         /// </summary>
         [JsonConstructor]
@@ -91,5 +99,67 @@ namespace Heidelpay.Payment.PaymentTypes
         /// </summary>
         /// <value>The heidelpay client.</value>
         IHeidelpay IAuthorizedPaymentType.Heidelpay => Heidelpay;
+    }
+
+    /// <summary>
+    /// CardDetails
+    /// </summary>
+    public class CardDetails
+    {
+        /// <summary>
+        /// Gets or sets the type of the card.
+        /// </summary>
+        /// <value>
+        /// The type of the card.
+        /// </value>
+        public string CardType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the account.
+        /// </summary>
+        /// <value>
+        /// The account.
+        /// </value>
+        public string Account { get; set; }
+
+        /// <summary>
+        /// Gets or sets the country iso a2.
+        /// </summary>
+        /// <value>
+        /// The country iso a2.
+        /// </value>
+        public string CountryIsoA2 { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the country.
+        /// </summary>
+        /// <value>
+        /// The name of the country.
+        /// </value>
+        public string CountryName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the issuer.
+        /// </summary>
+        /// <value>
+        /// The name of the issuer.
+        /// </value>
+        public string IssuerName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the issuer URL.
+        /// </summary>
+        /// <value>
+        /// The issuer URL.
+        /// </value>
+        public string IssuerUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the issuer phone number.
+        /// </summary>
+        /// <value>
+        /// The issuer phone number.
+        /// </value>
+        public string IssuerPhoneNumber { get; set; }
     }
 }
