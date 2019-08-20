@@ -43,6 +43,8 @@ namespace Heidelpay.Payment
 
         public decimal AmountTotalVat { get; set; }
 
+        public decimal AmountTotalVat { get; set; }
+
         /// <summary>
         /// Gets or sets the amount total discount.
         /// </summary>
