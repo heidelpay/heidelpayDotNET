@@ -1,8 +1,7 @@
 ﻿// ***********************************************************************
 // Assembly         : Heidelpay.Payment
-
 // ***********************************************************************
-// <copyright file="Refund.cs" company="Heidelpay">
+// <copyright file="Payment.cs" company="Heidelpay">
 //     Copyright (c) 2019 Heidelpay GmbH. All rights reserved.
 // </copyright>
 // ***********************************************************************
@@ -17,32 +16,23 @@
 // limitations under the License.
 // ***********************************************************************
 
-using Heidelpay.Payment.Interfaces;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Heidelpay.Payment
 {
     /// <summary>
-    /// Class Refund.
-    /// Implements the <see cref="Heidelpay.Payment.PaymentBase" />
+    /// 
     /// </summary>
-    /// <seealso cref="Heidelpay.Payment.PaymentBase" />
-    public sealed class Refund : PaymentBase
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum RegistrationType
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Refund"/> class.
-        /// </summary>
-        [JsonConstructor]
-        internal Refund()
-        {
-
-        }
-
-        /// <summary>Initializes a new instance of the <see cref="T:Heidelpay.Payment.Refund"/> class.</summary>
-        /// <param name="heidelpayClient">The heidelpay client instance.</param>
-        public Refund(IHeidelpay heidelpayClient)
-            : base(heidelpayClient)
-        {
-        }
+        /// <summary />
+        REGISTERED,
+        /// <summary />
+        NOT_REGISTERED
     }
 }

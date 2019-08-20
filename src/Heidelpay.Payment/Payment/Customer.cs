@@ -1,6 +1,6 @@
 ﻿// ***********************************************************************
 // Assembly         : Heidelpay.Payment
-// Last Modified On : 04-01-2019
+
 // ***********************************************************************
 // <copyright file="Customer.cs" company="Heidelpay">
 //     Copyright (c) 2019 Heidelpay GmbH. All rights reserved.
@@ -105,17 +105,46 @@ namespace Heidelpay.Payment
         /// <summary>
         /// Initializes a new instance of the <see cref="Customer"/> class.
         /// </summary>
+        /// <param name="companyName">Name of the company.</param>
+        public Customer(string companyName)
+        {
+            this.CompanyName = companyName;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Customer"/> class.
+        /// </summary>
         public Customer(string firstName, string lastName)
         {
             this.Firstname = firstName;
             this.Lastname = lastName;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Customer"/> class.
+        /// </summary>
         [JsonConstructor]
-        internal Customer()
+        public Customer()
         {
-
+            
         }
+
+        /// <summary>
+        /// Gets or sets the company.
+        /// </summary>
+        /// <value>
+        /// The company.
+        /// </value>
+        [JsonProperty(PropertyName = "company")]
+        public string CompanyName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the company information.
+        /// </summary>
+        /// <value>
+        /// The company information.
+        /// </value>
+        public CompanyInfo CompanyInfo { get; set; }
     }
 
     /// <summary>
