@@ -1,6 +1,6 @@
 ﻿// ***********************************************************************
 // Assembly         : Heidelpay.Payment
-// Last Modified On : 04-01-2019
+
 // ***********************************************************************
 // <copyright file="RestClientErrorObject.cs" company="Heidelpay">
 //     Copyright (c) 2019 Heidelpay GmbH. All rights reserved.

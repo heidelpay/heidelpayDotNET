@@ -1,6 +1,5 @@
 ﻿// ***********************************************************************
 // Assembly         : Heidelpay.Payment
-// Last Modified On : 04-09-2019
 // ***********************************************************************
 // <copyright file="Registry.cs" company="heidelpay GmbH, tieto Austria GmbH">
 //     Copyright (c) 2019 Heidelpay GmbH. All rights reserved.

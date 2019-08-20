@@ -1,6 +1,5 @@
 ﻿// ***********************************************************************
 // Assembly         : Heidelpay.Payment
-// Last Modified On : 04-04-2019
 // ***********************************************************************
 // <copyright file="Payment.cs" company="Heidelpay">
 //     Copyright (c) 2019 Heidelpay GmbH. All rights reserved.

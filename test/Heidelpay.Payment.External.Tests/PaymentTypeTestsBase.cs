@@ -67,10 +67,30 @@ namespace Heidelpay.Payment.External.Tests.Business
 
         protected Customer GetMinimumCustomer()
         {
-            return new Customer( "Max", "Musterperson" );
+            return new Customer("Max", "Musterperson") { BillingAddress = TestAddress };
         }
 
-        protected Customer GetMaximumCustomerSameAddress(String customerId)
+        protected Customer GetMinimumBusinessCustomerRegistered()
+        {
+            var cust = new Customer("Heidelpay GmbH");
+            cust.BillingAddress = TestAddress;
+            cust.CompanyInfo = CompanyInfo.BuildRegistered();
+            cust.CompanyInfo.CommercialRegisterNumber = "HRB337681 MANNHEIM";
+            return cust;
+        }
+
+        protected Customer GetMaximumBusinessCustomerRegistered()
+        {
+            var cust = GetMaximumCustomer(GetRandomId(), "Heidelpay GmbH");
+            cust.BillingAddress = TestAddress;
+            cust.CompanyInfo = CompanyInfo.BuildRegistered();
+            cust.CompanyInfo.CommercialRegisterNumber = "HRB337681 MANNHEIM";
+            cust.CompanyInfo.CommercialSector = CommercialSector.AIR_TRANSPORT;
+            return cust;
+        }
+
+
+        protected Customer GetMaximumCustomerSameAddress(string customerId)
         {
             TryParseDateTime("1974-03-10", out DateTime dt);
 
@@ -85,8 +105,9 @@ namespace Heidelpay.Payment.External.Tests.Business
                 ShippingAddress = TestAddress,
             };
         }
-        protected Customer GetMaximumCustomer(String customerId)
-        {
+
+        protected Customer GetMaximumCustomer(string customerId, string companyName = null)
+        { 
             TryParseDateTime("1974-03-10", out DateTime dt);
 
             return new Customer("Max", "Musterperson")
@@ -97,6 +118,7 @@ namespace Heidelpay.Payment.External.Tests.Business
                 Mobile = "+43676123456",
                 BirthDate = dt,
                 BillingAddress = TestAddress,
+                CompanyName = companyName,
                 ShippingAddress = new Address { Name = "Schubert", Street = "Vangerowstraße 18", City = "Heidelberg", Country = "BW", Zip = "69115", State = "DE" },
             };
         }

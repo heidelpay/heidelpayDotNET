@@ -1,7 +1,7 @@
 ﻿// ***********************************************************************
 // Assembly         : Heidelpay.Payment
 // Last Modified By : berghtho
-// Last Modified On : 04-01-2019
+
 // ***********************************************************************
 // <copyright file="Cancel.cs" company="Heidelpay">
 //     Copyright (c) 2019 Heidelpay GmbH. All rights reserved.

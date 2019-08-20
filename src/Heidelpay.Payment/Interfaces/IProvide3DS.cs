@@ -1,6 +1,5 @@
 ﻿// ***********************************************************************
 // Assembly         : Heidelpay.Payment
-// Last Modified On : 04-08-2019
 // ***********************************************************************
 // <copyright file="IProvide3DS.cs" company="heidelpay GmbH, tieto Austria GmbH">
 //     Copyright (c) 2019 Heidelpay GmbH. All rights reserved.
