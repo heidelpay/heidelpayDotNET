@@ -30,4 +30,13 @@ namespace Heidelpay.Payment.Interfaces
         /// <value>The identifier.</value>
         string Id { get; set; }
     }
+
+    /// <summary>
+    /// Marker interface
+    /// </summary>
+    /// <seealso cref="Heidelpay.Payment.Interfaces.IRestResource" />
+    public interface IPaymentType : IRestResource
+    {
+
+    }
 }

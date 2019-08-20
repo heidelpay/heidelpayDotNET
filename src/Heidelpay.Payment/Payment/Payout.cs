@@ -41,5 +41,10 @@ namespace Heidelpay.Payment
             : base(heidelpayClient)
         {
         }
+
+        public Payout(IHeidelpay heidelpayClient, IPaymentType paymentType)
+            : base(heidelpayClient, paymentTypeId: paymentType.Id)
+        {
+        }
     }
 }
