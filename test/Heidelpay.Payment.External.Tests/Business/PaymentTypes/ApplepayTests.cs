@@ -39,5 +39,37 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
 
             Assert.NotNull(fetched?.Id);
         }
+
+        [Fact]
+        public async Task Authorize_PaymentType_object()
+        {
+            var result = await Heidelpay.CreatePaymentTypeAsync(ConfigurePaymentType);
+            var auth = await Heidelpay.AuthorizeAsync(decimal.One, "EUR", result, ShopReturnUri);
+            Assert.NotNull(result?.Id);
+            Assert.NotNull(auth?.Id);
+            Assert.Equal(Status.Success, auth.Status);
+        }
+
+        [Fact]
+        public async Task Authorize_PaymentType_typeId()
+        {
+            var result = await Heidelpay.CreatePaymentTypeAsync(ConfigurePaymentType);
+            var auth = await Heidelpay.AuthorizeAsync(decimal.One, "EUR", result.Id, ShopReturnUri);
+            Assert.NotNull(result?.Id);
+            Assert.NotNull(auth?.Id);
+            Assert.Equal(Status.Success, auth.Status);
+        }
+
+        [Fact]
+        public async Task Charge_PaymentType()
+        {
+            var typeInstance = await Heidelpay.CreatePaymentTypeAsync(ConfigurePaymentType);
+            var charge = await typeInstance.ChargeAsync(decimal.One, "EUR", ShopReturnUri);
+            Assert.NotNull(charge?.Id);
+            Assert.Equal(decimal.One, charge.Amount);
+            Assert.Equal("EUR", charge.Currency);
+            Assert.Equal(typeInstance.Id, charge.TypeId);
+            Assert.Equal(Status.Success, charge.Status);
+        }
     }
 }
