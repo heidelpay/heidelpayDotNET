@@ -11,6 +11,9 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         {
             var result = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCard);
             Assert.NotNull(result?.Id);
+            Assert.NotNull(result?.CardDetails);
+            Assert.NotNull(result?.CardDetails?.CountryName);
+            Assert.NotNull(result?.CardDetails?.CountryIsoA2);
         }
 
         [Fact]
