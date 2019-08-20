@@ -161,8 +161,8 @@ namespace Heidelpay.Payment
         /// <summary>
         /// Ms
         /// </summary>
-        [EnumMember(Value = "ms")]
-        Ms,
+        [EnumMember(Value = "mrs")]
+        Mrs,
         /// <summary>
         /// Unknown
         /// </summary>

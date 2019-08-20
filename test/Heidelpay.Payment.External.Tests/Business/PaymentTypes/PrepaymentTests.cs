@@ -20,6 +20,10 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             var charge = await Heidelpay.ChargeAsync(decimal.One, "EUR", result, TestReturnUri);
             Assert.NotNull(charge?.Id);
             Assert.NotNull(charge?.ReturnUrl);
+            Assert.NotNull(charge?.Processing?.Iban);
+            Assert.NotNull(charge?.Processing?.Bic);
+            Assert.NotNull(charge?.Processing?.Descriptor);
+            Assert.NotNull(charge?.Processing?.Holder);
         }
 
         [Fact]
