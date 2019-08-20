@@ -34,6 +34,8 @@ namespace Heidelpay.Payment
     /// <seealso cref="Heidelpay.Payment.PaymentTransactionBase" />
     public sealed class Authorization : PaymentTransactionBase
     {
+        public decimal EffectiveInterestRate { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Authorization"/> class.
         /// </summary>
