@@ -519,6 +519,16 @@ namespace Heidelpay.Payment.Service
             return result;
         }
 
+        internal async Task<Recurring> RecurringAsync(Recurring recurring)
+        {
+            var result = await ApiPostAsync(
+                recurring, 
+                uri: BuildUri(Registry.ResolveRecurringUrl(recurring.TypeId), null), 
+                getAfterPost: false);
+
+            return result;
+        }
+
         /// <summary>
         /// Gets the cancels for charge.
         /// </summary>

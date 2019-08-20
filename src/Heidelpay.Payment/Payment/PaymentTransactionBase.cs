@@ -32,6 +32,10 @@ namespace Heidelpay.Payment
     /// <seealso cref="Heidelpay.Payment.PaymentBase" />
     public abstract class PaymentTransactionBase : PaymentBase
     {
+        /*
+         * Java Equivalent is AbstractInitPayment
+         */
+
         /// <summary>
         /// Gets or sets the amount.
         /// </summary>

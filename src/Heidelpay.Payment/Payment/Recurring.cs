@@ -26,28 +26,28 @@ namespace Heidelpay.Payment
     /// 
     /// </summary>
     /// <seealso cref="Heidelpay.Payment.PaymentTransactionBase" />
-    public sealed class Payout : PaymentTransactionBase
+    public sealed class Recurring : PaymentTransactionBase
     {
         [JsonConstructor]
-        internal Payout()
+        internal Recurring()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Payout"/> class.
+        /// Initializes a new instance of the <see cref="Recurring"/> class.
         /// </summary>
         /// <param name="heidelpayClient">The heidelpay client instance.</param>
-        internal Payout(IHeidelpay heidelpayClient)
+        internal Recurring(IHeidelpay heidelpayClient)
             : base(heidelpayClient)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Payout"/> class.
+        /// Initializes a new instance of the <see cref="Recurring"/> class.
         /// </summary>
         /// <param name="heidelpayClient">The heidelpay client.</param>
         /// <param name="paymentType">Type of the payment.</param>
-        public Payout(IHeidelpay heidelpayClient, IPaymentType paymentType)
+        public Recurring(IHeidelpay heidelpayClient, IPaymentType paymentType)
             : base(heidelpayClient, paymentTypeId: paymentType.Id)
         {
         }

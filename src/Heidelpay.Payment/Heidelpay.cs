@@ -481,6 +481,30 @@ namespace Heidelpay.Payment
         }
 
 
+
+        /// <summary>
+        /// Recurrings the asynchronous.
+        /// </summary>
+        /// <param name="paymentType">Type of the payment.</param>
+        /// <param name="returnUrl">The return URL.</param>
+        /// <param name="customerId">The customer identifier.</param>
+        /// <param name="metadataId">The metadata identifier.</param>
+        /// <returns></returns>
+        public async Task<Recurring> RecurringAsync(IPaymentType paymentType, Uri returnUrl, string customerId = null, string metadataId = null) 
+        {
+            Check.ThrowIfNull(paymentType, nameof(paymentType));
+            Check.ThrowIfNull(returnUrl, nameof(returnUrl));
+
+            var recurring = new Recurring(this, paymentType)
+            {
+                CustomerId = customerId,
+                ReturnUrl = returnUrl,
+                MetadataId = metadataId,
+            };
+
+            return await PaymentService.RecurringAsync(recurring);
+        }
+
         /// <summary>
         /// Authorize as an asynchronous operation.
         /// </summary>

@@ -318,5 +318,15 @@ namespace Heidelpay.Payment.Interfaces
         /// <param name="payout">The payout.</param>
         /// <returns></returns>
         Task<Payout> PayoutAsync(Payout payout);
+
+        /// <summary>
+        /// Recurrings the asynchronous.
+        /// </summary>
+        /// <param name="paymentType">Type of the payment.</param>
+        /// <param name="returnUrl">The return URL.</param>
+        /// <param name="customerId">The customer identifier.</param>
+        /// <param name="metadataId">The metadata identifier.</param>
+        /// <returns></returns>
+        Task<Recurring> RecurringAsync(IPaymentType paymentType, Uri returnUrl, string customerId = null, string metadataId = null);
     }
 }
