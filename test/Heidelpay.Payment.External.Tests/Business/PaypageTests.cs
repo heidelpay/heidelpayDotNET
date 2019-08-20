@@ -21,8 +21,7 @@ namespace Heidelpay.Payment.External.Tests.Business
                         
             var paypage = await heidelpay.PaypageAsync(built);
 
-            var client = new HttpClient();
-            var page = await client.GetAsync(paypage.RedirectUrl);
+            Assert.NotNull(paypage?.RedirectUrl);
         }
     }
 }
