@@ -34,6 +34,7 @@ namespace Heidelpay.Payment.Service
     {
         private static readonly string TRANSACTION_TYPE_AUTHORIZATION = "authorize";
         private static readonly string TRANSACTION_TYPE_CHARGE = "charge";
+        private static readonly string TRANSACTION_TYPE_PAYOUT = "payout";
         private static readonly string TRANSACTION_TYPE_CANCEL_AUTHORIZE = "cancel-authorize";
         private static readonly string TRANSACTION_TYPE_CANCEL_CHARGE = "cancel-charge";
 
@@ -457,6 +458,22 @@ namespace Heidelpay.Payment.Service
             return result;
         }
 
+        private async Task<IEnumerable<Payout>> FetchPayoutListAsync(Payment payment)
+        {
+            var payoutTransactions = GetPayouts(payment.Transactions);
+
+            var result = new List<Payout>();
+            foreach (var payoutTransaction in payoutTransactions)
+            {
+                var payout = await ApiGetAsync<Payout>(payoutTransaction.Url);
+                payout.Payment = payment;
+                payout.ResourceUrl = payoutTransaction.Url;
+                payout.TransactionType = payoutTransaction.Type;
+                result.Add(payout);
+            }
+            return result;
+        }
+
         /// <summary>
         /// fetch charge list as an asynchronous operation.
         /// </summary>
@@ -524,6 +541,13 @@ namespace Heidelpay.Payment.Service
             return cancelList?
                 .Where(x => TRANSACTION_TYPE_CANCEL_CHARGE.Equals(x.Type, StringComparison.InvariantCultureIgnoreCase) 
                 || TRANSACTION_TYPE_CANCEL_AUTHORIZE.Equals(x.Type, StringComparison.InvariantCultureIgnoreCase))
+                .ToList();
+        }
+
+        private IEnumerable<Transaction> GetPayouts(IEnumerable<Transaction> cancelList)
+        {
+            return cancelList?
+                .Where(x => TRANSACTION_TYPE_PAYOUT.Equals(x.Type, StringComparison.InvariantCultureIgnoreCase))
                 .ToList();
         }
 
@@ -681,6 +705,7 @@ namespace Heidelpay.Payment.Service
         {
             payment.CancelList = await FetchCancelListAsync(payment);
             payment.ChargesList = await FetchChargeListAsync(payment);
+            payment.PayoutList = await FetchPayoutListAsync(payment);
             payment.Authorization = await FetchAuthorizationAsync(payment);
             return payment;
         }
