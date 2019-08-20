@@ -184,6 +184,13 @@ namespace Heidelpay.Payment.Interfaces
         Task<TPaymentBase> CreatePaymentTypeAsync<TPaymentBase>(Action<TPaymentBase> config = null) where TPaymentBase : PaymentTypeBase;
 
         /// <summary>
+        /// Creates the payment type as an asynchronous operation.
+        /// </summary>
+        /// <param name="plan">The plan.</param>
+        /// <returns></returns>
+        Task<HirePurchaseRatePlan> CreatePaymentTypeAsync(HirePurchaseRatePlan plan);
+
+        /// <summary>
         /// Deletes the customer as an asynchronous operation.
         /// </summary>
         /// <param name="id">The identifier.</param>

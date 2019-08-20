@@ -1,5 +1,6 @@
 ﻿using Heidelpay.Payment.Interfaces;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -58,7 +59,7 @@ namespace Heidelpay.Payment
         /// The number of rates.
         /// </value>
         [JsonProperty]
-        public int NumberOfRates { get; internal set; }
+        public int NumberOfRates { get; set; }
 
         /// <summary>
         /// Gets the day of purchase.
@@ -67,7 +68,8 @@ namespace Heidelpay.Payment
         /// The day of purchase.
         /// </value>
         [JsonProperty]
-        public DateTime DayOfPurchase { get; internal set; }
+        [JsonConverter(typeof(JsonOnlyDateConverter))]
+        public DateTime DayOfPurchase { get; set; }
 
         /// <summary>
         /// Gets the invoice date.
@@ -76,7 +78,8 @@ namespace Heidelpay.Payment
         /// The invoice date.
         /// </value>
         [JsonProperty]
-        public DateTime InvoiceDate { get; internal set; }
+        [JsonConverter(typeof(JsonOnlyDateConverter))]
+        public DateTime InvoiceDate { get; set; }
 
         /// <summary>
         /// Gets the invoice due date.
@@ -85,7 +88,8 @@ namespace Heidelpay.Payment
         /// The invoice due date.
         /// </value>
         [JsonProperty]
-        public DateTime InvoiceDueDate { get; internal set; }
+        [JsonConverter(typeof(JsonOnlyDateConverter))]
+        public DateTime InvoiceDueDate { get; set; }
 
         /// <summary>
         /// Gets the total purchase amount.
@@ -94,7 +98,7 @@ namespace Heidelpay.Payment
         /// The total purchase amount.
         /// </value>
         [JsonProperty]
-        public decimal TotalPurchaseAmount { get; internal set; }
+        public decimal TotalPurchaseAmount { get; set; }
 
         /// <summary>
         /// Gets the total interest amount.
@@ -103,7 +107,7 @@ namespace Heidelpay.Payment
         /// The total interest amount.
         /// </value>
         [JsonProperty]
-        public decimal TotalInterestAmount { get; internal set; }
+        public decimal TotalInterestAmount { get; set; }
 
         /// <summary>
         /// Gets the total amount.
@@ -112,7 +116,7 @@ namespace Heidelpay.Payment
         /// The total amount.
         /// </value>
         [JsonProperty]
-        public decimal TotalAmount { get; internal set; }
+        public decimal TotalAmount { get; set; }
 
         /// <summary>
         /// Gets the effective interest rate.
@@ -121,7 +125,7 @@ namespace Heidelpay.Payment
         /// The effective interest rate.
         /// </value>
         [JsonProperty]
-        public decimal EffectiveInterestRate { get; internal set; }
+        public decimal EffectiveInterestRate { get; set; }
 
         /// <summary>
         /// Gets the nominal interest rate.
@@ -130,7 +134,7 @@ namespace Heidelpay.Payment
         /// The nominal interest rate.
         /// </value>
         [JsonProperty]
-        public decimal NominalInterestRate { get; internal set; }
+        public decimal NominalInterestRate { get; set; }
 
         /// <summary>
         /// Gets the fee first rate.
@@ -139,7 +143,7 @@ namespace Heidelpay.Payment
         /// The fee first rate.
         /// </value>
         [JsonProperty]
-        public decimal FeeFirstRate { get; internal set; }
+        public decimal FeeFirstRate { get; set; }
 
         /// <summary>
         /// Gets the fee per rate.
@@ -148,7 +152,7 @@ namespace Heidelpay.Payment
         /// The fee per rate.
         /// </value>
         [JsonProperty]
-        public decimal FeePerRate { get; internal set; }
+        public decimal FeePerRate { get; set; }
 
         /// <summary>
         /// Gets the monthly rate.
@@ -157,7 +161,7 @@ namespace Heidelpay.Payment
         /// The monthly rate.
         /// </value>
         [JsonProperty]
-        public decimal MonthlyRate { get; internal set; }
+        public decimal MonthlyRate { get; set; }
 
         /// <summary>
         /// Gets the last rate.
@@ -166,7 +170,7 @@ namespace Heidelpay.Payment
         /// The last rate.
         /// </value>
         [JsonProperty]
-        public decimal LastRate { get; internal set; }
+        public decimal LastRate { get; set; }
 
         /// <summary>
         /// Gets the rate list.
@@ -175,7 +179,7 @@ namespace Heidelpay.Payment
         /// The rate list.
         /// </value>
         [JsonProperty]
-        public IEnumerable<HirePurchaseRate> RateList { get; internal set; }
+        public IEnumerable<HirePurchaseRate> RateList { get; set; }
 
     }
 

@@ -798,12 +798,22 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
+        /// Creates the payment type as an asynchronous operation.
+        /// </summary>
+        /// <param name="plan">The plan.</param>
+        /// <returns></returns>
+        public async Task<HirePurchaseRatePlan> CreatePaymentTypeAsync(HirePurchaseRatePlan plan)
+        {
+            return await PaymentService.CreatePaymentTypeAsync(plan);
+        }
+
+        /// <summary>
         /// Shipment as an asynchronous operation.
         /// </summary>
         /// <param name="paymentId">The payment identifier.</param>
         /// <param name="invoiceId">The invoice identifier.</param>
         /// <returns>Task&lt;Shipment&gt;.</returns>
-        public async Task<Shipment> ShipmentAsync(string paymentId, string invoiceId = null)
+            public async Task<Shipment> ShipmentAsync(string paymentId, string invoiceId = null)
         {
             Check.ThrowIfNullOrEmpty(paymentId, nameof(paymentId));
 

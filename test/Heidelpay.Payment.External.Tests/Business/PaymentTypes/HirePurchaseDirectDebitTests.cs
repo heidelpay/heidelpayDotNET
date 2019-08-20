@@ -31,6 +31,13 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             var rateList = await Heidelpay.HirePurchaseRatesAsync(10, "EUR", effectiveInterestRate, orderDate);
 
             var plan = rateList.First();
+
+            AddIbanInvoiceParameter(plan);
+
+            var created = await Heidelpay.CreatePaymentTypeAsync(plan);
+
+            Assert.NotNull(created);
+            AssertRatePlan(plan, created);
         }
 
         private void AssertRatePlan(decimal effectiveInterestRate, DateTime orderDate, HirePurchaseRatePlan ratePlan)
@@ -44,6 +51,34 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             Assert.Equal(3.34m, ratePlan.LastRate);
             //Assert.Equal(1.35m, ratePlan.NominalInterestRate);
             Assert.Equal(orderDate, ratePlan.DayOfPurchase);
+        }
+
+        private void AssertRatePlan(HirePurchaseRatePlan expected, HirePurchaseRatePlan actual)
+        {
+            Assert.Equal(expected.AccountHolder, actual.AccountHolder);
+            Assert.Equal(expected.Bic, actual.Bic);
+            Assert.Equal(expected.EffectiveInterestRate, actual.EffectiveInterestRate);
+            Assert.Equal(expected.FeeFirstRate, actual.FeeFirstRate);
+            Assert.Equal(expected.FeePerRate, actual.FeePerRate);
+            Assert.Equal(expected.InvoiceDate, actual.InvoiceDate);
+            Assert.Equal(expected.InvoiceDueDate, actual.InvoiceDueDate);
+            Assert.Equal(expected.LastRate, actual.LastRate);
+            Assert.Equal(expected.MonthlyRate, actual.MonthlyRate);
+            Assert.Equal(expected.NominalInterestRate, actual.NominalInterestRate);
+            Assert.Equal(expected.NumberOfRates, actual.NumberOfRates);
+            Assert.Equal(expected.DayOfPurchase, actual.DayOfPurchase);
+            Assert.Equal(expected.RateList, actual.RateList);
+            Assert.Equal(expected.TotalAmount, actual.TotalAmount);
+            Assert.Equal(expected.TotalPurchaseAmount, actual.TotalPurchaseAmount);
+        }
+
+        private void AddIbanInvoiceParameter(HirePurchaseRatePlan ratePlan)
+        {
+            ratePlan.Iban = "DE46940594210000012345";
+            ratePlan.Bic = "COBADEFFXXX";
+            ratePlan.AccountHolder = "Rene Felder";
+            ratePlan.InvoiceDate = DateTime.Now.AddDays(-1);
+            ratePlan.InvoiceDueDate = DateTime.Now.AddDays(10);
         }
     }
 }
