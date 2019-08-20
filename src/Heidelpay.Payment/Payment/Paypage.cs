@@ -42,20 +42,28 @@ namespace Heidelpay.Payment
         public string ShopName { get; set; }
 
         /// <summary>
-        /// Gets or sets the description main.
+        /// Gets or sets the shop description.
         /// </summary>
         /// <value>
-        /// The description main.
+        /// The shop description.
         /// </value>
-        public string DescriptionMain { get; set; }
+        public string ShopDescription { get; set; }
 
         /// <summary>
-        /// Gets or sets the description small.
+        /// Gets or sets the tagline.
         /// </summary>
         /// <value>
-        /// The description small.
+        /// The tagline.
         /// </value>
-        public string DescriptionSmall { get; set; }
+        public string Tagline { get; set; }
+
+        /// <summary>
+        /// Gets or sets the invoice identifier.
+        /// </summary>
+        /// <value>
+        /// The invoice identifier.
+        /// </value>
+        public string InvoiceId { get; set; }
 
         /// <summary>
         /// Gets or sets the terms and condition URI.
@@ -97,6 +105,16 @@ namespace Heidelpay.Payment
         /// </value>
         public Uri ContactUri { get; set; }
 
+
+        /// <summary>
+        /// Gets or sets the attributes.
+        /// </summary>
+        /// <value>
+        /// The attributes.
+        /// </value>
+        [JsonProperty(PropertyName = "additionalAttributes")]
+        public PaypageAttributes Attributes { get; set; }
+
         [JsonConstructor]
         internal Paypage()
         {
@@ -110,5 +128,19 @@ namespace Heidelpay.Payment
             : base(heidelpayClient)
         {
         }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class PaypageAttributes
+    {
+        /// <summary>
+        /// Gets or sets the effective interest rate.
+        /// </summary>
+        /// <value>
+        /// The effective interest rate.
+        /// </value>
+        public decimal EffectiveInterestRate { get; set; }
     }
 }
