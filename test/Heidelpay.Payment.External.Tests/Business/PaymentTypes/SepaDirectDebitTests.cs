@@ -5,12 +5,12 @@ using Xunit;
 
 namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
 {
-    public class SepaDirectTransitGuaranteedTests : PaymentTypeTestsBase
+    public class SepaDirectDebitTests : PaymentTypeTestsBase
     {
         [Fact]
         public async Task Create_PaymentType()
         {
-            var result = await Heidelpay.CreatePaymentTypeAsync<SepaDirectDebitGuaranteed>(x => x.Iban = "DE89370400440532013000");
+            var result = await Heidelpay.CreatePaymentTypeAsync<SepaDirectDebit>(x => x.Iban = "DE89370400440532013000");
             Assert.NotNull(result?.Id);
         }
 
@@ -27,10 +27,19 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         }
 
         [Fact]
+        public async Task Charge_PaymentType()
+        {
+            var result = await Heidelpay.CreatePaymentTypeAsync(TestPaymentType);
+            var charge = await result.ChargeAsync(decimal.One, "EUR", TestReturnUri);
+            Assert.NotNull(charge?.Id);
+            Assert.NotNull(charge?.ReturnUrl);
+        }
+
+        [Fact]
         public async Task Fetch_PaymentType()
         {
             var result = await Heidelpay.CreatePaymentTypeAsync(TestPaymentType);
-            var fetched = await Heidelpay.FetchPaymentTypeAsync<SepaDirectDebitGuaranteed>(result.Id);
+            var fetched = await Heidelpay.FetchPaymentTypeAsync<SepaDirectDebit>(result.Id);
             Assert.NotNull(fetched?.Id);
 
             Assert.Equal("COBADEFFXXX", fetched.Bic);
@@ -39,7 +48,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             Assert.Equal("DE89370400440532013000", result.Iban);
         }
 
-        private Action<SepaDirectDebitGuaranteed> TestPaymentType { get; } = new Action<SepaDirectDebitGuaranteed>(x =>
+        private Action<SepaDirectDebit> TestPaymentType { get; } = new Action<SepaDirectDebit>(x =>
         {
             x.Iban = "DE89370400440532013000";
             x.Bic = "COBADEFFXXX";
