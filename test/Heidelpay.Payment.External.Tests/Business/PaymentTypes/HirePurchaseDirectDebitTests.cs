@@ -77,8 +77,8 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             ratePlan.Iban = "DE46940594210000012345";
             ratePlan.Bic = "COBADEFFXXX";
             ratePlan.AccountHolder = "Rene Felder";
-            ratePlan.InvoiceDate = DateTime.Now.AddDays(-1);
-            ratePlan.InvoiceDueDate = DateTime.Now.AddDays(10);
+            ratePlan.InvoiceDate = DateTime.Now.Date;
+            ratePlan.InvoiceDueDate = DateTime.Now.Date.AddDays(10);
         }
     }
 }
