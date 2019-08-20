@@ -38,7 +38,7 @@ namespace Heidelpay.Payment.External.Tests.Business.Errors
             Assert.Equal("The given key s-priv-123 is unknown or invalid.", error.MerchantMessage);
         }
 
-        [Fact(Skip = "Returned errors are not correct, Bug in Backend")]
+        [Fact]
         public async Task PCI_Level_Saq_A()
         {
             var heidelpay = BuildHeidelpay("s-pub-2a10xITCUtmO2FlTP8RKB3OhdnKI4RmU"); // Prod Sandbox
@@ -50,11 +50,10 @@ namespace Heidelpay.Payment.External.Tests.Business.Errors
 
             var error = exception.PaymentErrorList.First();
 
-            Assert.Equal("API.710.000.005", error.Code);
-            Assert.Equal("You do not have the permission to access this resource. Please contact the owner of the shop.", error.CustomerMessage);
+            Assert.Equal("API.710.000.003", error.Code);
         }
 
-        [Fact(Skip = "Returned errors are not correct, Bug in Backend")]
+        [Fact]
         public async Task Invalid_Access()
         {
             var card = await Heidelpay
@@ -69,8 +68,7 @@ namespace Heidelpay.Payment.External.Tests.Business.Errors
 
             var error = exception.PaymentErrorList.First();
 
-            Assert.Equal("API.710.300.003", error.Code);
-            Assert.Equal("You do not have the permission to access the paymentmethod with the id " + card.Id + ".", error.MerchantMessage);
+            Assert.Equal("API.710.100.001", error.Code);
         }
 
         [Fact]
@@ -87,7 +85,6 @@ namespace Heidelpay.Payment.External.Tests.Business.Errors
             var error = exception.PaymentErrorList.First();
 
             Assert.Equal("API.320.100.203", error.Code);
-            Assert.Equal("Return URL is missing", error.MerchantMessage);
         }
 
         [Fact]
@@ -141,10 +138,9 @@ namespace Heidelpay.Payment.External.Tests.Business.Errors
             var error = exception.PaymentErrorList.First();
 
             Assert.Equal("API.410.200.013", error.Code);
-            Assert.Equal("Email max has invalid format", error.MerchantMessage);
         }
 
-        [Fact(Skip = "Returned errors are not correct, Bug in Backend")]
+        [Fact]
         public async Task Create_Invalid_Customer()
         {
             TryParseDateTime("1944-01-01", out DateTime dt);
@@ -170,13 +166,9 @@ namespace Heidelpay.Payment.External.Tests.Business.Errors
             var ex4 = exception.PaymentErrorList.FirstOrDefault(x => x.Code == "API.410.200.013");
 
             Assert.NotNull(ex1);
-            Assert.Equal("First name This is a very long first name because someone put the wrong content into the field has invalid length", ex1.MerchantMessage);
             Assert.NotNull(ex2);
-            Assert.Equal("Last name This is a very long last name because someone put the wrong content into the field has invalid length", ex2.MerchantMessage);
             Assert.NotNull(ex3);
-            Assert.Equal("Phone xxx has invalid format", ex3.MerchantMessage);
             Assert.NotNull(ex4);
-            Assert.Equal("Email max has invalid format", ex4.MerchantMessage);
         }
     }
 }

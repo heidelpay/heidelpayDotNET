@@ -105,7 +105,7 @@ namespace Heidelpay.Payment.External.Tests.Business
         {
             var basket = new Basket
             {
-                AmountTotal = 500.05m,
+                AmountTotalGross = 500.05m,
                 AmountTotalDiscount = 10m,
                 CurrencyCode = "EUR",
                 Note = "Mystery Shopping",
@@ -133,7 +133,7 @@ namespace Heidelpay.Payment.External.Tests.Business
         {
             var basket = new Basket
             {
-                AmountTotal = 500.05m,
+                AmountTotalGross = 500.05m,
                 CurrencyCode = "EUR",
                 OrderId = GetRandomInvoiceId(),
             };
@@ -227,7 +227,7 @@ namespace Heidelpay.Payment.External.Tests.Business
 
         protected void AssertEqual(Basket expected, Basket actual)
         {
-            Assert.Equal(expected.AmountTotal, actual.AmountTotal);
+            Assert.Equal(expected.AmountTotalGross, actual.AmountTotalGross);
             Assert.Equal(expected.AmountTotalDiscount, actual.AmountTotalDiscount);
             Assert.Equal(expected.CurrencyCode, actual.CurrencyCode);
             Assert.Equal(expected.Note, actual.Note);

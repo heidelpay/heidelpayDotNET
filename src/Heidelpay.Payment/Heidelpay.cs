@@ -742,7 +742,7 @@ namespace Heidelpay.Payment
             Check.ThrowIfNull(httpClientFactory, nameof(httpClientFactory));
             Check.ThrowIfNull(options?.Value, nameof(options));
 
-            return new RestClient(httpClientFactory, options, new NullLogger<RestClient>());
+            return new RestClient(httpClientFactory.CreateClient(), options, new NullLogger<RestClient>());
         }
 
         /// <summary>

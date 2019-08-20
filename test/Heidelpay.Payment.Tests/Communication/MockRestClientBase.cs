@@ -8,8 +8,8 @@ namespace Heidelpay.Payment.Internal.Tests.Communication
 {
     class MockRestClient : RestClient
     {
-        public MockRestClient(IHttpClientFactory factory, IOptions<HeidelpayApiOptions> apiOptions, ILogger<RestClient> logger)
-            : base(factory, apiOptions, logger)
+        public MockRestClient(HttpClient client, IOptions<HeidelpayApiOptions> apiOptions, ILogger<RestClient> logger)
+            : base(client, apiOptions, logger)
         {
         }
 

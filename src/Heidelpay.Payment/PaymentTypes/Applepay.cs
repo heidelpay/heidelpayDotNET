@@ -53,6 +53,14 @@ namespace Heidelpay.Payment.PaymentTypes
         /// <value>The header.</value>
         public ApplepayHeader Header { get; set; } = new ApplepayHeader();
 
+        public string Number { get; set; }
+
+        public string ExpiryDate { get; set; }
+
+        public string CurrencyCode { get; set; }
+
+        public decimal TransactionAmount { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Applepay" /> class.
         /// </summary>

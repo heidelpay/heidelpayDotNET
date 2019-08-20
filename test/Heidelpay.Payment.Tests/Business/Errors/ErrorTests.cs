@@ -42,7 +42,6 @@ namespace Heidelpay.Payment.Internal.Tests.Business.Errors
             var error = exception.PaymentErrorList.First();
 
             Assert.Equal("API.320.200.143", error.Code);
-            Assert.Equal("Resources type id is missing", error.MerchantMessage);
         }
     }
 }

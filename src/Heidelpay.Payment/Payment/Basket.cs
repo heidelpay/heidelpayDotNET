@@ -39,7 +39,7 @@ namespace Heidelpay.Payment
         /// Gets or sets the amount total.
         /// </summary>
         /// <value>The amount total.</value>
-        public decimal AmountTotal { get; set; }
+        public decimal AmountTotalGross { get; set; }
 
         /// <summary>
         /// Gets or sets the amount total discount.
