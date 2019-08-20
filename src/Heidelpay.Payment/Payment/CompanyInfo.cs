@@ -16,6 +16,7 @@ namespace Heidelpay.Payment
         /// <value>
         /// The type of the registration.
         /// </value>
+        [JsonProperty]
         public RegistrationType RegistrationType { get; internal set; }
 
         /// <summary>
@@ -40,6 +41,7 @@ namespace Heidelpay.Payment
         /// <value>
         /// The function.
         /// </value>
+        [JsonProperty]
         internal string Function { get; set; }
 
         [JsonConstructor]

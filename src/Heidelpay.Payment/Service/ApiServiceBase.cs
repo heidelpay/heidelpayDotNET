@@ -21,6 +21,7 @@ using Heidelpay.Payment.Interfaces;
 using Heidelpay.Payment.PaymentTypes;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -177,6 +178,18 @@ namespace Heidelpay.Payment.Service
                 combinedPaths = new Uri(combinedPaths, id.EnsureTrailingSlash());
             }
 
+            return combinedPaths;
+        }
+
+        protected Uri BuildHirePurchaseUri(decimal amount, string currency, decimal effectiveInterestRate, DateTime orderDate)
+        {
+            var rootPath = new Uri(Heidelpay.RestClient?.Options?.ApiEndpoint, Heidelpay.RestClient?.Options?.ApiVersion.EnsureTrailingSlash());
+            var combinedPaths = new Uri(rootPath, 
+                $"types/hire-purchase-direct-debit/plans?" +
+                $"amount={amount.ToString(CultureInfo.InvariantCulture)}&" +
+                $"currency={currency}&" +
+                $"effectiveInterest={effectiveInterestRate.ToString(CultureInfo.InvariantCulture)}&" +
+                $"orderDate={orderDate.ToString("yyyy-MM-dd")}");
             return combinedPaths;
         }
 

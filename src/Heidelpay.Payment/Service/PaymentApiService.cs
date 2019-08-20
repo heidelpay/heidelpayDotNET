@@ -529,7 +529,11 @@ namespace Heidelpay.Payment.Service
         /// <exception cref="NotImplementedException"></exception>
         public async Task<IEnumerable<HirePurchaseRatePlan>> HirePurchasePlanAsync(decimal amount, string currency, decimal effectiveInterestRate, DateTime orderDate)
         {
-            throw new NotImplementedException();
+            var uri = BuildHirePurchaseUri(amount, currency, effectiveInterestRate, orderDate);
+
+            var result = await ApiGetAsync<HirePurchaseRatePlanList>(uri: uri);
+
+            return result.Entity;
         }
 
 

@@ -820,6 +820,14 @@ namespace Heidelpay.Payment
             return await PaypageService.InitializeAsync(paypage);
         }
 
+        /// <summary>
+        /// Hires the purchase rates asynchronous.
+        /// </summary>
+        /// <param name="amount">The amount.</param>
+        /// <param name="currency">The currency.</param>
+        /// <param name="effectiveInterestRate">The effective interest rate.</param>
+        /// <param name="orderDate">The order date.</param>
+        /// <returns></returns>
         public async Task<IEnumerable<HirePurchaseRatePlan>> HirePurchaseRatesAsync(decimal amount, string currency, decimal effectiveInterestRate, DateTime orderDate)
         {
             return await PaymentService.HirePurchasePlanAsync(amount, currency, effectiveInterestRate, orderDate);
