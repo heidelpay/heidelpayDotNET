@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System;
 
-namespace Heidelpay.Payment.Payment
+namespace Heidelpay.Payment
 {
     /// <summary>
     /// 
@@ -106,7 +106,7 @@ namespace Heidelpay.Payment.Payment
         /// Initializes a new instance of the <see cref="Paypage"/> class.
         /// </summary>
         /// <param name="heidelpayClient">The heidelpay client instance.</param>
-        internal Paypage(IHeidelpay heidelpayClient)
+        public Paypage(IHeidelpay heidelpayClient)
             : base(heidelpayClient)
         {
         }

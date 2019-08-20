@@ -47,7 +47,8 @@ namespace Heidelpay.Payment
         /// Gets the payment service.
         /// </summary>
         /// <value>The payment service.</value>
-        internal PaymentService PaymentService { get; }
+        internal PaymentApiService PaymentService { get; }
+        internal PaypageApiService PaypageService { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HeidelpayClient"/> class.
@@ -150,7 +151,8 @@ namespace Heidelpay.Payment
         /// </summary>
         private HeidelpayClient()
         {
-            PaymentService = new PaymentService(this);
+            PaymentService = new PaymentApiService(this);
+            PaypageService = new PaypageApiService(this);
         }
 
         /// <summary>
@@ -841,6 +843,16 @@ namespace Heidelpay.Payment
             }
 
             return resultId;
+        }
+
+        /// <summary>
+        /// Paypages as an asynchronous operation.
+        /// </summary>
+        /// <param name="paypage">The paypage.</param>
+        /// <returns></returns>
+        public async Task<Paypage> PaypageAsync(Paypage paypage)
+        {
+            return await PaypageService.InitializeAsync(paypage);
         }
     }
 }

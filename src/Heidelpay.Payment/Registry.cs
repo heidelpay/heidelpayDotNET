@@ -46,6 +46,7 @@ namespace Heidelpay.Payment
             [typeof(Customer)] = ("customers", null, RegistryType.Root),
             [typeof(MetaData)] = ("metadata", null, RegistryType.Root),
             [typeof(Payment)] = ("payments", null, RegistryType.Root),
+            [typeof(Paypage)] = ("paypage/charge", null, RegistryType.Root),
 
             [typeof(Authorization)] = ("authorize", null, RegistryType.Payment),
             [typeof(Cancel)] = ("authorize/cancels", null, RegistryType.Payment),
