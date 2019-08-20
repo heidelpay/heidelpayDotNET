@@ -65,7 +65,7 @@ namespace Heidelpay.Payment.Service
         /// <returns></returns>
         public async Task<HirePurchaseRatePlan> CreatePaymentTypeAsync(HirePurchaseRatePlan plan)
         {
-            return await ApiPostAsync(plan, uri: BuildUri("types/hire-purchase-direct-debit", null));
+            return await ApiPostAsync(plan, uri: BuildUri("types/hire-purchase-direct-debit", null), getAfterPost: false);
         }
 
         /// <summary>
