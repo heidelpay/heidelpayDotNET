@@ -2,7 +2,7 @@
 // Assembly         : Heidelpay.Payment
 // Last Modified On : 04-15-2019
 // ***********************************************************************
-// <copyright file="IAuthorizedPaymentType.cs" company="Heidelpay">
+// <copyright file="Authorization.cs" company="Heidelpay">
 //     Copyright (c) 2019 Heidelpay GmbH. All rights reserved.
 // </copyright>
 // ***********************************************************************
@@ -17,19 +17,39 @@
 // limitations under the License.
 // ***********************************************************************
 
-namespace Heidelpay.Payment.Interfaces
+using Heidelpay.Payment.Interfaces;
+using Newtonsoft.Json;
+
+namespace Heidelpay.Payment
 {
     /// <summary>
-    /// Interface IAuthorizedPaymentType
-    /// Implements the <see cref="Heidelpay.Payment.Interfaces.IPaymentType" />
+    /// 
     /// </summary>
-    /// <seealso cref="Heidelpay.Payment.Interfaces.IPaymentType" />
-    public interface IAuthorizedPaymentType : IPaymentType
+    /// <seealso cref="Heidelpay.Payment.PaymentTransactionBase" />
+    public sealed class Payout : PaymentTransactionBase
     {
+        [JsonConstructor]
+        internal Payout()
+        {
+        }
+
         /// <summary>
-        /// Gets the heidelpay client.
+        /// Initializes a new instance of the <see cref="Payout"/> class.
         /// </summary>
-        /// <value>The heidelpay client.</value>
-        IHeidelpay Heidelpay { get; }
+        /// <param name="heidelpayClient">The heidelpay client instance.</param>
+        internal Payout(IHeidelpay heidelpayClient)
+            : base(heidelpayClient)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Payout"/> class.
+        /// </summary>
+        /// <param name="heidelpayClient">The heidelpay client.</param>
+        /// <param name="paymentType">Type of the payment.</param>
+        public Payout(IHeidelpay heidelpayClient, IPaymentType paymentType)
+            : base(heidelpayClient, paymentTypeId: paymentType.Id)
+        {
+        }
     }
 }

@@ -17,6 +17,8 @@
 // limitations under the License.
 // ***********************************************************************
 
+using System;
+
 namespace Heidelpay.Payment
 {
     /// <summary>
@@ -40,7 +42,7 @@ namespace Heidelpay.Payment
         /// Gets or sets the vat.
         /// </summary>
         /// <value>The vat.</value>
-        public decimal Vat { get; set; }
+        public double Vat { get; set; }
 
         /// <summary>
         /// Gets or sets the amount discount.
@@ -94,6 +96,6 @@ namespace Heidelpay.Payment
         /// Gets or sets the image URL.
         /// </summary>
         /// <value>The image URL.</value>
-        public string ImageUrl { get; set; }
+        public Uri ImageUrl { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 // Assembly         : Heidelpay.Payment
 // Last Modified On : 04-15-2019
 // ***********************************************************************
-// <copyright file="IAuthorizedPaymentType.cs" company="Heidelpay">
+// <copyright file="PaymentService.cs" company="Heidelpay">
 //     Copyright (c) 2019 Heidelpay GmbH. All rights reserved.
 // </copyright>
 // ***********************************************************************
@@ -17,19 +17,28 @@
 // limitations under the License.
 // ***********************************************************************
 
-namespace Heidelpay.Payment.Interfaces
+using Heidelpay.Payment.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Heidelpay.Payment.Service
 {
     /// <summary>
-    /// Interface IAuthorizedPaymentType
-    /// Implements the <see cref="Heidelpay.Payment.Interfaces.IPaymentType" />
+    /// 
     /// </summary>
-    /// <seealso cref="Heidelpay.Payment.Interfaces.IPaymentType" />
-    public interface IAuthorizedPaymentType : IPaymentType
+    internal sealed class PaypageApiService : ApiServiceBase
     {
-        /// <summary>
-        /// Gets the heidelpay client.
-        /// </summary>
-        /// <value>The heidelpay client.</value>
-        IHeidelpay Heidelpay { get; }
+
+        public PaypageApiService(HeidelpayClient heidelpay)
+            : base(heidelpay)
+        {
+        }
+
+        public async Task<Paypage> InitializeAsync(Paypage paypage, Uri url = null)
+        {
+            return await ApiPostAsync(paypage, getAfterPost: false);
+        }
     }
 }

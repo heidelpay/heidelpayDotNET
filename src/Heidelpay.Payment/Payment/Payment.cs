@@ -32,9 +32,9 @@ namespace Heidelpay.Payment
     /// Business object for a payment. A payment is the object that combines several
     /// requests over the lifetime of a payment transaction. This means that one payment
     /// always relates to one offer from the merchant.
-    /// Implements the <see cref="Heidelpay.Payment.PaymentBase" />
+    /// Implements the <see cref="PaymentBase" />
     /// </summary>
-    /// <seealso cref="Heidelpay.Payment.PaymentBase" />
+    /// <seealso cref="PaymentBase" />
     public class Payment : PaymentBase
     {
         /// <summary>
@@ -80,6 +80,12 @@ namespace Heidelpay.Payment
         /// </summary>
         /// <value>The charges list.</value>
         public IEnumerable<Charge> ChargesList { get; internal set; } = Enumerable.Empty<Charge>();
+
+        /// <summary>
+        /// Gets the payout list.
+        /// </summary>
+        /// <value>The payout list.</value>
+        public IEnumerable<Payout> PayoutList { get; internal set; } = Enumerable.Empty<Payout>();
 
         /// <summary>
         /// Gets the cancel list.
@@ -208,7 +214,7 @@ namespace Heidelpay.Payment
         internal IEnumerable<Transaction> Transactions { get; set; } = Enumerable.Empty<Transaction>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Payment" /> class.
+        /// Initializes a new instance of the <see cref="Heidelpay.Payment.Payment" /> class.
         /// </summary>
         /// <param name="heidelpayClient">The heidelpay client instance.</param>
         internal Payment(IHeidelpay heidelpayClient)
@@ -218,7 +224,7 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Payment" /> class.
+        /// Initializes a new instance of the <see cref="Heidelpay.Payment.Payment" /> class.
         /// </summary>
         [JsonConstructor]
         internal Payment()
@@ -309,6 +315,16 @@ namespace Heidelpay.Payment
         public Charge GetCharge(string chargeId)
         {
             return ChargesList?.FirstOrDefault(x => string.Equals(x.Id, chargeId, StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        /// <summary>
+        /// Gets the payout.
+        /// </summary>
+        /// <param name="payoutId">The payout identifier.</param>
+        /// <returns></returns>
+        public Payout GetPayout(string payoutId)
+        {
+            return PayoutList?.FirstOrDefault(x => string.Equals(x.Id, payoutId, StringComparison.InvariantCultureIgnoreCase));
         }
 
         /// <summary>

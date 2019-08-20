@@ -33,10 +33,16 @@ namespace Heidelpay.Payment
     /// <seealso cref="Heidelpay.Payment.Interfaces.IHeidelpayProvider" />
     public abstract class PaymentBase : IRestResource, IHeidelpayProvider
     {
+        /*
+         * Java Equivalent is AbstractPayment
+         */
+
         /// <summary>
         /// Gets or sets the identifier.
         /// </summary>
-        /// <value>The identifier.</value>
+        /// <value>
+        /// The identifier.
+        /// </value>
         public string Id { get; set; }
                       
         /// <summary>

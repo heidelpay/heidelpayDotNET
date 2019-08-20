@@ -32,6 +32,10 @@ namespace Heidelpay.Payment
     /// <seealso cref="Heidelpay.Payment.PaymentBase" />
     public abstract class PaymentTransactionBase : PaymentBase
     {
+        /*
+         * Java Equivalent is AbstractInitPayment
+         */
+
         /// <summary>
         /// Gets or sets the amount.
         /// </summary>
@@ -76,6 +80,14 @@ namespace Heidelpay.Payment
         /// </summary>
         /// <value><c>null</c> if [card3ds] contains no value, <c>true</c> if [card3ds]; otherwise, <c>false</c>.</value>
         public bool? Card3ds { get; set; }
+
+        /// <summary>
+        /// Gets or sets the payment reference.
+        /// </summary>
+        /// <value>
+        /// The payment reference.
+        /// </value>
+        public string PaymentReference { get; set; }
 
         /// <summary>
         /// Gets or sets the order identifier.

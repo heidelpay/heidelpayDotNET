@@ -35,6 +35,14 @@ namespace Heidelpay.Payment
     public sealed class Authorization : PaymentTransactionBase
     {
         /// <summary>
+        /// Gets or sets the effective interest rate.
+        /// </summary>
+        /// <value>
+        /// The effective interest rate.
+        /// </value>
+        public decimal EffectiveInterestRate { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Authorization"/> class.
         /// </summary>
         [JsonConstructor]

@@ -47,7 +47,8 @@ namespace Heidelpay.Payment
         /// Gets the payment service.
         /// </summary>
         /// <value>The payment service.</value>
-        internal PaymentService PaymentService { get; }
+        internal PaymentApiService PaymentService { get; }
+        internal PaypageApiService PaypageService { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HeidelpayClient"/> class.
@@ -150,7 +151,8 @@ namespace Heidelpay.Payment
         /// </summary>
         private HeidelpayClient()
         {
-            PaymentService = new PaymentService(this);
+            PaymentService = new PaymentApiService(this);
+            PaypageService = new PaypageApiService(this);
         }
 
         /// <summary>
@@ -443,6 +445,69 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
+        /// Payout as an asynchronous operation.
+        /// </summary>
+        /// <param name="amount">The amount.</param>
+        /// <param name="currency">The currency.</param>
+        /// <param name="paymentType">Type of the payment.</param>
+        /// <param name="returnUrl">The return URL.</param>
+        /// <returns></returns>
+        public async Task<Payout> PayoutAsync(decimal amount, string currency, IChargeablePaymentType paymentType, Uri returnUrl)
+        {
+            Check.ThrowIfNullOrEmpty(currency, nameof(currency));
+
+            var typeId = await EnsureRestResourceCreatedAsync(paymentType);
+
+            return await PayoutAsync(new Payout
+            {
+                Amount = amount,
+                Currency = currency,
+                Resources = new Resources
+                {
+                    TypeId = typeId,
+                },
+                ReturnUrl = returnUrl,
+            });
+        }
+
+        /// <summary>
+        /// Payout as an asynchronous operation.
+        /// </summary>
+        /// <param name="payout">The payout.</param>
+        /// <returns></returns>
+        public async Task<Payout> PayoutAsync(Payout payout)
+        {
+            Check.ThrowIfNull(payout, nameof(payout));
+
+            return await PaymentService.PayoutAsync(payout);
+        }
+
+
+
+        /// <summary>
+        /// Recurrings the asynchronous.
+        /// </summary>
+        /// <param name="paymentType">Type of the payment.</param>
+        /// <param name="returnUrl">The return URL.</param>
+        /// <param name="customerId">The customer identifier.</param>
+        /// <param name="metadataId">The metadata identifier.</param>
+        /// <returns></returns>
+        public async Task<Recurring> RecurringAsync(IPaymentType paymentType, Uri returnUrl, string customerId = null, string metadataId = null) 
+        {
+            Check.ThrowIfNull(paymentType, nameof(paymentType));
+            Check.ThrowIfNull(returnUrl, nameof(returnUrl));
+
+            var recurring = new Recurring(this, paymentType)
+            {
+                CustomerId = customerId,
+                ReturnUrl = returnUrl,
+                MetadataId = metadataId,
+            };
+
+            return await PaymentService.RecurringAsync(recurring);
+        }
+
+        /// <summary>
         /// Authorize as an asynchronous operation.
         /// </summary>
         /// <param name="amount">The amount.</param>
@@ -596,6 +661,20 @@ namespace Heidelpay.Payment
             Check.ThrowIfNullOrEmpty(chargeId, nameof(chargeId));
 
             return await PaymentService.FetchChargeAsync(paymentId, chargeId);
+        }
+
+        /// <summary>
+        /// Fetch payout as an asynchronous operation.
+        /// </summary>
+        /// <param name="paymentId">The payment identifier.</param>
+        /// <param name="payoutId">The charge identifier.</param>
+        /// <returns>Task&lt;Charge&gt;.</returns>
+        public async Task<Payout> FetchPayoutAsync(string paymentId, string payoutId)
+        {
+            Check.ThrowIfNullOrEmpty(paymentId, nameof(paymentId));
+            Check.ThrowIfNullOrEmpty(payoutId, nameof(payoutId));
+
+            return await PaymentService.FetchPayoutAsync(paymentId, payoutId);
         }
 
         /// <summary>
@@ -764,6 +843,16 @@ namespace Heidelpay.Payment
             }
 
             return resultId;
+        }
+
+        /// <summary>
+        /// Paypages as an asynchronous operation.
+        /// </summary>
+        /// <param name="paypage">The paypage.</param>
+        /// <returns></returns>
+        public async Task<Paypage> PaypageAsync(Paypage paypage)
+        {
+            return await PaypageService.InitializeAsync(paypage);
         }
     }
 }

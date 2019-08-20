@@ -42,6 +42,14 @@ namespace Heidelpay.Payment
         public decimal AmountTotalGross { get; set; }
 
         /// <summary>
+        /// Gets or sets the amount total vat.
+        /// </summary>
+        /// <value>
+        /// The amount total vat.
+        /// </value>
+        public decimal AmountTotalVat { get; set; }
+
+        /// <summary>
         /// Gets or sets the amount total discount.
         /// </summary>
         /// <value>The amount total discount.</value>

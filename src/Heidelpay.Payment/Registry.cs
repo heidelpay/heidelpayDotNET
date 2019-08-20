@@ -32,10 +32,12 @@ namespace Heidelpay.Payment
     {
         private const string PLACEHOLDER_CHARGE_ID = "<chargeId>";
         private const string PLACEHOLDER_PAYMENT_ID = "<paymentId>";
+        private const string PLACEHOLDER_TYPE_ID = "<typeId>";
 
         private const string PAYMENTTYPE_PREFIX = "types/";
         private const string PAYMENT_PREFIX = "payments/<paymentId>/";
         private const string REFUND_PREFIX = PAYMENT_PREFIX + "charges/<chargeId>/cancels";
+        private const string RECURRING_PREFIX = PAYMENTTYPE_PREFIX + "/<typeId>/recurring";
 
 
         static ReadOnlyDictionary<Type, ValueTuple<string, string, RegistryType>> ResourcePathRegistry { get; } = new ReadOnlyDictionary<Type, ValueTuple<string, string, RegistryType>>(new Dictionary<Type, ValueTuple<string, string, RegistryType>>
@@ -44,11 +46,13 @@ namespace Heidelpay.Payment
             [typeof(Customer)] = ("customers", null, RegistryType.Root),
             [typeof(MetaData)] = ("metadata", null, RegistryType.Root),
             [typeof(Payment)] = ("payments", null, RegistryType.Root),
+            [typeof(Paypage)] = ("paypage/charge", null, RegistryType.Root),
 
             [typeof(Authorization)] = ("authorize", null, RegistryType.Payment),
             [typeof(Cancel)] = ("authorize/cancels", null, RegistryType.Payment),
             [typeof(Charge)] = ("charges", null, RegistryType.Payment),
             [typeof(Shipment)] = ("shipments", null, RegistryType.Payment),
+            [typeof(Payout)] = ("payouts", null, RegistryType.Payment),
 
             [typeof(Card)] = ("card", "crd", RegistryType.PaymentType),
             [typeof(Eps)] = ("eps", "eps", RegistryType.PaymentType),
@@ -129,6 +133,15 @@ namespace Heidelpay.Payment
             return REFUND_PREFIX
                 .Replace(PLACEHOLDER_PAYMENT_ID, paymentId)
                 .Replace(PLACEHOLDER_CHARGE_ID, chargeId)
+                .EnsureTrailingSlash();
+        }
+
+        public static string ResolveRecurringUrl(string typeId)
+        {
+            Check.ThrowIfNullOrEmpty(typeId, nameof(typeId));
+
+            return RECURRING_PREFIX
+                .Replace(PLACEHOLDER_TYPE_ID, typeId)
                 .EnsureTrailingSlash();
         }
 
