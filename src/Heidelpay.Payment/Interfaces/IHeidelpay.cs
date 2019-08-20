@@ -18,6 +18,7 @@
 
 using Heidelpay.Payment.PaymentTypes;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Heidelpay.Payment.Interfaces
@@ -334,5 +335,16 @@ namespace Heidelpay.Payment.Interfaces
         /// <param name="paypage">The paypage.</param>
         /// <returns></returns>
         Task<Paypage> PaypageAsync(Paypage paypage);
+
+
+        /// <summary>
+        /// Hires the purchase rates asynchronous.
+        /// </summary>
+        /// <param name="amount">The amount.</param>
+        /// <param name="currency">The currency.</param>
+        /// <param name="effectiveInterestRate">The effective interest rate.</param>
+        /// <param name="orderDate">The order date.</param>
+        /// <returns></returns>
+        Task<IEnumerable<HirePurchaseRatePlan>> HirePurchaseRatesAsync(decimal amount, string currency, decimal effectiveInterestRate, DateTime orderDate);
     }
 }

@@ -24,6 +24,7 @@ using Heidelpay.Payment.Service;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -810,6 +811,21 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
+        /// Paypages as an asynchronous operation.
+        /// </summary>
+        /// <param name="paypage">The paypage.</param>
+        /// <returns></returns>
+        public async Task<Paypage> PaypageAsync(Paypage paypage)
+        {
+            return await PaypageService.InitializeAsync(paypage);
+        }
+
+        public async Task<IEnumerable<HirePurchaseRatePlan>> HirePurchaseRatesAsync(decimal amount, string currency, decimal effectiveInterestRate, DateTime orderDate)
+        {
+            return await PaymentService.HirePurchasePlanAsync(amount, currency, effectiveInterestRate, orderDate);
+        }
+
+        /// <summary>
         /// Builds the rest client.
         /// </summary>
         /// <param name="httpClientFactory">The HTTP client factory.</param>
@@ -842,16 +858,6 @@ namespace Heidelpay.Payment
             }
 
             return resultId;
-        }
-
-        /// <summary>
-        /// Paypages as an asynchronous operation.
-        /// </summary>
-        /// <param name="paypage">The paypage.</param>
-        /// <returns></returns>
-        public async Task<Paypage> PaypageAsync(Paypage paypage)
-        {
-            return await PaypageService.InitializeAsync(paypage);
         }
     }
 }
