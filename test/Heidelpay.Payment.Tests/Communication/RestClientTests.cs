@@ -58,7 +58,7 @@ namespace Heidelpay.Payment.Internal.Tests.Communication
             var logger = serviceProvider.GetService<ILogger<RestClient>>();
             var options = serviceProvider.GetService<IOptions<HeidelpayApiOptions>>();
 
-            return new MockRestClient(factory, options, logger);
+            return new MockRestClient(factory.CreateClient(httpClientName), options, logger);
         }
 
         [Fact]

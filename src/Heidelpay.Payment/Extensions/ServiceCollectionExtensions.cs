@@ -77,17 +77,11 @@ namespace Heidelpay.Payment.Extensions
         /// <returns>IServiceCollection.</returns>
         private static IServiceCollection AddHeidelpay(this IServiceCollection serviceCollection)
         {
-            if(!serviceCollection.Any(x => x.ServiceType == typeof(IHttpClientFactory)))
-            {
-                serviceCollection.AddHttpClient();
-            }
+            serviceCollection
+                .AddHttpClient<IRestClient, RestClient>();
 
             return serviceCollection
-                .AddTransient<IRestClient, RestClient>(sp => new RestClient(
-                    sp.GetRequiredService<IHttpClientFactory>(), 
-                    sp.GetRequiredService<IOptions<HeidelpayApiOptions>>(),
-                    sp.GetService<ILogger<RestClient>>()))
-                .AddTransient<IHeidelpay>(sp => new HeidelpayClient(sp.GetRequiredService<IRestClient>()));
+                .AddTransient<IHeidelpay, HeidelpayClient>(sp => new HeidelpayClient(sp.GetRequiredService<IRestClient>()));
         }
     }
 }

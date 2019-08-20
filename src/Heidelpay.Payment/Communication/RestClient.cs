@@ -51,7 +51,7 @@ namespace Heidelpay.Payment.Communication
         /// <summary>
         /// The factory
         /// </summary>
-        private readonly IHttpClientFactory factory;
+        private readonly HttpClient httpClient;
         /// <summary>
         /// The logger
         /// </summary>
@@ -66,17 +66,17 @@ namespace Heidelpay.Payment.Communication
         /// <summary>
         /// Initializes a new instance of the <see cref="RestClient"/> class.
         /// </summary>
-        /// <param name="factory">The factory.</param>
+        /// <param name="httpClient"></param>
         /// <param name="apiOptions">The API options.</param>
         /// <param name="logger">The logger.</param>
-        public RestClient(IHttpClientFactory factory, IOptions<HeidelpayApiOptions> apiOptions, ILogger<RestClient> logger)
+        public RestClient(HttpClient httpClient, IOptions<HeidelpayApiOptions> apiOptions, ILogger<RestClient> logger)
         {
-            Check.ThrowIfNull(factory, nameof(factory));
+            Check.ThrowIfNull(httpClient, nameof(httpClient));
             Check.ThrowIfNull(apiOptions?.Value, nameof(apiOptions));
 
             apiOptions.Value.ThrowIfInvalid();
 
-            this.factory = factory;
+            this.httpClient = httpClient;
             this.logger = logger;
 
             Options = apiOptions.Value.EnsureDefaultSet();
@@ -195,20 +195,6 @@ namespace Heidelpay.Payment.Communication
         }
 
         /// <summary>
-        /// Resolves the HTTP client.
-        /// </summary>
-        /// <param name="factory">The factory.</param>
-        /// <returns>HttpClient.</returns>
-        protected virtual HttpClient ResolveHttpClient(IHttpClientFactory factory)
-        {
-            var resolvedFactory = (factory ?? this.factory);
-
-            return !string.IsNullOrWhiteSpace(Options?.HttpClientName)
-                ? resolvedFactory.CreateClient(Options.HttpClientName)
-                : resolvedFactory.CreateClient();
-        }
-
-        /// <summary>
         /// send request as an asynchronous operation.
         /// </summary>
         /// <param name="request">The request.</param>
@@ -223,8 +209,7 @@ namespace Heidelpay.Payment.Communication
 
             LogRequest(request);
 
-            var client = ResolveHttpClient(factory);
-            var response = await client
+            var response = await httpClient
                 .SendAsync(request);
 
             LogResponse(response);
