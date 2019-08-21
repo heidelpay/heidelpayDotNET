@@ -59,7 +59,19 @@ namespace Heidelpay.Payment.Service
         }
 
         /// <summary>
-        /// Creates the payment type asynchronous.
+        /// Updates the payment type as an asynchronous operation.
+        /// </summary>
+        /// <typeparam name="TPaymentBase">The type of the payment base.</typeparam>
+        /// <param name="paymentType">Type of the payment.</param>
+        /// <returns></returns>
+        public async Task<TPaymentBase> UpdatePaymentTypeAsync<TPaymentBase>(TPaymentBase paymentType)
+            where TPaymentBase : PaymentTypeBase
+        {
+            return await ApiPutAsync(paymentType, true);
+        }
+
+        /// <summary>
+        /// Creates the payment type as an asynchronous operation.
         /// </summary>
         /// <param name="plan">The plan.</param>
         /// <returns></returns>
@@ -69,7 +81,17 @@ namespace Heidelpay.Payment.Service
         }
 
         /// <summary>
-        /// create basket as an asynchronous operation.
+        /// Updates the payment type as an asynchronous operation.
+        /// </summary>
+        /// <param name="plan">The plan.</param>
+        /// <returns></returns>
+        public async Task<HirePurchaseRatePlan> UpdatePaymentTypeAsync(HirePurchaseRatePlan plan)
+        {
+            return await ApiPostAsync(plan, uri: BuildUri("types/hire-purchase-direct-debit", null), getAfterPost: false);
+        }
+
+        /// <summary>
+        /// Create basket as an asynchronous operation.
         /// </summary>
         /// <param name="basket">The basket.</param>
         /// <returns>Task&lt;Basket&gt;.</returns>
@@ -97,15 +119,13 @@ namespace Heidelpay.Payment.Service
         /// <summary>
         /// Update basket as an asynchronous operation.
         /// </summary>
-        /// <param name="id">The identifier.</param>
         /// <param name="basket">The basket.</param>
         /// <returns>Task&lt;Basket&gt;.</returns>
-        public async Task<Basket> UpdateBasketAsync(string id, Basket basket)
+        public async Task<Basket> UpdateBasketAsync(Basket basket)
         {
-            Check.ThrowIfNullOrEmpty(id, nameof(id));
             Check.ThrowIfNull(basket, nameof(basket));
 
-            return await ApiPutAsync(id, basket, getAfterPut: true);
+            return await ApiPutAsync(basket, getAfterPut: true);
         }
 
         /// <summary>
@@ -123,15 +143,13 @@ namespace Heidelpay.Payment.Service
         /// <summary>
         /// Update customer as an asynchronous operation.
         /// </summary>
-        /// <param name="id">The identifier.</param>
         /// <param name="customer">The customer.</param>
         /// <returns>Task&lt;Customer&gt;.</returns>
-        public async Task<Customer> UpdateCustomerAsync(string id, Customer customer)
+        public async Task<Customer> UpdateCustomerAsync(Customer customer)
         {
-            Check.ThrowIfNullOrEmpty(id, nameof(id));
             Check.ThrowIfNull(customer, nameof(customer));
 
-            return await ApiPutAsync(id, customer, getAfterPut: true);
+            return await ApiPutAsync(customer, getAfterPut: true);
         }
 
         /// <summary>

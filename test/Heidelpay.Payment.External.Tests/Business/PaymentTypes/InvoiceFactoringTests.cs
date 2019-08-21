@@ -20,7 +20,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             var charge = await result.ChargeAsync(10m, "EUR", ShopReturnUri, 
                 GetMaximumCustomerSameAddress(GetRandomInvoiceId()), GetMaximumBasket());
 
-            Assert.NotNull(result?.Id);
+            AssertCharge(charge, 10m);
             Assert.NotNull(charge?.PaymentId);
         }
 

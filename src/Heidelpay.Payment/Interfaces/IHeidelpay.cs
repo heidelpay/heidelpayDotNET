@@ -78,6 +78,19 @@ namespace Heidelpay.Payment.Interfaces
         Task<Authorization> AuthorizeAsync(decimal amount, string currency, string authorizedPaymentTypeId, Uri returnUrl = null, string customerId = null, bool? card3ds = null);
 
         /// <summary>
+        /// Authorizes s an asynchronous operation.
+        /// </summary>
+        /// <param name="amount">The amount.</param>
+        /// <param name="currency">The currency.</param>
+        /// <param name="plan">The plan.</param>
+        /// <param name="returnUrl">The return URL.</param>
+        /// <param name="customer">The customer.</param>
+        /// <param name="basket">The basket.</param>
+        /// <param name="effectiveInterestRate">The effective interest rate.</param>
+        /// <returns></returns>
+        Task<Authorization> AuthorizeAsync(decimal amount, string currency, HirePurchaseRatePlan plan, Uri returnUrl, Customer customer, Basket basket, decimal effectiveInterestRate);
+
+        /// <summary>
         /// Cancels the authorization as an asynchronous operation.
         /// </summary>
         /// <param name="paymentId">The payment identifier.</param>
@@ -184,11 +197,26 @@ namespace Heidelpay.Payment.Interfaces
         Task<TPaymentBase> CreatePaymentTypeAsync<TPaymentBase>(Action<TPaymentBase> config = null) where TPaymentBase : PaymentTypeBase;
 
         /// <summary>
+        /// Updates the payment type as an asynchronous operation.
+        /// </summary>
+        /// <typeparam name="TPaymentBase">The type of the payment base.</typeparam>
+        /// <param name="paymentType">Type of the payment.</param>
+        /// <returns></returns>
+        Task<TPaymentBase> UpdatePaymentTypeAsync<TPaymentBase>(TPaymentBase paymentType) where TPaymentBase : PaymentTypeBase;
+
+        /// <summary>
         /// Creates the payment type as an asynchronous operation.
         /// </summary>
         /// <param name="plan">The plan.</param>
         /// <returns></returns>
         Task<HirePurchaseRatePlan> CreatePaymentTypeAsync(HirePurchaseRatePlan plan);
+
+        /// <summary>
+        /// Updates the payment type as an asynchronous operation.
+        /// </summary>
+        /// <param name="plan">The plan.</param>
+        /// <returns></returns>
+        Task<HirePurchaseRatePlan> UpdatePaymentTypeAsync(HirePurchaseRatePlan plan);
 
         /// <summary>
         /// Deletes the customer as an asynchronous operation.
@@ -327,7 +355,7 @@ namespace Heidelpay.Payment.Interfaces
         Task<Payout> PayoutAsync(Payout payout);
 
         /// <summary>
-        /// Recurrings the asynchronous.
+        /// Recurrings as an asynchronous operation.
         /// </summary>
         /// <param name="paymentType">Type of the payment.</param>
         /// <param name="returnUrl">The return URL.</param>
@@ -337,7 +365,7 @@ namespace Heidelpay.Payment.Interfaces
         Task<Recurring> RecurringAsync(IPaymentType paymentType, Uri returnUrl, string customerId = null, string metadataId = null);
 
         /// <summary>
-        /// Paypages the asynchronous.
+        /// Paypages as an asynchronous operation.
         /// </summary>
         /// <param name="paypage">The paypage.</param>
         /// <returns></returns>
@@ -345,7 +373,7 @@ namespace Heidelpay.Payment.Interfaces
 
 
         /// <summary>
-        /// Hires the purchase rates asynchronous.
+        /// Hires the purchase rates as an asynchronous operation.
         /// </summary>
         /// <param name="amount">The amount.</param>
         /// <param name="currency">The currency.</param>

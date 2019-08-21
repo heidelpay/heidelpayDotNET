@@ -208,7 +208,7 @@ namespace Heidelpay.Payment
             Check.ThrowIfTrue(string.IsNullOrEmpty(customer.Id),
                "Customer has no id set. UpdateCustomerAsync can only be called with Customer.id.");
 
-            return await PaymentService.UpdateCustomerAsync(customer.Id, customer);
+            return await PaymentService.UpdateCustomerAsync(customer);
         }
 
         /// <summary>
@@ -222,7 +222,7 @@ namespace Heidelpay.Payment
             Check.ThrowIfTrue(string.IsNullOrEmpty(basket.Id),
                "Basket has no id set. UpdateBasketAsync can only be called with Basket.id.");
 
-            return await PaymentService.UpdateBasketAsync(basket.Id, basket);
+            return await PaymentService.UpdateBasketAsync(basket);
         }
 
         /// <summary>
@@ -293,11 +293,8 @@ namespace Heidelpay.Payment
                 Currency = currency,
                 ReturnUrl = returnUrl,
                 Card3ds = threeDS,
-                Resources = new Resources
-                {
-                    TypeId = chargeablePaymentTypeId,
-                    CustomerId = customerId
-                }
+                TypeId = chargeablePaymentTypeId,
+                CustomerId = customerId,
             });
         }
 
@@ -379,11 +376,8 @@ namespace Heidelpay.Payment
                 Currency = currency,
                 ReturnUrl = returnUrl,
                 Card3ds = threeDS,
-                Resources = new Resources
-                {
-                    TypeId = typeId,
-                    CustomerId = customerId
-                }
+                TypeId = typeId,
+                CustomerId = customerId
             });
         }
 
@@ -423,12 +417,9 @@ namespace Heidelpay.Payment
                 ReturnUrl = returnUrl,
                 InvoiceId = invoiceId,
                 Card3ds = threeDS,
-                Resources = new Resources
-                {
-                    TypeId = typeId,
-                    CustomerId = customerId,
-                    BasketId = basketId,
-                }
+                TypeId = typeId,
+                CustomerId = customerId,
+                BasketId = basketId,
             });
         }
 
@@ -462,10 +453,7 @@ namespace Heidelpay.Payment
             {
                 Amount = amount,
                 Currency = currency,
-                Resources = new Resources
-                {
-                    TypeId = typeId,
-                },
+                TypeId = typeId,
                 ReturnUrl = returnUrl,
             });
         }
@@ -537,11 +525,8 @@ namespace Heidelpay.Payment
                 Currency = currency,
                 ReturnUrl = returnUrl,
                 Card3ds = threeDS,
-                Resources = new Resources
-                {
-                    TypeId = authorizedPaymentTypeId,
-                    CustomerId = customerId,
-                }
+                TypeId = authorizedPaymentTypeId,
+                CustomerId = customerId,
             });
         }
 
@@ -622,6 +607,41 @@ namespace Heidelpay.Payment
             }
 
             return await AuthorizeAsync(amount, currency, authorizedPaymentTypeId: typeId, returnUrl: returnUrl, customerId: customerId, card3ds: threeDS);
+        }
+
+        /// <summary>
+        /// Authorizes the asynchronous.
+        /// </summary>
+        /// <param name="amount">The amount.</param>
+        /// <param name="currency">The currency.</param>
+        /// <param name="plan">The plan.</param>
+        /// <param name="returnUrl">The return URL.</param>
+        /// <param name="customer">The customer.</param>
+        /// <param name="basket">The basket.</param>
+        /// <param name="effectiveInterestRate">The effective interest rate.</param>
+        /// <returns></returns>
+        public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, HirePurchaseRatePlan plan, Uri returnUrl, Customer customer, Basket basket, decimal effectiveInterestRate)
+        {
+            Check.ThrowIfNullOrEmpty(currency, nameof(currency));
+            Check.ThrowIfNull(returnUrl, nameof(returnUrl));
+            Check.ThrowIfNull(customer, nameof(customer));
+            Check.ThrowIfNull(basket, nameof(basket));
+            Check.ThrowIfNull(plan, nameof(plan));
+
+            var customerId = await EnsureRestResourceCreatedAsync(customer);
+            var basketId = await EnsureRestResourceCreatedAsync(basket);
+            var typeId = await EnsureRestResourceCreatedAsync(plan, "types/hire-purchase-direct-debit");
+
+            return await AuthorizeAsync(new Authorization
+            {
+                Amount = amount,
+                Currency = currency,
+                ReturnUrl = returnUrl,
+                CustomerId = customerId,
+                BasketId = basketId,
+                TypeId = typeId,
+                EffectiveInterestRate = effectiveInterestRate,
+            });
         }
 
         /// <summary>
@@ -798,13 +818,47 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
+        /// Updates the payment type as an asynchronous operation.
+        /// </summary>
+        /// <typeparam name="TPaymentBase">The type of the payment base.</typeparam>
+        /// <param name="paymentType">Type of the payment.</param>
+        /// <returns></returns>
+        public async Task<TPaymentBase> UpdatePaymentTypeAsync<TPaymentBase>(TPaymentBase paymentType)
+             where TPaymentBase : PaymentTypeBase
+        {
+            Check.ThrowIfNull(paymentType, nameof(paymentType));
+
+            if (string.IsNullOrEmpty(paymentType.Id))
+                return await PaymentService.CreatePaymentTypeAsync(paymentType);
+
+            return await PaymentService.UpdatePaymentTypeAsync(paymentType);
+        }
+
+        /// <summary>
         /// Creates the payment type as an asynchronous operation.
         /// </summary>
         /// <param name="plan">The plan.</param>
         /// <returns></returns>
         public async Task<HirePurchaseRatePlan> CreatePaymentTypeAsync(HirePurchaseRatePlan plan)
         {
+            Check.ThrowIfNull(plan, nameof(plan));
+
             return await PaymentService.CreatePaymentTypeAsync(plan);
+        }
+
+        /// <summary>
+        /// Updates the payment type as an asynchronous operation.
+        /// </summary>
+        /// <param name="plan">The plan.</param>
+        /// <returns></returns>
+        public async Task<HirePurchaseRatePlan> UpdatePaymentTypeAsync(HirePurchaseRatePlan plan)
+        {
+            Check.ThrowIfNull(plan, nameof(plan));
+
+            if (string.IsNullOrEmpty(plan.Id))
+                return await PaymentService.CreatePaymentTypeAsync(plan);
+
+            return await PaymentService.UpdatePaymentTypeAsync(plan);
         }
 
         /// <summary>
@@ -813,7 +867,7 @@ namespace Heidelpay.Payment
         /// <param name="paymentId">The payment identifier.</param>
         /// <param name="invoiceId">The invoice identifier.</param>
         /// <returns>Task&lt;Shipment&gt;.</returns>
-            public async Task<Shipment> ShipmentAsync(string paymentId, string invoiceId = null)
+        public async Task<Shipment> ShipmentAsync(string paymentId, string invoiceId = null)
         {
             Check.ThrowIfNullOrEmpty(paymentId, nameof(paymentId));
 
@@ -827,6 +881,8 @@ namespace Heidelpay.Payment
         /// <returns></returns>
         public async Task<Paypage> PaypageAsync(Paypage paypage)
         {
+            Check.ThrowIfNull(paypage, nameof(paypage));
+
             return await PaypageService.InitializeAsync(paypage);
         }
 
@@ -862,8 +918,11 @@ namespace Heidelpay.Payment
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="restResource">The rest resource.</param>
-        /// <returns>Task&lt;System.String&gt;.</returns>
-        private async Task<string> EnsureRestResourceCreatedAsync<T>(T restResource)
+        /// <param name="resourceUrl">The resource URL.</param>
+        /// <returns>
+        /// Task&lt;System.String&gt;.
+        /// </returns>
+        private async Task<string> EnsureRestResourceCreatedAsync<T>(T restResource, string resourceUrl = null)
             where T : class, IRestResource
         {
             if (restResource == null)
@@ -872,7 +931,7 @@ namespace Heidelpay.Payment
             string resultId = restResource?.Id;
             if (string.IsNullOrEmpty(resultId))
             {
-                resultId = await PaymentService.EnsureRestResourceIdAsync(restResource);
+                resultId = await PaymentService.EnsureRestResourceIdAsync(restResource, resourceUrl);
             }
 
             return resultId;

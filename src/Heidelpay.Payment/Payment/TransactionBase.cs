@@ -29,7 +29,7 @@ namespace Heidelpay.Payment
     /// Implements the <see cref="Heidelpay.Payment.PaymentBase" />
     /// </summary>
     /// <seealso cref="Heidelpay.Payment.PaymentBase" />
-    public abstract class PaymentTransactionBase : PaymentBase
+    public abstract class TransactionBase : PaymentBase
     {
         /*
          * Java Equivalent is AbstractInitPayment
@@ -140,6 +140,10 @@ namespace Heidelpay.Payment
             {
                 return Resources?.TypeId;
             }
+            internal set
+            {
+                Resources.TypeId = value;
+            }
         }
 
         /// <summary>
@@ -230,18 +234,18 @@ namespace Heidelpay.Payment
         public IEnumerable<Cancel> CancelList { get; internal set; } = Enumerable.Empty<Cancel>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PaymentTransactionBase"/> class.
+        /// Initializes a new instance of the <see cref="TransactionBase"/> class.
         /// </summary>
-        public PaymentTransactionBase()
+        public TransactionBase()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PaymentTransactionBase"/> class.
+        /// Initializes a new instance of the <see cref="TransactionBase"/> class.
         /// </summary>
         /// <param name="heidelpayClient">The heidelpay client.</param>
         /// <param name="paymentTypeId">The payment type identifier.</param>
-        internal PaymentTransactionBase(IHeidelpay heidelpayClient, string paymentTypeId = null)
+        internal TransactionBase(IHeidelpay heidelpayClient, string paymentTypeId = null)
             : base(heidelpayClient)
         {
             Resources.TypeId = paymentTypeId;
@@ -287,6 +291,6 @@ namespace Heidelpay.Payment
         /// </summary>
         /// <value>The resources.</value>
         [JsonProperty]
-        internal Resources Resources { get; set; } = new Resources();
+        internal Resources Resources { get; private set; } = new Resources();
     }
 }

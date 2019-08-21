@@ -7,7 +7,7 @@ namespace Heidelpay.Payment
     /// <summary>
     /// 
     /// </summary>
-    public sealed class Paypage : PaymentTransactionBase
+    public sealed class Paypage : TransactionBase
     {
         /// <summary>
         /// Gets or sets the logo image.

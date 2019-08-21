@@ -40,6 +40,113 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             AssertRatePlan(plan, created);
         }
 
+        [Fact]
+        public async Task Create_Hire_Purchase_Type_Iban_Later()
+        {
+            var created = await CreatePlan();
+
+            AddIbanInvoiceParameter(created);
+
+            var updated = await Heidelpay.UpdatePaymentTypeAsync(created);
+
+            Assert.NotNull(updated);
+            AssertRatePlan(created, updated);
+        }
+
+        [Fact]
+        public async Task Authorize_Via_Type_With_Iban()
+        {
+            var customer = await Heidelpay.CreateCustomerAsync(GetMaximumCustomerSameAddress(GetRandomId()));
+            var basket = await Heidelpay.CreateBasketAsync(GetMaximumBasket(amount: 866.49m, discount: 0m));
+            var plan = await CreatePlanWithIban();
+
+            var authorization = await plan.AuthorizeAsync(866.49m, "EUR", TestReturnUri, customer, basket, plan.EffectiveInterestRate.Value);
+
+            AssertAuthorization(plan, authorization);
+        }
+
+        [Fact]
+        public async Task Authorize_Via_Heidelpay_TypeId_With_Iban()
+        {
+            var customer = GetMaximumCustomerSameAddress(GetRandomId());
+            var basket = GetMaximumBasket(amount: 866.49m, discount: 0m);
+
+            decimal effectiveInterestRate = 5.5m;
+            DateTime orderDate = new DateTime(2019, 6, 12);
+            var rateList = await Heidelpay.HirePurchaseRatesAsync(10, "EUR", effectiveInterestRate, orderDate);
+            var plan = rateList.First();
+            AddIbanInvoiceParameter(plan);
+
+            var authorization = await Heidelpay.AuthorizeAsync(866.49m, "EUR", plan, TestReturnUri, customer, basket, plan.EffectiveInterestRate.Value);
+
+            AssertAuthorization(plan, authorization);
+        }
+
+        [Fact]
+        public async Task Charge_Via_Authorize()
+        {
+            var customer = GetMaximumCustomerSameAddress(GetRandomId());
+            var basket = GetMaximumBasket(amount: 866.49m, discount: 0m);
+            var plan = await CreatePlan();
+
+            var authorization = await Heidelpay.AuthorizeAsync(866.49m, "EUR", plan, TestReturnUri, customer, basket, plan.EffectiveInterestRate.Value);
+
+            var charge = await authorization.ChargeAsync();
+            Assert.NotNull(charge.Processing.ExternalOrderId);
+            AssertCharge(charge);
+        }
+
+        [Fact]
+        public async Task Full_Cancellation_Before_Shipment()
+        {
+            var customer = GetMaximumCustomerSameAddress(GetRandomId());
+            var basket = GetMaximumBasket(amount: 866.49m, discount: 0m);
+            var plan = await CreatePlan();
+
+            var authorization = await Heidelpay.AuthorizeAsync(866.49m, "EUR", plan, TestReturnUri, customer, basket, plan.EffectiveInterestRate.Value);
+
+            var charge = await authorization.ChargeAsync();
+            
+            var cancel = await charge.CancelAsync();
+            AssertCancel(cancel);
+        }
+
+        [Fact]
+        public async Task Partial_Cancellation_Before_Shipment()
+        {
+            var customer = GetMaximumCustomerSameAddress(GetRandomId());
+            var basket = GetMaximumBasket(amount: 866.49m, discount: 0m);
+            var plan = await CreatePlan();
+
+            var authorization = await Heidelpay.AuthorizeAsync(866.49m, "EUR", plan, TestReturnUri, customer, basket, plan.EffectiveInterestRate.Value);
+
+            var charge = await authorization.ChargeAsync();
+
+            var cancel = await charge.CancelAsync(decimal.One);
+            AssertCancel(cancel, decimal.One);
+        }
+
+        [Fact]
+        public async Task Test_Shipment()
+        {
+            var customer = GetMaximumCustomerSameAddress(GetRandomId());
+            var basket = GetMaximumBasket(amount: 866.49m, discount: 0m);
+            var plan = await CreatePlan();
+
+            var authorization = await Heidelpay.AuthorizeAsync(866.49m, "EUR", plan, TestReturnUri, customer, basket, plan.EffectiveInterestRate.Value);
+
+            var charge = await authorization.ChargeAsync();
+
+            var shipment = await Heidelpay.ShipmentAsync(charge.PaymentId);
+            AssertShipment(shipment);
+        }
+
+        private void AssertAuthorization(HirePurchaseRatePlan ratePlan, Authorization authorization, decimal? authAmount = 866.49m)
+        {
+            Assert.Equal(ratePlan.EffectiveInterestRate, authorization.EffectiveInterestRate);
+            AssertAuthorizationFull(authorization, authAmount);
+        }
+
         private void AssertRatePlan(decimal effectiveInterestRate, DateTime orderDate, HirePurchaseRatePlan ratePlan)
         {
             Assert.Equal(3, ratePlan.NumberOfRates);
@@ -71,13 +178,30 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             Assert.Equal(expected.TotalAmount, actual.TotalAmount);
             Assert.Equal(expected.TotalPurchaseAmount, actual.TotalPurchaseAmount);
         }
+        private async Task<HirePurchaseRatePlan> CreatePlanWithIban()
+        {
+            decimal effectiveInterestRate = 5.5m;
+            DateTime orderDate = new DateTime(2019, 6, 12);
+            var rateList = await Heidelpay.HirePurchaseRatesAsync(10, "EUR", effectiveInterestRate, orderDate);
+            var plan = rateList.First();
+            AddIbanInvoiceParameter(plan);
+            return await Heidelpay.CreatePaymentTypeAsync(plan);
+        }
 
+        private async Task<HirePurchaseRatePlan> CreatePlan()
+        {
+            decimal effectiveInterestRate = 5.5m;
+            DateTime orderDate = new DateTime(2019, 6, 12);
+            var rateList = await Heidelpay.HirePurchaseRatesAsync(10, "EUR", effectiveInterestRate, orderDate);
+            var plan = rateList.First();
+            return await Heidelpay.CreatePaymentTypeAsync(plan);
+        }
         private void AddIbanInvoiceParameter(HirePurchaseRatePlan ratePlan)
         {
             ratePlan.Iban = "DE46940594210000012345";
             ratePlan.Bic = "COBADEFFXXX";
             ratePlan.AccountHolder = "Rene Felder";
-            ratePlan.InvoiceDate = DateTime.Now.Date;
+            ratePlan.InvoiceDate = DateTime.Now.Date.AddDays(-1);
             ratePlan.InvoiceDueDate = DateTime.Now.Date.AddDays(10);
         }
     }

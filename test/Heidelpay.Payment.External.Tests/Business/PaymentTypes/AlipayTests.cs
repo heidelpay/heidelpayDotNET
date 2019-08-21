@@ -24,10 +24,8 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         {
             var typeInstance = await Heidelpay.CreatePaymentTypeAsync(ConfigurePaymentType);
             var charge = await typeInstance.ChargeAsync(decimal.One, "EUR", ShopReturnUri);
-            Assert.NotNull(charge?.Id);
-            Assert.Equal(decimal.One, charge.Amount);
-            Assert.Equal("EUR", charge.Currency);
             Assert.Equal(typeInstance.Id, charge.TypeId);
+            AssertCharge(charge, decimal.One, Status.Pending);
         }
 
         [Fact]

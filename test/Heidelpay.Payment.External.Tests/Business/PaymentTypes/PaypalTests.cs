@@ -20,7 +20,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             var result = await Heidelpay.CreatePaymentTypeAsync<Paypal>();
             var auth = await Heidelpay.AuthorizeAsync(decimal.One, "EUR", result, ShopReturnUri);
             Assert.NotNull(result?.Id);
-            Assert.NotNull(auth?.Id);
+            AssertAuthorizationSimple(auth, decimal.One);
         }
 
         [Fact]
@@ -28,8 +28,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         {
             var result = await Heidelpay.CreatePaymentTypeAsync<Paypal>();
             var charge = await Heidelpay.ChargeAsync(decimal.One, "EUR", result, TestReturnUri);
-            Assert.NotNull(charge?.Id);
-            Assert.NotNull(charge?.RedirectUrl);
+            AssertCharge(charge, decimal.One, Status.Pending);
         }
 
         [Fact]
