@@ -302,8 +302,8 @@ namespace Heidelpay.Payment
         /// <returns>Task&lt;Cancel&gt;.</returns>
         public async Task<Cancel> CancelAsync(decimal? amount = null)
         {
-            Check.ThrowIfTrue(Authorization == null, 
-                merchantMessage: "Cancel is only possible for an Authorization", 
+            Check.ThrowIfTrue(Authorization == null,
+                merchantMessage: "Cancel is only possible for an Authorization",
                 customerMessage: "Payment cancelation not possible");
 
             return await Authorization.CancelAsync(amount);
