@@ -21,6 +21,7 @@ using Heidelpay.Payment.Interfaces;
 using Heidelpay.Payment.PaymentTypes;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -52,11 +53,18 @@ namespace Heidelpay.Payment.Service
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="resource">The resource.</param>
-        /// <returns>Task&lt;System.String&gt;.</returns>
-        public async Task<string> EnsureRestResourceIdAsync<T>(T resource)
+        /// <param name="resourceUrl">The resource URL.</param>
+        /// <returns>
+        /// Task&lt;System.String&gt;.
+        /// </returns>
+        public async Task<string> EnsureRestResourceIdAsync<T>(T resource, string resourceUrl = null)
             where T : class, IRestResource
         {
-            var response = (await Heidelpay.RestClient.HttpPostAsync(BuildUri(resource.GetType()), resource, typeof(IdResponse))) as IdResponse;
+            var uri = string.IsNullOrEmpty(resourceUrl)
+                ? BuildUri(resource.GetType())
+                : BuildUri(resourceUrl, null);
+
+            var response = (await Heidelpay.RestClient.HttpPostAsync(uri, resource, typeof(IdResponse))) as IdResponse;
             return response?.Id;
         }
 
@@ -113,14 +121,13 @@ namespace Heidelpay.Payment.Service
         /// API put as an asynchronous operation.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="id">The identifier.</param>
         /// <param name="resource">The resource.</param>
         /// <param name="getAfterPut">if set to <c>true</c> [get after put].</param>
         /// <returns>Task&lt;T&gt;.</returns>
-        protected async Task<T> ApiPutAsync<T>(string id, T resource, bool getAfterPut = false)
+        protected async Task<T> ApiPutAsync<T>(T resource, bool getAfterPut = false)
            where T : class, IRestResource
         {
-            var putted = await Heidelpay.RestClient.HttpPutAsync<T>(BuildUri<T>(id), resource);
+            var putted = await Heidelpay.RestClient.HttpPutAsync<T>(BuildUri<T>(resource.Id), resource);
             return getAfterPut
                 ? await ApiGetAsync<T>(putted.Id)
                 : PostProcessApiResource(putted);
@@ -177,6 +184,18 @@ namespace Heidelpay.Payment.Service
                 combinedPaths = new Uri(combinedPaths, id.EnsureTrailingSlash());
             }
 
+            return combinedPaths;
+        }
+
+        protected Uri BuildHirePurchaseUri(decimal amount, string currency, decimal effectiveInterestRate, DateTime orderDate)
+        {
+            var rootPath = new Uri(Heidelpay.RestClient?.Options?.ApiEndpoint, Heidelpay.RestClient?.Options?.ApiVersion.EnsureTrailingSlash());
+            var combinedPaths = new Uri(rootPath, 
+                $"types/hire-purchase-direct-debit/plans?" +
+                $"amount={amount.ToString(CultureInfo.InvariantCulture)}&" +
+                $"currency={currency}&" +
+                $"effectiveInterest={effectiveInterestRate.ToString(CultureInfo.InvariantCulture)}&" +
+                $"orderDate={orderDate.ToString("yyyy-MM-dd")}");
             return combinedPaths;
         }
 

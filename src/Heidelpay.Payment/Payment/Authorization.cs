@@ -28,10 +28,10 @@ namespace Heidelpay.Payment
     /// 
     /// The returnUrl is mandatory in case of redirectPayments like Sofort, Paypal, Giropay, Creditcard 3DS
     /// 
-    /// Implements the <see cref="Heidelpay.Payment.PaymentTransactionBase" />
+    /// Implements the <see cref="Heidelpay.Payment.TransactionBase" />
     /// </summary>
-    /// <seealso cref="Heidelpay.Payment.PaymentTransactionBase" />
-    public sealed class Authorization : PaymentTransactionBase
+    /// <seealso cref="Heidelpay.Payment.TransactionBase" />
+    public sealed class Authorization : TransactionBase
     {
         /// <summary>
         /// Gets or sets the effective interest rate.
@@ -39,7 +39,7 @@ namespace Heidelpay.Payment
         /// <value>
         /// The effective interest rate.
         /// </value>
-        public decimal EffectiveInterestRate { get; set; }
+        public decimal? EffectiveInterestRate { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Authorization"/> class.

@@ -42,7 +42,7 @@ namespace Heidelpay.Payment.Options
         /// Gets the default locale.
         /// </summary>
         /// <value>The default locale.</value>
-        public static string DefaultLocale { get; } = "en-US";
+        public static string DefaultLocale { get; } = "en";
 
         /// <summary>
         /// Gets or sets the API endpoint.

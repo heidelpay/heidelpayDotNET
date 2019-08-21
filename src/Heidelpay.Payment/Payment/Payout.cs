@@ -24,8 +24,8 @@ namespace Heidelpay.Payment
     /// <summary>
     /// 
     /// </summary>
-    /// <seealso cref="Heidelpay.Payment.PaymentTransactionBase" />
-    public sealed class Payout : PaymentTransactionBase
+    /// <seealso cref="Heidelpay.Payment.TransactionBase" />
+    public sealed class Payout : TransactionBase
     {
         [JsonConstructor]
         internal Payout()

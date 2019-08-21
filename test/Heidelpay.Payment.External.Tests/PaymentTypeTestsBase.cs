@@ -123,12 +123,12 @@ namespace Heidelpay.Payment.External.Tests.Business
             };
         }
 
-        protected Basket GetMaximumBasket()
+        protected Basket GetMaximumBasket(decimal? amount = 500.05m, decimal? discount = 10m)
         {
             var basket = new Basket
             {
-                AmountTotalGross = 500.05m,
-                AmountTotalDiscount = 10m,
+                AmountTotalGross = amount.Value,
+                AmountTotalDiscount = discount.Value,
                 CurrencyCode = "EUR",
                 Note = "Mystery Shopping",
                 OrderId = GetRandomInvoiceId(),
@@ -137,8 +137,8 @@ namespace Heidelpay.Payment.External.Tests.Business
             {
                 BasketItemReferenceId = "Artikelnummer4711",
                 AmountDiscount = decimal.One,
-                AmountGross = 500.5m,
-                AmountNet = 420.1m,
+                AmountGross = amount.Value,
+                AmountNet = amount.Value,
                 AmountPerUnit = 100.1m,
                 AmountVat = 80.4m,
                 Quantity = 5,
@@ -303,6 +303,50 @@ namespace Heidelpay.Payment.External.Tests.Business
             Assert.Equal(expected.RiskId, actual.RiskId);
             Assert.Equal(expected.TypeId, actual.TypeId);
             AssertEquals(expected.Processing, actual.Processing);
+        }
+
+        protected void AssertCancel(Cancel cancel, decimal? cancelAmount = 866.49m)
+        {
+            Assert.NotNull(cancel?.Id);
+            Assert.NotNull(cancel.Processing.UniqueId);
+            Assert.NotNull(cancel.Processing.ShortId);
+            Assert.Equal(cancelAmount, cancel.Amount);
+            Assert.Equal(Status.Success, cancel.Status);
+        }
+
+        protected void AssertCharge(Charge charge, decimal? chargeAmount = 866.49m, Status status = Status.Success, string currency = "EUR")
+        {
+            Assert.NotNull(charge?.Id);
+            Assert.NotNull(charge.Processing.UniqueId);
+            Assert.NotNull(charge.Processing.ShortId);
+            Assert.Equal(currency, charge.Currency);
+            Assert.Equal(chargeAmount, charge.Amount);
+            Assert.Equal(status, charge.Status);
+        }
+
+        protected void AssertAuthorizationSimple(Authorization authorization, decimal? authAmount = 866.49m, Status status = Status.Success)
+        {
+            Assert.NotNull(authorization?.Id);
+            Assert.Equal(authAmount, authorization.Amount);
+            Assert.Equal(status, authorization.Status);
+            Assert.NotNull(authorization.TypeId);
+        }
+
+        protected void AssertAuthorizationFull(Authorization authorization, decimal? authAmount = 866.49m)
+        {
+            AssertAuthorizationSimple(authorization, authAmount);
+
+            Assert.NotNull(authorization.Processing.PdfLink);
+            Assert.NotNull(authorization.Processing.ExternalOrderId);
+
+            Assert.NotNull(authorization.PaymentId);
+            Assert.NotNull(authorization.CustomerId);
+            Assert.NotNull(authorization.BasketId);
+        }
+
+        protected void AssertShipment(Shipment shipment)
+        {
+            Assert.NotNull(shipment?.Id);
         }
     }
 }

@@ -24,8 +24,8 @@ namespace Heidelpay.Payment
     /// <summary>
     /// 
     /// </summary>
-    /// <seealso cref="Heidelpay.Payment.PaymentTransactionBase" />
-    public sealed class Recurring : PaymentTransactionBase
+    /// <seealso cref="Heidelpay.Payment.TransactionBase" />
+    public sealed class Recurring : TransactionBase
     {
         [JsonConstructor]
         internal Recurring()

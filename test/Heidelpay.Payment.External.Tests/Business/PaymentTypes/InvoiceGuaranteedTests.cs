@@ -19,8 +19,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         {
             var result = await Heidelpay.CreatePaymentTypeAsync<InvoiceGuaranteed>();
             var charge = await result.ChargeAsync(10.0m, "EUR", ShopReturnUri, GetMaximumCustomerSameAddress(GetRandomId()));
-            Assert.NotNull(result?.Id);
-            Assert.NotNull(charge?.Id);
+            AssertCharge(charge, 10m, Status.Pending);
         }
 
         [Fact]
@@ -37,7 +36,8 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             var charge = await result.ChargeAsync(10.0m, "EUR", ShopReturnUri, GetMaximumCustomerSameAddress(GetRandomId()));
             var shipment = await Heidelpay.ShipmentAsync(charge?.PaymentId, GetRandomInvoiceId());
 
-            Assert.NotNull(shipment?.Id);
+            AssertCharge(charge, 10m, Status.Pending);
+            AssertShipment(shipment);
         }
 
         [Fact]

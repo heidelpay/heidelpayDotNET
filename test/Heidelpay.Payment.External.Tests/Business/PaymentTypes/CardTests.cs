@@ -21,7 +21,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         {
             var card = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCard);
             var authorization = await card.AuthorizeAsync(decimal.One, "EUR", ShopReturnUri);
-            Assert.NotNull(authorization?.Id);
+            AssertAuthorizationSimple(authorization, decimal.One, Status.Pending);
         }
 
         [Fact]
@@ -30,7 +30,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             var card = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCard);
             var authorization = await card.AuthorizeAsync(decimal.One, "EUR", ShopReturnUri);
             var payment = authorization.Payment;
-            Assert.NotNull(authorization?.Id);
+            AssertAuthorizationSimple(authorization, decimal.One, Status.Pending);
             Assert.NotNull(payment?.Id);
         }
 
@@ -39,9 +39,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         {
             var card = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCard);
             var charge = await card.ChargeAsync(decimal.One, "EUR", ShopReturnUri);
-            Assert.NotNull(charge?.Id);
-            Assert.Equal(decimal.One, charge.Amount);
-            Assert.Equal("EUR", charge.Currency);
+            AssertCharge(charge, decimal.One, Status.Pending);
             Assert.Equal(card.Id, charge.TypeId);
         }
 

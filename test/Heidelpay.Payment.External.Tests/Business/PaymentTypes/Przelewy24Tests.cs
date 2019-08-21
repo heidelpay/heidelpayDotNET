@@ -18,7 +18,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         {
             var result = await Heidelpay.CreatePaymentTypeAsync<Przelewy24>();
             var charge = await Heidelpay.ChargeAsync(decimal.One, "PLN", result, TestReturnUri);
-            Assert.NotNull(charge?.Id);
+            AssertCharge(charge, decimal.One, status: Status.Pending, currency: "PLN");
             Assert.NotNull(charge?.RedirectUrl);
         }
 

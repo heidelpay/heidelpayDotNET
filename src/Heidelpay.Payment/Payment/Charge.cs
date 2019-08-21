@@ -30,10 +30,10 @@ namespace Heidelpay.Payment
     /// 
     /// The returnUrl is mandatory in case of redirectPayments like Sofort, Paypal, Giropay, Creditcard 3DS
     /// 
-    /// Implements the <see cref="Heidelpay.Payment.PaymentTransactionBase" />
+    /// Implements the <see cref="Heidelpay.Payment.TransactionBase" />
     /// </summary>
-    /// <seealso cref="Heidelpay.Payment.PaymentTransactionBase" />
-    public sealed class Charge : PaymentTransactionBase
+    /// <seealso cref="Heidelpay.Payment.TransactionBase" />
+    public sealed class Charge : TransactionBase
     {
         /// <summary>
         /// Gets or sets the invoice identifier.

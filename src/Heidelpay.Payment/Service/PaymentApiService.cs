@@ -47,7 +47,7 @@ namespace Heidelpay.Payment.Service
         }
 
         /// <summary>
-        /// create payment type as an asynchronous operation.
+        /// Create payment type as an asynchronous operation.
         /// </summary>
         /// <typeparam name="TPaymentBase">The type of the t payment base.</typeparam>
         /// <param name="paymentType">Type of the payment.</param>
@@ -59,7 +59,19 @@ namespace Heidelpay.Payment.Service
         }
 
         /// <summary>
-        /// create basket as an asynchronous operation.
+        /// Updates the payment type as an asynchronous operation.
+        /// </summary>
+        /// <typeparam name="TPaymentBase">The type of the payment base.</typeparam>
+        /// <param name="paymentType">Type of the payment.</param>
+        /// <returns></returns>
+        public async Task<TPaymentBase> UpdatePaymentTypeAsync<TPaymentBase>(TPaymentBase paymentType)
+            where TPaymentBase : PaymentTypeBase
+        {
+            return await ApiPutAsync(paymentType, true);
+        }
+
+        /// <summary>
+        /// Create basket as an asynchronous operation.
         /// </summary>
         /// <param name="basket">The basket.</param>
         /// <returns>Task&lt;Basket&gt;.</returns>
@@ -71,7 +83,7 @@ namespace Heidelpay.Payment.Service
         }
 
         /// <summary>
-        /// create meta data as an asynchronous operation.
+        /// Create meta data as an asynchronous operation.
         /// </summary>
         /// <param name="metadata">The metadata.</param>
         /// <returns>Task&lt;MetaData&gt;.</returns>
@@ -85,21 +97,19 @@ namespace Heidelpay.Payment.Service
         }
 
         /// <summary>
-        /// update basket as an asynchronous operation.
+        /// Update basket as an asynchronous operation.
         /// </summary>
-        /// <param name="id">The identifier.</param>
         /// <param name="basket">The basket.</param>
         /// <returns>Task&lt;Basket&gt;.</returns>
-        public async Task<Basket> UpdateBasketAsync(string id, Basket basket)
+        public async Task<Basket> UpdateBasketAsync(Basket basket)
         {
-            Check.ThrowIfNullOrEmpty(id, nameof(id));
             Check.ThrowIfNull(basket, nameof(basket));
 
-            return await ApiPutAsync(id, basket, getAfterPut: true);
+            return await ApiPutAsync(basket, getAfterPut: true);
         }
 
         /// <summary>
-        /// create customer as an asynchronous operation.
+        /// Create customer as an asynchronous operation.
         /// </summary>
         /// <param name="customer">The customer.</param>
         /// <returns>Task&lt;Customer&gt;.</returns>
@@ -111,21 +121,19 @@ namespace Heidelpay.Payment.Service
         }
 
         /// <summary>
-        /// update customer as an asynchronous operation.
+        /// Update customer as an asynchronous operation.
         /// </summary>
-        /// <param name="id">The identifier.</param>
         /// <param name="customer">The customer.</param>
         /// <returns>Task&lt;Customer&gt;.</returns>
-        public async Task<Customer> UpdateCustomerAsync(string id, Customer customer)
+        public async Task<Customer> UpdateCustomerAsync(Customer customer)
         {
-            Check.ThrowIfNullOrEmpty(id, nameof(id));
             Check.ThrowIfNull(customer, nameof(customer));
 
-            return await ApiPutAsync(id, customer, getAfterPut: true);
+            return await ApiPutAsync(customer, getAfterPut: true);
         }
 
         /// <summary>
-        /// delete customer as an asynchronous operation.
+        /// Delete customer as an asynchronous operation.
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns>Task.</returns>
@@ -137,7 +145,7 @@ namespace Heidelpay.Payment.Service
         }
 
         /// <summary>
-        /// charge as an asynchronous operation.
+        /// Charge as an asynchronous operation.
         /// </summary>
         /// <param name="charge">The charge.</param>
         /// <returns>Task&lt;Charge&gt;.</returns>
@@ -153,7 +161,7 @@ namespace Heidelpay.Payment.Service
         }
 
         /// <summary>
-        /// authorize as an asynchronous operation.
+        /// Authorize as an asynchronous operation.
         /// </summary>
         /// <param name="authorization">The authorization.</param>
         /// <returns>Task&lt;Authorization&gt;.</returns>
@@ -169,7 +177,7 @@ namespace Heidelpay.Payment.Service
         }
 
         /// <summary>
-        /// fetch payment type as an asynchronous operation.
+        /// Fetch payment type as an asynchronous operation.
         /// </summary>
         /// <typeparam name="TPaymentBase">The type of the t payment base.</typeparam>
         /// <param name="paymentTypeId">The payment type identifier.</param>
@@ -184,7 +192,7 @@ namespace Heidelpay.Payment.Service
         }
 
         /// <summary>
-        /// fetch authorization as an asynchronous operation.
+        /// Fetch authorization as an asynchronous operation.
         /// </summary>
         /// <param name="paymentId">The payment identifier.</param>
         /// <returns>Task&lt;Authorization&gt;.</returns>
@@ -197,7 +205,7 @@ namespace Heidelpay.Payment.Service
         }
 
         /// <summary>
-        /// fetch charge as an asynchronous operation.
+        /// Fetch charge as an asynchronous operation.
         /// </summary>
         /// <param name="paymentId">The payment identifier.</param>
         /// <param name="chargeId">The charge identifier.</param>
@@ -213,7 +221,7 @@ namespace Heidelpay.Payment.Service
         }
 
         /// <summary>
-        /// fetch payout as an asynchronous operation.
+        /// Fetch payout as an asynchronous operation.
         /// </summary>
         /// <param name="paymentId">The payment identifier.</param>
         /// <param name="payoutId">The charge identifier.</param>
@@ -229,7 +237,7 @@ namespace Heidelpay.Payment.Service
         }
 
         /// <summary>
-        /// fetch cancel as an asynchronous operation.
+        /// Fetch cancel as an asynchronous operation.
         /// </summary>
         /// <param name="paymentId">The payment identifier.</param>
         /// <param name="cancelId">The cancel identifier.</param>
@@ -245,7 +253,7 @@ namespace Heidelpay.Payment.Service
         }
 
         /// <summary>
-        /// fetch cancel as an asynchronous operation.
+        /// Fetch cancel as an asynchronous operation.
         /// </summary>
         /// <param name="paymentId">The payment identifier.</param>
         /// <param name="chargeId">The charge identifier.</param>
@@ -267,7 +275,7 @@ namespace Heidelpay.Payment.Service
         }
 
         /// <summary>
-        /// fetch payment as an asynchronous operation.
+        /// Fetch payment as an asynchronous operation.
         /// </summary>
         /// <param name="paymentId">The payment identifier.</param>
         /// <returns>Task&lt;Payment&gt;.</returns>
@@ -281,7 +289,7 @@ namespace Heidelpay.Payment.Service
         }
 
         /// <summary>
-        /// fetch basket as an asynchronous operation.
+        /// Fetch basket as an asynchronous operation.
         /// </summary>
         /// <param name="basketId">The basket identifier.</param>
         /// <returns>Task&lt;Basket&gt;.</returns>
@@ -293,7 +301,7 @@ namespace Heidelpay.Payment.Service
         }
 
         /// <summary>
-        /// fetch customer as an asynchronous operation.
+        /// Fetch customer as an asynchronous operation.
         /// </summary>
         /// <param name="customerId">The customer identifier.</param>
         /// <returns>Task&lt;Customer&gt;.</returns>
@@ -305,7 +313,7 @@ namespace Heidelpay.Payment.Service
         }
 
         /// <summary>
-        /// fetch meta data as an asynchronous operation.
+        /// Fetch meta data as an asynchronous operation.
         /// </summary>
         /// <param name="metaDataId">The meta data identifier.</param>
         /// <returns>Task&lt;MetaData&gt;.</returns>
@@ -319,7 +327,7 @@ namespace Heidelpay.Payment.Service
         }
 
         /// <summary>
-        /// shipment as an asynchronous operation.
+        /// Shipment as an asynchronous operation.
         /// </summary>
         /// <param name="paymentId">The payment identifier.</param>
         /// <param name="invoiceId">The invoice identifier.</param>
@@ -337,7 +345,7 @@ namespace Heidelpay.Payment.Service
         }
 
         /// <summary>
-        /// charge as an asynchronous operation.
+        /// Charge as an asynchronous operation.
         /// </summary>
         /// <param name="charge">The charge.</param>
         /// <param name="paymentId">The payment identifier.</param>
@@ -355,7 +363,7 @@ namespace Heidelpay.Payment.Service
         }
 
         /// <summary>
-        /// cancel as an asynchronous operation.
+        /// Cancel as an asynchronous operation.
         /// </summary>
         /// <param name="cancel">The cancel.</param>
         /// <param name="paymentId">The payment identifier.</param>
@@ -373,7 +381,7 @@ namespace Heidelpay.Payment.Service
         }
 
         /// <summary>
-        /// cancel charge as an asynchronous operation.
+        /// Cancel charge as an asynchronous operation.
         /// </summary>
         /// <param name="cancel">The cancel.</param>
         /// <param name="chargeId">The charge identifier.</param>
@@ -395,7 +403,7 @@ namespace Heidelpay.Payment.Service
         }
 
         /// <summary>
-        /// fetch authorization as an asynchronous operation.
+        /// Fetch authorization as an asynchronous operation.
         /// </summary>
         /// <param name="payment">The payment.</param>
         /// <returns>Task&lt;Authorization&gt;.</returns>
@@ -417,7 +425,7 @@ namespace Heidelpay.Payment.Service
         }
 
         /// <summary>
-        /// fetch cancel list as an asynchronous operation.
+        /// Fetch cancel list as an asynchronous operation.
         /// </summary>
         /// <param name="payment">The payment.</param>
         /// <returns>Task&lt;IEnumerable&lt;Cancel&gt;&gt;.</returns>
@@ -454,7 +462,7 @@ namespace Heidelpay.Payment.Service
         }
 
         /// <summary>
-        /// fetch charge list as an asynchronous operation.
+        /// Fetch charge list as an asynchronous operation.
         /// </summary>
         /// <param name="payment">The payment.</param>
         /// <returns>Task&lt;IEnumerable&lt;Charge&gt;&gt;.</returns>
@@ -487,6 +495,11 @@ namespace Heidelpay.Payment.Service
                 .ToList();
         }
 
+        /// <summary>
+        /// Payouts as an asynchronous operation.
+        /// </summary>
+        /// <param name="payout">The payout.</param>
+        /// <returns></returns>
         public async Task<Payout> PayoutAsync(Payout payout)
         {
             Check.ThrowIfNull(payout, nameof(payout));
@@ -498,7 +511,12 @@ namespace Heidelpay.Payment.Service
             return result;
         }
 
-        internal async Task<Recurring> RecurringAsync(Recurring recurring)
+        /// <summary>
+        /// Recurrings as an asynchronous operation.
+        /// </summary>
+        /// <param name="recurring">The recurring.</param>
+        /// <returns></returns>
+        public async Task<Recurring> RecurringAsync(Recurring recurring)
         {
             var result = await ApiPostAsync(
                 recurring, 
@@ -507,6 +525,25 @@ namespace Heidelpay.Payment.Service
 
             return result;
         }
+
+        /// <summary>
+        /// Hires the purchase plan as an asynchronous operation.
+        /// </summary>
+        /// <param name="amount">The amount.</param>
+        /// <param name="currency">The currency.</param>
+        /// <param name="effectiveInterestRate">The effective interest rate.</param>
+        /// <param name="orderDate">The order date.</param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public async Task<IEnumerable<HirePurchaseRatePlan>> HirePurchasePlanAsync(decimal amount, string currency, decimal effectiveInterestRate, DateTime orderDate)
+        {
+            var uri = BuildHirePurchaseUri(amount, currency, effectiveInterestRate, orderDate);
+
+            var result = await ApiGetAsync<HirePurchaseRatePlanList>(uri: uri);
+
+            return result.Entity;
+        }
+
 
         /// <summary>
         /// Gets the cancels for charge.
