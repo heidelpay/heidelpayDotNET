@@ -32,9 +32,9 @@ namespace Heidelpay.Payment
 {
     /// <summary>
     /// Class Heidelpay. This class cannot be inherited.
-    /// 
     /// The Heidelpay instance is a facade to the Heidelpay REST Api. The facade is initialized with an instance of HeidelpayApiOptions.
     /// </summary>
+    /// <seealso cref="Heidelpay.Payment.Interfaces.IHeidelpay" />
     public sealed class HeidelpayClient : IHeidelpay
     {
         /// <summary>
@@ -273,7 +273,13 @@ namespace Heidelpay.Payment
         /// <param name="customerId">The customer identifier.</param>
         /// <param name="card3ds">if set to <c>true</c> [3ds] is set, overriding setting of the payment type.</param>
         /// <returns>Task&lt;Charge&gt;.</returns>
-        public async Task<Charge> ChargeAsync(decimal amount, string currency, string chargeablePaymentTypeId, Uri returnUrl = null, string customerId = null, bool? card3ds = null)
+        public async Task<Charge> ChargeAsync(
+            decimal amount,
+            string currency,
+            string chargeablePaymentTypeId,
+            Uri returnUrl = null,
+            string customerId = null,
+            bool? card3ds = null)
         {
             Check.ThrowIfNullOrEmpty(currency, nameof(currency));
             Check.ThrowIfNullOrEmpty(chargeablePaymentTypeId, nameof(chargeablePaymentTypeId));
@@ -306,7 +312,11 @@ namespace Heidelpay.Payment
         /// <param name="paymentType">Type of the payment.</param>
         /// <param name="card3ds">if set to <c>true</c> [3ds] is set, overriding setting of the payment type.</param>
         /// <returns>Task&lt;Charge&gt;.</returns>
-        public async Task<Charge> ChargeAsync(decimal amount, string currency, IChargeablePaymentType paymentType, bool? card3ds = null)
+        public async Task<Charge> ChargeAsync(
+            decimal amount,
+            string currency,
+            IChargeablePaymentType paymentType,
+            bool? card3ds = null)
         {
             Check.ThrowIfNullOrEmpty(currency, nameof(currency));
 
@@ -329,7 +339,13 @@ namespace Heidelpay.Payment
         /// <param name="customer">The customer.</param>
         /// <param name="card3ds">if set to <c>true</c> [3ds] is set, overriding setting of the payment type.</param>
         /// <returns>Task&lt;Charge&gt;.</returns>
-        public async Task<Charge> ChargeAsync(decimal amount, string currency, IChargeablePaymentType paymentType, Uri returnUrl, Customer customer = null, bool? card3ds = null)
+        public async Task<Charge> ChargeAsync(
+            decimal amount,
+            string currency,
+            IChargeablePaymentType paymentType,
+            Uri returnUrl,
+            Customer customer = null,
+            bool? card3ds = null)
         {
             Check.ThrowIfNullOrEmpty(currency, nameof(currency));
             Check.ThrowIfNull(paymentType, nameof(paymentType));
@@ -356,7 +372,13 @@ namespace Heidelpay.Payment
         /// <param name="customerId">The customer identifier.</param>
         /// <param name="card3ds">if set to <c>true</c> [3ds] is set, overriding setting of the payment type.</param>
         /// <returns>Task&lt;Charge&gt;.</returns>
-        public async Task<Charge> ChargeAsync(decimal amount, string currency, IChargeablePaymentType paymentType, Uri returnUrl, string customerId, bool? card3ds = null)
+        public async Task<Charge> ChargeAsync(
+            decimal amount,
+            string currency,
+            IChargeablePaymentType paymentType,
+            Uri returnUrl,
+            string customerId,
+            bool? card3ds = null)
         {
             Check.ThrowIfNullOrEmpty(currency, nameof(currency));
             Check.ThrowIfNull(paymentType, nameof(paymentType));
@@ -393,7 +415,15 @@ namespace Heidelpay.Payment
         /// <param name="invoiceId">The invoice identifier.</param>
         /// <param name="card3ds">if set to <c>true</c> [3ds] is set, overriding setting of the payment type.</param>
         /// <returns>Task&lt;Charge&gt;.</returns>
-        public async Task<Charge> ChargeAsync(decimal amount, string currency, IChargeablePaymentType paymentType, Uri returnUrl, Customer customer, Basket basket, string invoiceId = null, bool? card3ds = null)
+        public async Task<Charge> ChargeAsync(
+            decimal amount,
+            string currency,
+            IChargeablePaymentType paymentType,
+            Uri returnUrl,
+            Customer customer,
+            Basket basket,
+            string invoiceId = null,
+            bool? card3ds = null)
         {
             Check.ThrowIfNullOrEmpty(currency, nameof(currency));
             Check.ThrowIfNull(paymentType, nameof(paymentType));
@@ -443,7 +473,11 @@ namespace Heidelpay.Payment
         /// <param name="paymentType">Type of the payment.</param>
         /// <param name="returnUrl">The return URL.</param>
         /// <returns></returns>
-        public async Task<Payout> PayoutAsync(decimal amount, string currency, IChargeablePaymentType paymentType, Uri returnUrl)
+        public async Task<Payout> PayoutAsync(
+            decimal amount,
+            string currency,
+            IChargeablePaymentType paymentType,
+            Uri returnUrl)
         {
             Check.ThrowIfNullOrEmpty(currency, nameof(currency));
 
@@ -480,7 +514,11 @@ namespace Heidelpay.Payment
         /// <param name="customerId">The customer identifier.</param>
         /// <param name="metadataId">The metadata identifier.</param>
         /// <returns></returns>
-        public async Task<Recurring> RecurringAsync(IPaymentType paymentType, Uri returnUrl, string customerId = null, string metadataId = null) 
+        public async Task<Recurring> RecurringAsync(
+            IPaymentType paymentType,
+            Uri returnUrl,
+            string customerId = null,
+            string metadataId = null) 
         {
             Check.ThrowIfNull(paymentType, nameof(paymentType));
             Check.ThrowIfNull(returnUrl, nameof(returnUrl));
@@ -504,8 +542,16 @@ namespace Heidelpay.Payment
         /// <param name="returnUrl">The return URL.</param>
         /// <param name="customerId">The customer identifier.</param>
         /// <param name="card3ds">if set to <c>true</c> [3ds] is set, overriding setting of the payment type.</param>
-        /// <returns>Task&lt;Authorization&gt;.</returns>
-        public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, string authorizedPaymentTypeId, Uri returnUrl = null, string customerId = null, bool? card3ds = null)
+        /// <returns>
+        /// Task&lt;Authorization&gt;.
+        /// </returns>
+        public async Task<Authorization> AuthorizeAsync(
+            decimal amount,
+            string currency,
+            string authorizedPaymentTypeId,
+            Uri returnUrl = null,
+            string customerId = null,
+            bool? card3ds = null)
         {
             Check.ThrowIfNullOrEmpty(currency, nameof(currency));
             Check.ThrowIfNullOrEmpty(authorizedPaymentTypeId, nameof(authorizedPaymentTypeId));
@@ -527,6 +573,44 @@ namespace Heidelpay.Payment
                 Card3ds = threeDS,
                 TypeId = authorizedPaymentTypeId,
                 CustomerId = customerId,
+            });
+        }
+
+        /// <summary>
+        /// Authorizes the asynchronous.
+        /// </summary>
+        /// <param name="amount">The amount.</param>
+        /// <param name="currency">The currency.</param>
+        /// <param name="authorizedPaymentTypeId">The authorized payment type identifier.</param>
+        /// <param name="returnUrl">The return URL.</param>
+        /// <param name="customerId">The customer identifier.</param>
+        /// <param name="basketId">The basket identifier.</param>
+        /// <param name="effectiveInterestRate">The effective interest rate.</param>
+        /// <returns></returns>
+        public async Task<Authorization> AuthorizeAsync(
+            decimal amount, 
+            string currency, 
+            string authorizedPaymentTypeId, 
+            Uri returnUrl, 
+            string customerId, 
+            string basketId, 
+            decimal? effectiveInterestRate = null)
+        {
+            Check.ThrowIfNullOrEmpty(currency, nameof(currency));
+            Check.ThrowIfNullOrEmpty(authorizedPaymentTypeId, nameof(authorizedPaymentTypeId));
+
+            var type = await PaymentService.FetchPaymentTypeAsync<PaymentTypeBase>(authorizedPaymentTypeId);
+            Check.ThrowIfNull(type as IAuthorizedPaymentType, "Only authorizable payment types are permitted for authorization.");
+
+            return await AuthorizeAsync(new Authorization
+            {
+                Amount = amount,
+                Currency = currency,
+                ReturnUrl = returnUrl,
+                TypeId = authorizedPaymentTypeId,
+                CustomerId = customerId,
+                BasketId = basketId,
+                EffectiveInterestRate = effectiveInterestRate,
             });
         }
 
@@ -562,7 +646,12 @@ namespace Heidelpay.Payment
         /// <param name="returnUrl">The return URL.</param>
         /// <param name="customerId">The customer identifier.</param>
         /// <returns>Task&lt;Authorization&gt;.</returns>
-        public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, IAuthorizedPaymentType paymentType, Uri returnUrl, string customerId)
+        public async Task<Authorization> AuthorizeAsync(
+            decimal amount, 
+            string currency, 
+            IAuthorizedPaymentType paymentType, 
+            Uri returnUrl, 
+            string customerId)
         {
             Check.ThrowIfNullOrEmpty(currency, nameof(currency));
             Check.ThrowIfNull(paymentType, nameof(paymentType));
@@ -589,9 +678,16 @@ namespace Heidelpay.Payment
         /// <param name="returnUrl">The return URL.</param>
         /// <param name="customer">The customer.</param>
         /// <param name="card3ds">if set to <c>true</c> [3ds] is set, overriding setting of the payment type.</param>
-        /// <returns>Task&lt;Authorization&gt;.</returns>
-        public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, IAuthorizedPaymentType paymentType, Uri returnUrl, 
-            Customer customer = null, bool? card3ds = null)
+        /// <returns>
+        /// Task&lt;Authorization&gt;.
+        /// </returns>
+        public async Task<Authorization> AuthorizeAsync(
+            decimal amount, 
+            string currency, 
+            IAuthorizedPaymentType paymentType,
+            Uri returnUrl, 
+            Customer customer = null,
+            bool? card3ds = null)
         {
             Check.ThrowIfNullOrEmpty(currency, nameof(currency));
             Check.ThrowIfNull(paymentType, nameof(paymentType));
@@ -606,42 +702,45 @@ namespace Heidelpay.Payment
                 threeDS = threeDSprovider.ThreeDs;
             }
 
-            return await AuthorizeAsync(amount, currency, authorizedPaymentTypeId: typeId, returnUrl: returnUrl, customerId: customerId, card3ds: threeDS);
+            return await AuthorizeAsync(
+                amount, 
+                currency, 
+                authorizedPaymentTypeId: typeId, 
+                returnUrl: returnUrl, 
+                customerId: customerId, 
+                card3ds: threeDS);
         }
 
+
         /// <summary>
-        /// Authorizes the asynchronous.
+        /// Authorizes as an asynchronous operation.
         /// </summary>
         /// <param name="amount">The amount.</param>
         /// <param name="currency">The currency.</param>
-        /// <param name="plan">The plan.</param>
+        /// <param name="paymentType">Type of the payment.</param>
         /// <param name="returnUrl">The return URL.</param>
         /// <param name="customer">The customer.</param>
         /// <param name="basket">The basket.</param>
         /// <param name="effectiveInterestRate">The effective interest rate.</param>
         /// <returns></returns>
-        public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, HirePurchaseRatePlan plan, Uri returnUrl, Customer customer, Basket basket, decimal effectiveInterestRate)
+        public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, IAuthorizedPaymentType paymentType, Uri returnUrl, Customer customer, Basket basket, decimal? effectiveInterestRate = null)
         {
             Check.ThrowIfNullOrEmpty(currency, nameof(currency));
+            Check.ThrowIfNull(paymentType, nameof(paymentType));
             Check.ThrowIfNull(returnUrl, nameof(returnUrl));
-            Check.ThrowIfNull(customer, nameof(customer));
-            Check.ThrowIfNull(basket, nameof(basket));
-            Check.ThrowIfNull(plan, nameof(plan));
 
+            var typeId = await EnsureRestResourceCreatedAsync(paymentType);
             var customerId = await EnsureRestResourceCreatedAsync(customer);
             var basketId = await EnsureRestResourceCreatedAsync(basket);
-            var typeId = await EnsureRestResourceCreatedAsync(plan, "types/hire-purchase-direct-debit");
 
-            return await AuthorizeAsync(new Authorization
-            {
-                Amount = amount,
-                Currency = currency,
-                ReturnUrl = returnUrl,
-                CustomerId = customerId,
-                BasketId = basketId,
-                TypeId = typeId,
-                EffectiveInterestRate = effectiveInterestRate,
-            });
+            return await AuthorizeAsync(
+                amount,
+                currency,
+                authorizedPaymentTypeId: typeId,
+                returnUrl: returnUrl,
+                customerId: customerId,
+                basketId: basketId,
+                effectiveInterestRate: effectiveInterestRate);
         }
 
         /// <summary>
@@ -835,33 +934,6 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
-        /// Creates the payment type as an asynchronous operation.
-        /// </summary>
-        /// <param name="plan">The plan.</param>
-        /// <returns></returns>
-        public async Task<HirePurchaseRatePlan> CreatePaymentTypeAsync(HirePurchaseRatePlan plan)
-        {
-            Check.ThrowIfNull(plan, nameof(plan));
-
-            return await PaymentService.CreatePaymentTypeAsync(plan);
-        }
-
-        /// <summary>
-        /// Updates the payment type as an asynchronous operation.
-        /// </summary>
-        /// <param name="plan">The plan.</param>
-        /// <returns></returns>
-        public async Task<HirePurchaseRatePlan> UpdatePaymentTypeAsync(HirePurchaseRatePlan plan)
-        {
-            Check.ThrowIfNull(plan, nameof(plan));
-
-            if (string.IsNullOrEmpty(plan.Id))
-                return await PaymentService.CreatePaymentTypeAsync(plan);
-
-            return await PaymentService.UpdatePaymentTypeAsync(plan);
-        }
-
-        /// <summary>
         /// Shipment as an asynchronous operation.
         /// </summary>
         /// <param name="paymentId">The payment identifier.</param>
@@ -936,5 +1008,7 @@ namespace Heidelpay.Payment
 
             return resultId;
         }
+
+
     }
 }

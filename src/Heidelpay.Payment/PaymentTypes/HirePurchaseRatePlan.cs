@@ -3,15 +3,16 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Heidelpay.Payment
+namespace Heidelpay.Payment.PaymentTypes
 {
     /// <summary>
     /// HirePurchaseRatePlan
     /// </summary>
-    public sealed class HirePurchaseRatePlan : IRestResource, IHeidelpayProvider
+    public sealed class HirePurchaseRatePlan : PaymentTypeBase, IAuthorizedPaymentType
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="HirePurchaseRatePlan"/> class.
@@ -25,20 +26,64 @@ namespace Heidelpay.Payment
         /// Initializes a new instance of the <see cref="HirePurchaseRatePlan"/> class.
         /// </summary>
         /// <param name="heidelpayClient">The heidelpay client.</param>
-        internal HirePurchaseRatePlan(IHeidelpay heidelpayClient)
+        public HirePurchaseRatePlan(IHeidelpay heidelpayClient)
+            : base(heidelpayClient)
         {
-            Check.ThrowIfNull(heidelpayClient, nameof(heidelpayClient));
-
-            ((IHeidelpayProvider)this).Heidelpay = heidelpayClient;
         }
 
         /// <summary>
-        /// Gets or sets the identifier.
+        /// Builds a payment type configuration based on this instance.
         /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
-        public string Id { get; set; }
+        /// <returns></returns>
+        public Action<HirePurchaseRatePlan> PaymentTypeConfig()
+        {
+            return new Action<HirePurchaseRatePlan>(x =>
+            {
+                CopyPlan(this, x);
+            });
+        }
+
+        /// <summary>
+        /// Copies the plan.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="target">The target.</param>
+        public static void CopyPlan(HirePurchaseRatePlan source, HirePurchaseRatePlan target)
+        {
+            if(!string.IsNullOrEmpty(target.Id))
+                throw new InvalidOperationException("HirePurchaseRatePlan has an Id set. CopyPlan can only be called without Id.");
+
+            target.AccountHolder = source.AccountHolder;
+            target.Bic = source.Bic;
+            target.DayOfPurchase = source.DayOfPurchase;
+            target.EffectiveInterestRate = source.EffectiveInterestRate;
+            target.FeeFirstRate = source.FeeFirstRate;
+            target.FeePerRate = source.FeePerRate;
+            target.Iban = source.Iban;
+            target.InvoiceDate = source.InvoiceDate;
+            target.InvoiceDueDate = source.InvoiceDueDate;
+            target.LastRate = source.LastRate;
+            target.MonthlyRate = source.MonthlyRate;
+            target.NominalInterestRate = source.NominalInterestRate;
+            target.NumberOfRates = source.NumberOfRates;
+            target.Recurring = source.Recurring;
+            target.TotalAmount = source.TotalAmount;
+            target.TotalInterestAmount = source.TotalInterestAmount;
+            target.TotalPurchaseAmount = source.TotalPurchaseAmount;
+            target.Rates = source.Rates.Select(y => new HirePurchaseRate
+            {
+                AmountOfRepayment = y.AmountOfRepayment,
+                Rate = y.Rate,
+                RateIndex = y.RateIndex,
+                TotalRemainingAmount = y.TotalRemainingAmount,
+                Type = y.Type,
+                Ultimo = y.Ultimo,
+            }).ToList();
+        }
+
+        /// <summary>
+        /// The payment configuration
+        /// </summary>
 
         /// <summary>
         /// Gets or sets the bic.
@@ -190,29 +235,14 @@ namespace Heidelpay.Payment
         /// <value>
         /// The rate list.
         /// </value>
-        [JsonProperty]
-        public IEnumerable<HirePurchaseRate> RateList { get; internal set; }
+        [JsonProperty(PropertyName = "installmentRates")]
+        public IEnumerable<HirePurchaseRate> Rates { get; internal set; }
 
         /// <summary>
         /// Gets or sets the heidelpay client.
         /// </summary>
         /// <value>The heidelpay client.</value>
-        IHeidelpay IHeidelpayProvider.Heidelpay { get; set; }
-
-        /// <summary>
-        /// Authorizes the asynchronous.
-        /// </summary>
-        /// <param name="amount">The amount.</param>
-        /// <param name="currency">The currency.</param>
-        /// <param name="returnUrl">The return URL.</param>
-        /// <param name="customer">The customer.</param>
-        /// <param name="basket">The basket.</param>
-        /// <param name="effectiveInterestRate">The effective interest rate.</param>
-        /// <returns></returns>
-        public async Task<Authorization> AuthorizeAsync(decimal amount, string currency, Uri returnUrl, Customer customer, Basket basket, decimal effectiveInterestRate)
-        {
-            return await ((IHeidelpayProvider)this).Heidelpay.AuthorizeAsync(amount, currency, this, returnUrl, customer, basket, effectiveInterestRate);
-        }
+        IHeidelpay IAuthorizedPaymentType.Heidelpay => Heidelpay;
     }
 
     internal sealed class HirePurchaseRatePlanList : IRestResource

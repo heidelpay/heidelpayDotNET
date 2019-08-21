@@ -34,7 +34,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
 
             AddIbanInvoiceParameter(plan);
 
-            var created = await Heidelpay.CreatePaymentTypeAsync(plan);
+            var created = await Heidelpay.CreatePaymentTypeAsync(plan.PaymentTypeConfig());
 
             Assert.NotNull(created);
             AssertRatePlan(plan, created);
@@ -192,7 +192,6 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             Assert.Equal(expected.NominalInterestRate, actual.NominalInterestRate);
             Assert.Equal(expected.NumberOfRates, actual.NumberOfRates);
             Assert.Equal(expected.DayOfPurchase, actual.DayOfPurchase);
-            Assert.Equal(expected.RateList, actual.RateList);
             Assert.Equal(expected.TotalAmount, actual.TotalAmount);
             Assert.Equal(expected.TotalPurchaseAmount, actual.TotalPurchaseAmount);
         }
@@ -203,7 +202,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             var rateList = await Heidelpay.HirePurchaseRatesAsync(10, "EUR", effectiveInterestRate, orderDate);
             var plan = rateList.First();
             AddIbanInvoiceParameter(plan);
-            return await Heidelpay.CreatePaymentTypeAsync(plan);
+            return await Heidelpay.CreatePaymentTypeAsync(plan.PaymentTypeConfig());
         }
 
         private async Task<HirePurchaseRatePlan> CreatePlan()
@@ -212,7 +211,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             DateTime orderDate = new DateTime(2019, 6, 12);
             var rateList = await Heidelpay.HirePurchaseRatesAsync(10, "EUR", effectiveInterestRate, orderDate);
             var plan = rateList.First();
-            return await Heidelpay.CreatePaymentTypeAsync(plan);
+            return await Heidelpay.CreatePaymentTypeAsync(plan.PaymentTypeConfig());
         }
         private void AddIbanInvoiceParameter(HirePurchaseRatePlan ratePlan)
         {

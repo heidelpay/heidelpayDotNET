@@ -44,15 +44,32 @@ namespace Heidelpay.Payment.Interfaces
         /// <returns>Task&lt;Authorization&gt;.</returns>
         Task<Authorization> AuthorizeAsync(decimal amount, string currency, IAuthorizedPaymentType paymentType);
 
-        /// <summary>Authorizes as an asynchronous operation.</summary>
+        /// <summary>
+        /// Authorizes as an asynchronous operation.
+        /// </summary>
         /// <param name="amount">The amount.</param>
         /// <param name="currency">The currency.</param>
         /// <param name="paymentType">Type of the payment.</param>
         /// <param name="returnUrl">The return URL.</param>
         /// <param name="customer">The customer.</param>
-        /// <param name="card3ds"></param>
-        /// <returns>Task&lt;Authorization&gt;.</returns>
+        /// <param name="card3ds">The card3ds.</param>
+        /// <returns>
+        /// Task&lt;Authorization&gt;.
+        /// </returns>
         Task<Authorization> AuthorizeAsync(decimal amount, string currency, IAuthorizedPaymentType paymentType, Uri returnUrl, Customer customer = null, bool? card3ds = null);
+
+        /// <summary>
+        /// Authorizes the asynchronous.
+        /// </summary>
+        /// <param name="amount">The amount.</param>
+        /// <param name="currency">The currency.</param>
+        /// <param name="paymentType">Type of the payment.</param>
+        /// <param name="returnUrl">The return URL.</param>
+        /// <param name="customer">The customer.</param>
+        /// <param name="basket">The basket.</param>
+        /// <param name="effectiveInterestRate">The effective interest rate.</param>
+        /// <returns></returns>
+        Task<Authorization> AuthorizeAsync(decimal amount, string currency, IAuthorizedPaymentType paymentType, Uri returnUrl, Customer customer, Basket basket, decimal? effectiveInterestRate = null);
 
         /// <summary>
         /// Authorizes as an asynchronous operation.
@@ -73,29 +90,31 @@ namespace Heidelpay.Payment.Interfaces
         /// <param name="authorizedPaymentTypeId">The authorized payment type identifier.</param>
         /// <param name="returnUrl">The return URL.</param>
         /// <param name="customerId">The customer identifier.</param>
-        /// <param name="card3ds"></param>
-        /// <returns>Task&lt;Authorization&gt;.</returns>
+        /// <param name="card3ds">The card3ds.</param>
+        /// <returns>
+        /// Task&lt;Authorization&gt;.
+        /// </returns>
         Task<Authorization> AuthorizeAsync(decimal amount, string currency, string authorizedPaymentTypeId, Uri returnUrl = null, string customerId = null, bool? card3ds = null);
 
         /// <summary>
-        /// Authorizes s an asynchronous operation.
+        /// Authorizes the asynchronous.
         /// </summary>
         /// <param name="amount">The amount.</param>
         /// <param name="currency">The currency.</param>
-        /// <param name="plan">The plan.</param>
+        /// <param name="authorizedPaymentTypeId">The authorized payment type identifier.</param>
         /// <param name="returnUrl">The return URL.</param>
-        /// <param name="customer">The customer.</param>
-        /// <param name="basket">The basket.</param>
+        /// <param name="customerId">The customer identifier.</param>
+        /// <param name="basketId">The basket identifier.</param>
         /// <param name="effectiveInterestRate">The effective interest rate.</param>
         /// <returns></returns>
-        Task<Authorization> AuthorizeAsync(decimal amount, string currency, HirePurchaseRatePlan plan, Uri returnUrl, Customer customer, Basket basket, decimal effectiveInterestRate);
+        Task<Authorization> AuthorizeAsync(decimal amount, string currency, string authorizedPaymentTypeId, Uri returnUrl, string customerId, string basketId, decimal? effectiveInterestRate = null);
 
         /// <summary>
-        /// Cancels the authorization as an asynchronous operation.
+        /// Cancels the authorization asynchronous.
         /// </summary>
         /// <param name="paymentId">The payment identifier.</param>
         /// <param name="amount">The amount.</param>
-        /// <returns>Task&lt;Cancel&gt;.</returns>
+        /// <returns></returns>
         Task<Cancel> CancelAuthorizationAsync(string paymentId, decimal? amount = null);
 
         /// <summary>
@@ -203,20 +222,6 @@ namespace Heidelpay.Payment.Interfaces
         /// <param name="paymentType">Type of the payment.</param>
         /// <returns></returns>
         Task<TPaymentBase> UpdatePaymentTypeAsync<TPaymentBase>(TPaymentBase paymentType) where TPaymentBase : PaymentTypeBase;
-
-        /// <summary>
-        /// Creates the payment type as an asynchronous operation.
-        /// </summary>
-        /// <param name="plan">The plan.</param>
-        /// <returns></returns>
-        Task<HirePurchaseRatePlan> CreatePaymentTypeAsync(HirePurchaseRatePlan plan);
-
-        /// <summary>
-        /// Updates the payment type as an asynchronous operation.
-        /// </summary>
-        /// <param name="plan">The plan.</param>
-        /// <returns></returns>
-        Task<HirePurchaseRatePlan> UpdatePaymentTypeAsync(HirePurchaseRatePlan plan);
 
         /// <summary>
         /// Deletes the customer as an asynchronous operation.

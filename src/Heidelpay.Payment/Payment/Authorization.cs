@@ -39,7 +39,7 @@ namespace Heidelpay.Payment
         /// <value>
         /// The effective interest rate.
         /// </value>
-        public decimal EffectiveInterestRate { get; set; }
+        public decimal? EffectiveInterestRate { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Authorization"/> class.

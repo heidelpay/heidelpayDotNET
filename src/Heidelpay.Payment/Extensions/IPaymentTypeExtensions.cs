@@ -35,13 +35,17 @@ namespace Heidelpay.Payment.PaymentTypes
         /// <param name="currency">The currency.</param>
         /// <param name="returnUrl">The return URL.</param>
         /// <param name="customer">The customer.</param>
-        /// <returns>Task&lt;Authorization&gt;.</returns>
+        /// <param name="basket">The basket.</param>
+        /// <param name="effectiveInterestRate">The effective interest rate.</param>
+        /// <returns>
+        /// Task&lt;Authorization&gt;.
+        /// </returns>
         public static async Task<Authorization> AuthorizeAsync(this IAuthorizedPaymentType paymentType, 
-            decimal amount, string currency, Uri returnUrl, Customer customer = null)
+            decimal amount, string currency, Uri returnUrl, Customer customer = null, Basket basket = null, decimal? effectiveInterestRate = null)
         {
             Check.ThrowIfNull(paymentType.Heidelpay, "Heidelpay", "You cannot call authorize methods on an unattached resource. Please either inject or use heidelpay instance directly.");
 
-            return await paymentType.Heidelpay.AuthorizeAsync(amount, currency, paymentType, returnUrl, customer);
+            return await paymentType.Heidelpay.AuthorizeAsync(amount, currency, paymentType, returnUrl, customer, basket, effectiveInterestRate);
         }
 
         /// <summary>
