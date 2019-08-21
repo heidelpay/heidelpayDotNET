@@ -131,7 +131,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         {
             var customer = GetMaximumCustomerSameAddress(GetRandomId());
             var basket = GetMaximumBasket(amount: 866.49m, discount: 0m);
-            var plan = await CreatePlan();
+            var plan = await CreatePlanWithIban();
 
             var authorization = await Heidelpay.AuthorizeAsync(866.49m, "EUR", plan, TestReturnUri, customer, basket, plan.EffectiveInterestRate.Value);
 
@@ -146,7 +146,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         {
             var customer = GetMaximumCustomerSameAddress(GetRandomId());
             var basket = GetMaximumBasket(amount: 866.49m, discount: 0m);
-            var plan = await CreatePlan();
+            var plan = await CreatePlanWithIban();
 
             var authorization = await Heidelpay.AuthorizeAsync(866.49m, "EUR", plan, TestReturnUri, customer, basket, plan.EffectiveInterestRate.Value);
 
