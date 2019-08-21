@@ -16,6 +16,7 @@
 // limitations under the License.
 // ***********************************************************************
 
+using Newtonsoft.Json;
 using System;
 
 namespace Heidelpay.Payment
@@ -96,5 +97,14 @@ namespace Heidelpay.Payment
         /// </summary>
         /// <value>The image URL.</value>
         public Uri ImageUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type of the item.
+        /// </summary>
+        /// <value>
+        /// The type of the item.
+        /// </value>
+        [JsonProperty(PropertyName = "type")]
+        public string ItemType { get; set; }
     }
 }
