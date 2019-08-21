@@ -20,7 +20,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             var result = await Heidelpay.CreatePaymentTypeAsync<Paypal>();
             var auth = await Heidelpay.AuthorizeAsync(decimal.One, "EUR", result, ShopReturnUri);
             Assert.NotNull(result?.Id);
-            AssertAuthorizationSimple(auth, decimal.One);
+            AssertAuthorizationSimple(auth, decimal.One, Status.Pending);
         }
 
         [Fact]
