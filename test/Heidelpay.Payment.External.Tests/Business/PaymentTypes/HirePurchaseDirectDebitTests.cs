@@ -141,6 +141,24 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             AssertShipment(shipment);
         }
 
+        [Fact]
+        public async Task Test_Full_Cancel_After_Shipment()
+        {
+            var customer = GetMaximumCustomerSameAddress(GetRandomId());
+            var basket = GetMaximumBasket(amount: 866.49m, discount: 0m);
+            var plan = await CreatePlan();
+
+            var authorization = await Heidelpay.AuthorizeAsync(866.49m, "EUR", plan, TestReturnUri, customer, basket, plan.EffectiveInterestRate.Value);
+
+            var charge = await authorization.ChargeAsync();
+
+            var shipment = await Heidelpay.ShipmentAsync(charge.PaymentId);
+            AssertShipment(shipment);
+
+            var cancel = await charge.CancelAsync();
+            AssertCancel(cancel);
+        }
+
         private void AssertAuthorization(HirePurchaseRatePlan ratePlan, Authorization authorization, decimal? authAmount = 866.49m)
         {
             Assert.Equal(ratePlan.EffectiveInterestRate, authorization.EffectiveInterestRate);
