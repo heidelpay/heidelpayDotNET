@@ -129,7 +129,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             AssertCancel(cancel);
         }
 
-        [Fact(Skip = "Partial Cancellation seems to be broken")]
+        [Fact]
         public async Task Partial_Cancellation_Before_Shipment()
         {
             var customer = GetMaximumCustomerSameAddress(GetRandomId());
@@ -140,7 +140,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
 
             var charge = await authorization.ChargeAsync();
 
-            var cancel = await charge.CancelAsync(decimal.One);
+            var cancel = await charge.CancelAsync(5m, 4m, 1m);
             AssertCancel(cancel, decimal.One);
         }
 

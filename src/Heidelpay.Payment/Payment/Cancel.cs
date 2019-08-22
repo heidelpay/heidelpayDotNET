@@ -37,5 +37,29 @@ namespace Heidelpay.Payment
         internal Cancel()
         {
         }
+
+        /// <summary>
+        /// Gets or sets the amount gross.
+        /// </summary>
+        /// <value>
+        /// The amount gross.
+        /// </value>
+        public decimal? AmountGross { get; set; }
+
+        /// <summary>
+        /// Gets or sets the amount net.
+        /// </summary>
+        /// <value>
+        /// The amount net.
+        /// </value>
+        public decimal? AmountNet { get; set; }
+
+        /// <summary>
+        /// Gets or sets the amount vat.
+        /// </summary>
+        /// <value>
+        /// The amount vat.
+        /// </value>
+        public decimal? AmountVat { get; set; }
     }
 }

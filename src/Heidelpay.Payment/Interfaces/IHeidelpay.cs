@@ -127,6 +127,17 @@ namespace Heidelpay.Payment.Interfaces
         Task<Cancel> CancelChargeAsync(string paymentId, string chargeId, decimal? amount = null);
 
         /// <summary>
+        /// Cancels the charge as an asynchronous operation.
+        /// </summary>
+        /// <param name="paymentId">The payment identifier.</param>
+        /// <param name="chargeId">The charge identifier.</param>
+        /// <param name="amountGross">The amount gross.</param>
+        /// <param name="amountNet">The amount net.</param>
+        /// <param name="amountVat">The amount vat.</param>
+        /// <returns></returns>
+        Task<Cancel> CancelChargeAsync(string paymentId, string chargeId, decimal amountGross, decimal amountNet, decimal amountVat);
+
+        /// <summary>
         /// Charges as an asynchronous operation.
         /// </summary>
         /// <param name="charge">The charge.</param>

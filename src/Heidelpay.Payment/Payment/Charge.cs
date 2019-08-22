@@ -73,6 +73,18 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
+        /// Cancels the asynchronous.
+        /// </summary>
+        /// <param name="amountGross">The amount gross.</param>
+        /// <param name="amountNet">The amount net.</param>
+        /// <param name="amountVat">The amount vat.</param>
+        /// <returns></returns>
+        public async Task<Cancel> CancelAsync(decimal amountGross, decimal amountNet, decimal amountVat)
+        {
+            return await Heidelpay.CancelChargeAsync(Payment.Id, Id, amountGross, amountNet, amountVat);
+        }
+
+        /// <summary>
         /// Gets the cancel.
         /// </summary>
         /// <param name="cancelId">The cancel identifier.</param>
