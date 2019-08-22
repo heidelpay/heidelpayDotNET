@@ -20,6 +20,7 @@
 using Heidelpay.Payment;
 using Heidelpay.Payment.Communication;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -39,6 +40,12 @@ namespace System.Net.Http
             HttpStatusCode.OK       // 200
         };
 
+        public static readonly HttpStatusCode[] ServerUnavailableCodes = new[]
+        {
+            HttpStatusCode.GatewayTimeout,  // 504
+            HttpStatusCode.BadGateway       // 502
+        };
+
         /// <summary>
         /// throw if erroneous response as an asynchronous operation.
         /// </summary>
@@ -49,20 +56,39 @@ namespace System.Net.Http
             Check.ThrowIfNull(response, nameof(response));
 
             if (SuccessStatusCodes.Contains(response.StatusCode))
+            {
                 return;
+            }
 
-            var responseContent = await response.Content.ReadAsStringAsync();
-            var error = JsonConvert.DeserializeObject<RestClientErrorObject>(responseContent);
+            if(ServerUnavailableCodes.Contains(response.StatusCode))
+            {
+                throw AsGenericException(response);
+            }
 
-            throw AsException(error, response.StatusCode);
+            throw await AsBusinessException(response);
         }
 
         /// <summary>
         /// Returns an error object as respective payment exception.
         /// </summary>
+        /// <param name="response">The response.</param>
+        /// <returns>
+        /// PaymentException.
+        /// </returns>
+        internal static async Task<PaymentException> AsBusinessException(HttpResponseMessage response)
+        {
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var error = JsonConvert.DeserializeObject<RestClientErrorObject>(responseContent);
+
+            return AsException(error, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Ases the exception.
+        /// </summary>
         /// <param name="error">The error.</param>
         /// <param name="statusCode">The status code.</param>
-        /// <returns>PaymentException.</returns>
+        /// <returns></returns>
         internal static PaymentException AsException(RestClientErrorObject error, HttpStatusCode statusCode)
         {
             var uri = Uri.TryCreate(error.Url, UriKind.RelativeOrAbsolute, out Uri outUri) ? outUri : null;
@@ -70,6 +96,15 @@ namespace System.Net.Http
             var errors = error.Errors ?? Enumerable.Empty<PaymentError>();
 
             return new PaymentException(uri, statusCode, dt, errors);
+        }
+
+        internal static PaymentException AsGenericException(HttpResponseMessage response)
+        {
+            var uri = response.RequestMessage?.RequestUri;
+            var dt = DateTime.UtcNow;
+            var errors = Enumerable.Empty<PaymentError>();
+
+            return new PaymentException(uri, response.StatusCode, dt, errors);
         }
     }
 }
