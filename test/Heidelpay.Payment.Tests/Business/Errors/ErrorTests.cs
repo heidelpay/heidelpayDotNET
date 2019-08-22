@@ -14,7 +14,6 @@ namespace Heidelpay.Payment.Internal.Tests.Business.Errors
         {
             var services = new ServiceCollection();
 
-            services.AddHttpClient();
             services.AddLogging();
 
             services.AddHeidelpay(opt =>

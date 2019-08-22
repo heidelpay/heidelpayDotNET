@@ -70,7 +70,6 @@ namespace Heidelpay.Payment.External.Tests
         {
             var services = new ServiceCollection();
 
-            services.AddHttpClient();
             services.AddLogging();
 
             services.AddHeidelpay(opt =>
@@ -96,7 +95,6 @@ namespace Heidelpay.Payment.External.Tests
         {
             var services = new ServiceCollection();
 
-            services.AddHttpClient();
             services.AddLogging();
 
             services.AddHeidelpay(opt =>
@@ -189,8 +187,6 @@ namespace Heidelpay.Payment.External.Tests
         {
             var services = new ServiceCollection();
 
-            services.AddHttpClient();
-
             services.AddHeidelpay(x =>
             {
                 x.ApiEndpoint = new Uri("https://api.heidelpay.com");
@@ -209,8 +205,6 @@ namespace Heidelpay.Payment.External.Tests
         public void AddHeidelpay_Does_Not_Add_HttpClientFactory_If_Added_By_Client2()
         {
             var services = new ServiceCollection();
-
-            services.AddHttpClient();
 
             services.AddHeidelpay(x =>
             {
@@ -233,7 +227,6 @@ namespace Heidelpay.Payment.External.Tests
 
             var logger = new Mock<ILogger<RestClient>>();
 
-            services.AddHttpClient();
             services.AddTransient(x => logger.Object);
 
             services.AddHeidelpay(opt =>
@@ -269,7 +262,6 @@ namespace Heidelpay.Payment.External.Tests
         {
             var services = new ServiceCollection();
 
-            services.AddHttpClient();
             services.AddLogging();
 
             services.AddHeidelpay(opt =>
@@ -292,7 +284,6 @@ namespace Heidelpay.Payment.External.Tests
         {
             var services = new ServiceCollection();
 
-            services.AddHttpClient();
             services.AddLogging();
 
             services.AddHeidelpay(opt =>
@@ -311,7 +302,6 @@ namespace Heidelpay.Payment.External.Tests
         {
             var services = new ServiceCollection();
 
-            services.AddHttpClient();
             services.AddLogging();
 
             services.AddHeidelpay(opt =>
@@ -332,7 +322,6 @@ namespace Heidelpay.Payment.External.Tests
         {
             var services = new ServiceCollection();
 
-            services.AddHttpClient();
             services.AddLogging();
 
             services.AddHeidelpay(opt =>

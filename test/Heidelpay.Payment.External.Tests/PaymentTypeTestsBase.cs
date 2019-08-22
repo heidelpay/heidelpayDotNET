@@ -24,7 +24,6 @@ namespace Heidelpay.Payment.External.Tests.Business
         {
             var services = new ServiceCollection();
 
-            services.AddHttpClient();
             services.AddLogging();
 
             services.AddHeidelpay(opt =>
