@@ -1,4 +1,5 @@
 ﻿using Heidelpay.Payment.PaymentTypes;
+using System;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -6,10 +7,24 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
 {
     public class InvoiceFactoringTests : PaymentTypeTestsBase
     {
-        [Fact]
-        public async Task Create_PaymentType()
+        private Action<InvoiceFactoring> ConfigurePaymentType { get; } = new Action<InvoiceFactoring>(x =>
         {
-            var result = await Heidelpay.CreatePaymentTypeAsync<InvoiceFactoring>();
+
+        });
+
+        [Fact]
+        public async Task Create_PaymentType_Via_Config()
+        {
+            var result = await Heidelpay.CreatePaymentTypeAsync(ConfigurePaymentType);
+            Assert.NotNull(result?.Id);
+        }
+
+        [Fact]
+        public async Task Create_PaymentType_Via_Instance()
+        {
+            var instance = new InvoiceFactoring(Heidelpay);
+            ConfigurePaymentType(instance);
+            var result = await Heidelpay.CreatePaymentTypeAsync(instance);
             Assert.NotNull(result?.Id);
         }
 

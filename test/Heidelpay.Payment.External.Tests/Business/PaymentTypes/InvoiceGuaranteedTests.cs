@@ -7,10 +7,24 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
 {
     public class InvoiceGuaranteedTests : PaymentTypeTestsBase
     {
-        [Fact]
-        public async Task Create_PaymentType()
+        private Action<InvoiceGuaranteed> ConfigurePaymentType { get; } = new Action<InvoiceGuaranteed>(x =>
         {
-            var result = await Heidelpay.CreatePaymentTypeAsync<InvoiceGuaranteed>();
+
+        });
+
+        [Fact]
+        public async Task Create_PaymentType_Via_Config()
+        {
+            var result = await Heidelpay.CreatePaymentTypeAsync(ConfigurePaymentType);
+            Assert.NotNull(result?.Id);
+        }
+
+        [Fact]
+        public async Task Create_PaymentType_Via_Instance()
+        {
+            var instance = new InvoiceGuaranteed(Heidelpay);
+            ConfigurePaymentType(instance);
+            var result = await Heidelpay.CreatePaymentTypeAsync(instance);
             Assert.NotNull(result?.Id);
         }
 

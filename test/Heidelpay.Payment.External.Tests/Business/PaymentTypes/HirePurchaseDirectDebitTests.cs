@@ -23,7 +23,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         }
 
         [Fact]
-        public async Task Create_Hire_Purchase_Type_With_Iban_Invoice_Date()
+        public async Task Create_Hire_Purchase_Type_With_Iban_Invoice_Date_Config()
         {
             decimal effectiveInterestRate = 5.5m;
             DateTime orderDate = new DateTime(2019, 6, 12);
@@ -35,6 +35,24 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             AddIbanInvoiceParameter(plan);
 
             var created = await Heidelpay.CreatePaymentTypeAsync(plan.PaymentTypeConfig());
+
+            Assert.NotNull(created);
+            AssertRatePlan(plan, created);
+        }
+
+        [Fact]
+        public async Task Create_Hire_Purchase_Type_With_Iban_Invoice_Date_Instance()
+        {
+            decimal effectiveInterestRate = 5.5m;
+            DateTime orderDate = new DateTime(2019, 6, 12);
+
+            var rateList = await Heidelpay.HirePurchaseRatesAsync(10, "EUR", effectiveInterestRate, orderDate);
+
+            var plan = rateList.First();
+
+            AddIbanInvoiceParameter(plan);
+
+            var created = await Heidelpay.CreatePaymentTypeAsync(plan);
 
             Assert.NotNull(created);
             AssertRatePlan(plan, created);

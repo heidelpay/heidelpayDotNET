@@ -13,9 +13,18 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         });
 
         [Fact]
-        public async Task Create_PaymentType()
+        public async Task Create_PaymentType_Via_Config()
         {
             var result = await Heidelpay.CreatePaymentTypeAsync(ConfigurePaymentType);
+            Assert.NotNull(result?.Id);
+        }
+
+        [Fact]
+        public async Task Create_PaymentType_Via_Instance()
+        {
+            var instance = new WeChatPay(Heidelpay);
+            ConfigurePaymentType(instance);
+            var result = await Heidelpay.CreatePaymentTypeAsync(instance);
             Assert.NotNull(result?.Id);
         }
 
