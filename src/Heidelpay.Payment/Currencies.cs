@@ -5,7 +5,7 @@ using System.Text;
 namespace Heidelpay.Payment
 {
     /// <summary>
-    /// Known currencies
+    /// Supported Currency Literals
     /// </summary>
     public static class Currencies
     {
