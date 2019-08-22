@@ -20,7 +20,6 @@
 using Heidelpay.Payment;
 using Heidelpay.Payment.Communication;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 

@@ -16,10 +16,7 @@
 // limitations under the License.
 // ***********************************************************************
 
-using Heidelpay.Payment.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Heidelpay.Payment.Service

@@ -16,9 +16,6 @@
 // limitations under the License.
 // ***********************************************************************
 
-using System;
-using System.Reflection;
-
 namespace Heidelpay.Payment
 {
     /// <summary>
