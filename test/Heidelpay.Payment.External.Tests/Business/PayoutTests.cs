@@ -12,7 +12,7 @@ namespace Heidelpay.Payment.External.Tests.Business
         {
             var heidelpay = Heidelpay;
             var card = await heidelpay.CreatePaymentTypeAsync(PaymentTypeCard);
-            var payout = await heidelpay.PayoutAsync(decimal.One, "EUR", card, new Uri("https://www.heidelpay.com"));
+            var payout = await heidelpay.PayoutAsync(decimal.One, Currencies.EUR, card, new Uri("https://www.heidelpay.com"));
 
             Assert.NotNull(payout?.Id);
 
@@ -33,7 +33,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             var oot = new Payout(heidelpay, card)
             {
                 Amount = 2,
-                Currency = "EUR",
+                Currency = Currencies.EUR,
                 OrderId = GetRandomId(),
                 PaymentReference = "My Payment Reference",
                 ReturnUrl = new Uri("https://www.heidelpay.com"),

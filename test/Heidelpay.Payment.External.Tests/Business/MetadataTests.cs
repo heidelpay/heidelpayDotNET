@@ -44,7 +44,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             var auth = await Heidelpay.AuthorizeAsync(new Authorization(card)
             {
                 Amount = 1m,
-                Currency = "EUR",
+                Currency = Currencies.EUR,
                 ReturnUrl = TestReturnUri,
                 MetadataId = metadata.Id
             });

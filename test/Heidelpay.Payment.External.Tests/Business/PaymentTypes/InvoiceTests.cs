@@ -32,7 +32,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         public async Task Charge_PaymentType()
         {
             var result = await Heidelpay.CreatePaymentTypeAsync<Invoice>();
-            var charge = await Heidelpay.ChargeAsync(decimal.One, "EUR", result, ShopReturnUri);
+            var charge = await Heidelpay.ChargeAsync(decimal.One, Currencies.EUR, result, ShopReturnUri);
             AssertCharge(charge, decimal.One, Status.Pending);
         }
 

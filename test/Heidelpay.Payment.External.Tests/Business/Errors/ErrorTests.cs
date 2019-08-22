@@ -77,7 +77,7 @@ namespace Heidelpay.Payment.External.Tests.Business.Errors
             var heidelpay = Heidelpay;
             var card = await heidelpay.CreatePaymentTypeAsync(PaymentTypeCard);
 
-            var exception = await Assert.ThrowsAsync<PaymentException>(() => heidelpay.AuthorizeAsync(10m, "EUR", card.Id));
+            var exception = await Assert.ThrowsAsync<PaymentException>(() => heidelpay.AuthorizeAsync(10m, Currencies.EUR, card.Id));
 
             Assert.NotNull(exception);
             Assert.Single(exception.PaymentErrorList);
@@ -111,7 +111,7 @@ namespace Heidelpay.Payment.External.Tests.Business.Errors
         {
             var heidelpay = Heidelpay;
             var card = await heidelpay.CreatePaymentTypeAsync(PaymentTypeCard);
-            var charge = await heidelpay.ChargeAsync(new Charge(card) { Amount = decimal.One, Currency = "EUR", ReturnUrl = TestReturnUri });
+            var charge = await heidelpay.ChargeAsync(new Charge(card) { Amount = decimal.One, Currency = Currencies.EUR, ReturnUrl = TestReturnUri });
             var chargeFetched = await heidelpay.FetchChargeAsync(charge.PaymentId, "s-chg-200");
             Assert.Null(chargeFetched);
         }

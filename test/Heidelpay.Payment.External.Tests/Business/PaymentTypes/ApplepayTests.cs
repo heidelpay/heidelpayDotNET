@@ -53,7 +53,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         public async Task Authorize_PaymentType_object()
         {
             var result = await Heidelpay.CreatePaymentTypeAsync(ConfigurePaymentType);
-            var auth = await Heidelpay.AuthorizeAsync(decimal.One, "EUR", result, ShopReturnUri);
+            var auth = await Heidelpay.AuthorizeAsync(decimal.One, Currencies.EUR, result, ShopReturnUri);
             Assert.NotNull(result?.Id);
 
             AssertAuthorizationSimple(auth, decimal.One);
@@ -63,7 +63,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         public async Task Authorize_PaymentType_typeId()
         {
             var result = await Heidelpay.CreatePaymentTypeAsync(ConfigurePaymentType);
-            var auth = await Heidelpay.AuthorizeAsync(decimal.One, "EUR", result.Id, ShopReturnUri);
+            var auth = await Heidelpay.AuthorizeAsync(decimal.One, Currencies.EUR, result.Id, ShopReturnUri);
             Assert.NotNull(result?.Id);
 
             AssertAuthorizationSimple(auth, decimal.One);
@@ -73,7 +73,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         public async Task Charge_PaymentType()
         {
             var typeInstance = await Heidelpay.CreatePaymentTypeAsync(ConfigurePaymentType);
-            var charge = await typeInstance.ChargeAsync(decimal.One, "EUR", ShopReturnUri);
+            var charge = await typeInstance.ChargeAsync(decimal.One, Currencies.EUR, ShopReturnUri);
 
             Assert.Equal(typeInstance.Id, charge.TypeId);
 

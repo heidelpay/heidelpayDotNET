@@ -9,7 +9,7 @@ namespace Heidelpay.Payment.External.Tests.Business
         public async Task Fetch_Authorization()
         {
             var card = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCardNo3DS);
-            var auth = await Heidelpay.AuthorizeAsync(new Authorization(card) { Amount = 1m, Currency = "EUR", ReturnUrl = TestReturnUri });
+            var auth = await Heidelpay.AuthorizeAsync(new Authorization(card) { Amount = 1m, Currency = Currencies.EUR, ReturnUrl = TestReturnUri });
             var fetched = await Heidelpay.FetchAuthorizationAsync(auth.PaymentId);
 
             Assert.NotNull(fetched?.Id);
@@ -21,7 +21,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             var orderId = GetRandomId();
 
             var card = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCardNo3DS);
-            var auth = await Heidelpay.AuthorizeAsync(new Authorization(card) { Amount = 1m, Currency = "EUR", ReturnUrl = TestReturnUri, OrderId = orderId });
+            var auth = await Heidelpay.AuthorizeAsync(new Authorization(card) { Amount = 1m, Currency = Currencies.EUR, ReturnUrl = TestReturnUri, OrderId = orderId });
             var fetched = await Heidelpay.FetchAuthorizationAsync(auth.PaymentId);
             var charge = await fetched.ChargeAsync();
 
@@ -37,7 +37,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             var orderId = GetRandomId();
 
             var card = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCardNo3DS);
-            var auth = await Heidelpay.AuthorizeAsync(new Authorization(card) { Amount = 1m, Currency = "EUR", ReturnUrl = TestReturnUri, OrderId = orderId });
+            var auth = await Heidelpay.AuthorizeAsync(new Authorization(card) { Amount = 1m, Currency = Currencies.EUR, ReturnUrl = TestReturnUri, OrderId = orderId });
             var charge = await Heidelpay.ChargeAuthorizationAsync(auth.PaymentId);
 
             Assert.NotNull(charge?.Id);
@@ -49,7 +49,7 @@ namespace Heidelpay.Payment.External.Tests.Business
         public async Task Partial_Charge_After_Authorization()
         {
             var card = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCardNo3DS);
-            var auth = await Heidelpay.AuthorizeAsync(new Authorization(card) { Amount = 1m, Currency = "EUR", ReturnUrl = TestReturnUri });
+            var auth = await Heidelpay.AuthorizeAsync(new Authorization(card) { Amount = 1m, Currency = Currencies.EUR, ReturnUrl = TestReturnUri });
 
             var charge = await auth.ChargeAsync(0.1m);
 

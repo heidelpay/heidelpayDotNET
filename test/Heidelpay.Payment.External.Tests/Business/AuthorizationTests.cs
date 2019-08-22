@@ -10,7 +10,7 @@ namespace Heidelpay.Payment.External.Tests.Business
         public async Task Authorize_With_Authorization_Object()
         {
             var card = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCardNo3DS);
-            var newAuth = new Authorization(card) { Amount = 10m, Currency = "EUR", ReturnUrl = TestReturnUri, Card3ds = false };
+            var newAuth = new Authorization(card) { Amount = 10m, Currency = Currencies.EUR, ReturnUrl = TestReturnUri, Card3ds = false };
 
             var auth = await Heidelpay.AuthorizeAsync(newAuth);
 
@@ -24,7 +24,7 @@ namespace Heidelpay.Payment.External.Tests.Business
         {
             var card = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCardNo3DS);
 
-            var auth = await Heidelpay.AuthorizeAsync(10m, "EUR", card.Id, TestReturnUri);
+            var auth = await Heidelpay.AuthorizeAsync(10m, Currencies.EUR, card.Id, TestReturnUri);
 
             Assert.NotNull(auth?.Id);
             Assert.Equal("COR.000.100.112", auth.Message.Code);
@@ -36,7 +36,7 @@ namespace Heidelpay.Payment.External.Tests.Business
         {
             var card = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCardNo3DS);
 
-            var auth = await Heidelpay.AuthorizeAsync(10m, "EUR", card.Id, TestReturnUri);
+            var auth = await Heidelpay.AuthorizeAsync(10m, Currencies.EUR, card.Id, TestReturnUri);
 
             Assert.NotNull(auth?.Id);
             Assert.Equal("COR.000.100.112", auth.Message.Code);
@@ -49,7 +49,7 @@ namespace Heidelpay.Payment.External.Tests.Business
         {
             var card = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCard3DS);
 
-            var auth = await Heidelpay.AuthorizeAsync(10m, "EUR", card.Id, TestReturnUri);
+            var auth = await Heidelpay.AuthorizeAsync(10m, Currencies.EUR, card.Id, TestReturnUri);
 
             Assert.NotNull(auth?.Id);
             Assert.Equal("COR.000.200.000", auth.Message.Code);
@@ -62,7 +62,7 @@ namespace Heidelpay.Payment.External.Tests.Business
         {
             var card = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCard3DS);
 
-            var auth = await Heidelpay.AuthorizeAsync(10m, "EUR", card.Id, TestReturnUri, card3ds: false);
+            var auth = await Heidelpay.AuthorizeAsync(10m, Currencies.EUR, card.Id, TestReturnUri, card3ds: false);
 
             Assert.NotNull(auth?.Id);
             Assert.Equal("COR.000.100.112", auth.Message.Code);
@@ -75,7 +75,7 @@ namespace Heidelpay.Payment.External.Tests.Business
         {
             var card = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCard3DS);
 
-            var auth = await Heidelpay.AuthorizeAsync(10m, "EUR", card, TestReturnUri, card3ds: false);
+            var auth = await Heidelpay.AuthorizeAsync(10m, Currencies.EUR, card, TestReturnUri, card3ds: false);
 
             Assert.NotNull(auth?.Id);
             Assert.Equal("COR.000.100.112", auth.Message.Code);
@@ -88,7 +88,7 @@ namespace Heidelpay.Payment.External.Tests.Business
         {
             var card = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCardNo3DS);
 
-            var auth = await Heidelpay.AuthorizeAsync(10m, "EUR", card.Id, TestReturnUri, card3ds: true);
+            var auth = await Heidelpay.AuthorizeAsync(10m, Currencies.EUR, card.Id, TestReturnUri, card3ds: true);
 
             Assert.NotNull(auth?.Id);
             Assert.Equal("COR.000.200.000", auth.Message.Code);
@@ -101,7 +101,7 @@ namespace Heidelpay.Payment.External.Tests.Business
         {
             var card = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCardNo3DS);
 
-            var auth = await Heidelpay.AuthorizeAsync(10m, "EUR", card, TestReturnUri, card3ds: true);
+            var auth = await Heidelpay.AuthorizeAsync(10m, Currencies.EUR, card, TestReturnUri, card3ds: true);
 
             Assert.NotNull(auth?.Id);
             Assert.Equal("COR.000.200.000", auth.Message.Code);
@@ -114,7 +114,7 @@ namespace Heidelpay.Payment.External.Tests.Business
         {
             var card = new Card(Heidelpay) { Number = "4444333322221111", ExpiryDate = "12/19" };
 
-            var auth = await Heidelpay.AuthorizeAsync(10m, "EUR", card, TestReturnUri, card3ds: false);
+            var auth = await Heidelpay.AuthorizeAsync(10m, Currencies.EUR, card, TestReturnUri, card3ds: false);
 
             Assert.NotNull(auth?.Id);
             Assert.Equal("COR.000.100.112", auth.Message.Code);
@@ -127,7 +127,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             var card = new Card(Heidelpay) { Number = "4444333322221111", ExpiryDate = "12/19" };
             var customer = new Customer("Max", "Musterperson");
 
-            var auth = await Heidelpay.AuthorizeAsync(10m, "EUR", card, TestReturnUri, customer, false);
+            var auth = await Heidelpay.AuthorizeAsync(10m, Currencies.EUR, card, TestReturnUri, customer, false);
 
             Assert.NotNull(auth?.Id);
             Assert.Equal("COR.000.100.112", auth.Message.Code);
@@ -152,7 +152,7 @@ namespace Heidelpay.Payment.External.Tests.Business
         {
             var customer = await Heidelpay.CreateCustomerAsync(GetMaximumCustomer(GetRandomId()));
             var card = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCard3DS);
-            var auth = await Heidelpay.AuthorizeAsync(10m, "EUR", card.Id, TestReturnUri, customer.Id, false);
+            var auth = await Heidelpay.AuthorizeAsync(10m, Currencies.EUR, card.Id, TestReturnUri, customer.Id, false);
             Assert.NotNull(auth?.Id);
             Assert.Equal("COR.000.100.112", auth.Message.Code);
             Assert.NotNull(auth.Message.Customer);
@@ -163,7 +163,7 @@ namespace Heidelpay.Payment.External.Tests.Business
         {
             var customer = await Heidelpay.CreateCustomerAsync(GetMaximumCustomer(GetRandomId()));
             var card = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCard3DS);
-            var auth = await Heidelpay.AuthorizeAsync(10m, "EUR", card.Id, TestReturnUri, customer.Id, false);
+            var auth = await Heidelpay.AuthorizeAsync(10m, Currencies.EUR, card.Id, TestReturnUri, customer.Id, false);
             Assert.NotNull(auth?.Id);
             Assert.Equal("COR.000.100.112", auth.Message.Code);
             Assert.NotNull(auth.Message.Customer);
@@ -174,7 +174,7 @@ namespace Heidelpay.Payment.External.Tests.Business
         {
             var customer = await Heidelpay.CreateCustomerAsync(GetMaximumCustomer(GetRandomId()));
             var card = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCard3DS);
-            var auth = await Heidelpay.AuthorizeAsync(10m, "EUR", card, TestReturnUri, customer, card3ds: false);
+            var auth = await Heidelpay.AuthorizeAsync(10m, Currencies.EUR, card, TestReturnUri, customer, card3ds: false);
             Assert.NotNull(auth?.Id);
             Assert.Equal("COR.000.100.112", auth.Message.Code);
             Assert.NotNull(auth.Message.Customer);
@@ -184,7 +184,7 @@ namespace Heidelpay.Payment.External.Tests.Business
         public async Task Fetch_Authorization()
         {
             var card = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCard3DS);
-            var auth = await Heidelpay.AuthorizeAsync(10m, "EUR", card, TestReturnUri, card3ds: false);
+            var auth = await Heidelpay.AuthorizeAsync(10m, Currencies.EUR, card, TestReturnUri, card3ds: false);
 
             Assert.NotNull(auth?.Id);
 
@@ -200,7 +200,7 @@ namespace Heidelpay.Payment.External.Tests.Business
         {
             var orderId = GetRandomId();
             var card = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCardNo3DS);
-            var newAuth = new Authorization(card) { Amount = 10m, Currency = "EUR", ReturnUrl = TestReturnUri, OrderId = orderId };
+            var newAuth = new Authorization(card) { Amount = 10m, Currency = Currencies.EUR, ReturnUrl = TestReturnUri, OrderId = orderId };
             var auth = await Heidelpay.AuthorizeAsync(newAuth);
             Assert.NotNull(auth?.Id);
             Assert.Equal("COR.000.100.112", auth.Message.Code);

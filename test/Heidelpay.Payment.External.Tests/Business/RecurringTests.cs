@@ -59,7 +59,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             var card = await heidelpay.CreatePaymentTypeAsync(PaymentTypeCardNo3DS);
             Assert.False(card.Recurring);
 
-            var charge = await card.ChargeAsync(decimal.One, "EUR", TestReturnUri);
+            var charge = await card.ChargeAsync(decimal.One, Currencies.EUR, TestReturnUri);
             Assert.Null(charge.RedirectUrl);
 
             var fetchedCard = await heidelpay.FetchPaymentTypeAsync<Card>(card.Id);
@@ -73,7 +73,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             var result = await Heidelpay.CreatePaymentTypeAsync<SepaDirectDebit>(x => x.Iban = "DE89370400440532013000");
             Assert.False(result.Recurring);
 
-            var charge = await result.ChargeAsync(decimal.One, "EUR", TestReturnUri);
+            var charge = await result.ChargeAsync(decimal.One, Currencies.EUR, TestReturnUri);
             Assert.Null(charge.RedirectUrl);
 
             var fetchedCard = await heidelpay.FetchPaymentTypeAsync<SepaDirectDebit>(result.Id);

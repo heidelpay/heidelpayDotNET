@@ -130,7 +130,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             {
                 AmountTotalGross = amount.Value,
                 AmountTotalDiscount = discount.Value,
-                CurrencyCode = "EUR",
+                CurrencyCode = Currencies.EUR,
                 Note = "Mystery Shopping",
                 OrderId = GetRandomInvoiceId(),
             };
@@ -157,7 +157,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             var basket = new Basket
             {
                 AmountTotalGross = 500.05m,
-                CurrencyCode = "EUR",
+                CurrencyCode = Currencies.EUR,
                 OrderId = GetRandomInvoiceId(),
             };
             basket.AddBasketItem(new BasketItem
@@ -315,7 +315,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             Assert.Equal(Status.Success, cancel.Status);
         }
 
-        protected void AssertCharge(Charge charge, decimal? chargeAmount = 866.49m, Status status = Status.Success, string currency = "EUR")
+        protected void AssertCharge(Charge charge, decimal? chargeAmount = 866.49m, Status status = Status.Success, string currency = Currencies.EUR)
         {
             Assert.NotNull(charge?.Id);
             Assert.NotNull(charge.Processing.UniqueId);

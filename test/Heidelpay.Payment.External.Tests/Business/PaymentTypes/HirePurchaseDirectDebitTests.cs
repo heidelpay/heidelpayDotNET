@@ -14,7 +14,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             decimal effectiveInterestRate = 5.5m;
             DateTime orderDate = new DateTime(2019, 6, 12);
 
-            var rateList = await Heidelpay.HirePurchaseRatesAsync(10, "EUR", effectiveInterestRate, orderDate);
+            var rateList = await Heidelpay.HirePurchaseRatesAsync(10, Currencies.EUR, effectiveInterestRate, orderDate);
             
             Assert.NotNull(rateList);
             Assert.Equal(6, rateList.Count());
@@ -28,7 +28,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             decimal effectiveInterestRate = 5.5m;
             DateTime orderDate = new DateTime(2019, 6, 12);
 
-            var rateList = await Heidelpay.HirePurchaseRatesAsync(10, "EUR", effectiveInterestRate, orderDate);
+            var rateList = await Heidelpay.HirePurchaseRatesAsync(10, Currencies.EUR, effectiveInterestRate, orderDate);
 
             var plan = rateList.First();
 
@@ -46,7 +46,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             decimal effectiveInterestRate = 5.5m;
             DateTime orderDate = new DateTime(2019, 6, 12);
 
-            var rateList = await Heidelpay.HirePurchaseRatesAsync(10, "EUR", effectiveInterestRate, orderDate);
+            var rateList = await Heidelpay.HirePurchaseRatesAsync(10, Currencies.EUR, effectiveInterestRate, orderDate);
 
             var plan = rateList.First();
 
@@ -78,7 +78,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             var basket = await Heidelpay.CreateBasketAsync(GetMaximumBasket(amount: 866.49m, discount: 0m));
             var plan = await CreatePlanWithIban();
 
-            var authorization = await plan.AuthorizeAsync(866.49m, "EUR", TestReturnUri, customer, basket, plan.EffectiveInterestRate.Value);
+            var authorization = await plan.AuthorizeAsync(866.49m, Currencies.EUR, TestReturnUri, customer, basket, plan.EffectiveInterestRate.Value);
 
             AssertAuthorization(plan, authorization);
         }
@@ -91,11 +91,11 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
 
             decimal effectiveInterestRate = 5.5m;
             DateTime orderDate = new DateTime(2019, 6, 12);
-            var rateList = await Heidelpay.HirePurchaseRatesAsync(10, "EUR", effectiveInterestRate, orderDate);
+            var rateList = await Heidelpay.HirePurchaseRatesAsync(10, Currencies.EUR, effectiveInterestRate, orderDate);
             var plan = rateList.First();
             AddIbanInvoiceParameter(plan);
 
-            var authorization = await Heidelpay.AuthorizeAsync(866.49m, "EUR", plan, TestReturnUri, customer, basket, plan.EffectiveInterestRate.Value);
+            var authorization = await Heidelpay.AuthorizeAsync(866.49m, Currencies.EUR, plan, TestReturnUri, customer, basket, plan.EffectiveInterestRate.Value);
 
             AssertAuthorization(plan, authorization);
         }
@@ -107,7 +107,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             var basket = GetMaximumBasket(amount: 866.49m, discount: 0m);
             var plan = await CreatePlan();
 
-            var authorization = await Heidelpay.AuthorizeAsync(866.49m, "EUR", plan, TestReturnUri, customer, basket, plan.EffectiveInterestRate.Value);
+            var authorization = await Heidelpay.AuthorizeAsync(866.49m, Currencies.EUR, plan, TestReturnUri, customer, basket, plan.EffectiveInterestRate.Value);
 
             var charge = await authorization.ChargeAsync();
             Assert.NotNull(charge.Processing.ExternalOrderId);
@@ -121,7 +121,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             var basket = GetMaximumBasket(amount: 866.49m, discount: 0m);
             var plan = await CreatePlan();
 
-            var authorization = await Heidelpay.AuthorizeAsync(866.49m, "EUR", plan, TestReturnUri, customer, basket, plan.EffectiveInterestRate.Value);
+            var authorization = await Heidelpay.AuthorizeAsync(866.49m, Currencies.EUR, plan, TestReturnUri, customer, basket, plan.EffectiveInterestRate.Value);
 
             var charge = await authorization.ChargeAsync();
             
@@ -136,7 +136,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             var basket = GetMaximumBasket(amount: 866.49m, discount: 0m);
             var plan = await CreatePlanWithIban();
 
-            var authorization = await Heidelpay.AuthorizeAsync(866.49m, "EUR", plan, TestReturnUri, customer, basket, plan.EffectiveInterestRate.Value);
+            var authorization = await Heidelpay.AuthorizeAsync(866.49m, Currencies.EUR, plan, TestReturnUri, customer, basket, plan.EffectiveInterestRate.Value);
 
             var charge = await authorization.ChargeAsync();
 
@@ -151,7 +151,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             var basket = GetMaximumBasket(amount: 866.49m, discount: 0m);
             var plan = await CreatePlanWithIban();
 
-            var authorization = await Heidelpay.AuthorizeAsync(866.49m, "EUR", plan, TestReturnUri, customer, basket, plan.EffectiveInterestRate.Value);
+            var authorization = await Heidelpay.AuthorizeAsync(866.49m, Currencies.EUR, plan, TestReturnUri, customer, basket, plan.EffectiveInterestRate.Value);
 
             var charge = await authorization.ChargeAsync();
 
@@ -166,7 +166,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             var basket = GetMaximumBasket(amount: 866.49m, discount: 0m);
             var plan = await CreatePlanWithIban();
 
-            var authorization = await Heidelpay.AuthorizeAsync(866.49m, "EUR", plan, TestReturnUri, customer, basket, plan.EffectiveInterestRate.Value);
+            var authorization = await Heidelpay.AuthorizeAsync(866.49m, Currencies.EUR, plan, TestReturnUri, customer, basket, plan.EffectiveInterestRate.Value);
 
             var charge = await authorization.ChargeAsync();
 
@@ -217,7 +217,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         {
             decimal effectiveInterestRate = 5.5m;
             DateTime orderDate = new DateTime(2019, 6, 12);
-            var rateList = await Heidelpay.HirePurchaseRatesAsync(10, "EUR", effectiveInterestRate, orderDate);
+            var rateList = await Heidelpay.HirePurchaseRatesAsync(10, Currencies.EUR, effectiveInterestRate, orderDate);
             var plan = rateList.First();
             AddIbanInvoiceParameter(plan);
             return await Heidelpay.CreatePaymentTypeAsync(plan.PaymentTypeConfig());
@@ -227,7 +227,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         {
             decimal effectiveInterestRate = 5.5m;
             DateTime orderDate = new DateTime(2019, 6, 12);
-            var rateList = await Heidelpay.HirePurchaseRatesAsync(10, "EUR", effectiveInterestRate, orderDate);
+            var rateList = await Heidelpay.HirePurchaseRatesAsync(10, Currencies.EUR, effectiveInterestRate, orderDate);
             var plan = rateList.First();
             return await Heidelpay.CreatePaymentTypeAsync(plan.PaymentTypeConfig());
         }
