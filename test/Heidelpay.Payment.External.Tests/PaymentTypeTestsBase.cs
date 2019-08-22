@@ -43,17 +43,18 @@ namespace Heidelpay.Payment.External.Tests.Business
 
         protected static string GetRandomId()
         {
-            return new Random().Next(0, 99999).ToString();
-            //return new Random().Next(0, 99999).ToString("B")
-            //    .Replace("{", "")
-            //    .Replace("}", "")
-            //    .Replace("-", "")
-            //    .ToUpper();
+            return Guid.NewGuid().ToString("B")
+                .Replace("{", "")
+                .Replace("}", "")
+                .Replace("-", "")
+                .ToUpper();
         }
 
         protected static string GetRandomInvoiceId()
         {
-            return GetRandomId().Substring(0, 5);
+            return new ThreadSafeRandom()
+                .Next(10000, 99999)
+                .ToString();
         }
 
         protected async Task<Customer> CreateMaximumCustomer(HeidelpayClient heidelpay)
@@ -348,6 +349,29 @@ namespace Heidelpay.Payment.External.Tests.Business
         protected void AssertShipment(Shipment shipment)
         {
             Assert.NotNull(shipment?.Id);
+        }
+    }
+
+    public class ThreadSafeRandom
+    {
+        private static readonly Random _global = new Random();
+        [ThreadStatic] private static Random _local;
+
+        public int Next(int min, int max)
+        {
+            if (_local == null)
+            {
+                lock (_global)
+                {
+                    if (_local == null)
+                    {
+                        int seed = _global.Next(min, max);
+                        _local = new Random(seed);
+                    }
+                }
+            }
+
+            return _local.Next(min, max);
         }
     }
 }

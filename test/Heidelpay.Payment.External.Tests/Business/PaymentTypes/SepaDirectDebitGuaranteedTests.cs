@@ -31,13 +31,6 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         }
 
         [Fact]
-        public async Task Create_PaymentType()
-        {
-            var result = await Heidelpay.CreatePaymentTypeAsync<SepaDirectDebitGuaranteed>(x => x.Iban = "DE89370400440532013000");
-            Assert.NotNull(result?.Id);
-        }
-
-        [Fact]
         public async Task Create_PaymentType_Full()
         {
             var result = await Heidelpay.CreatePaymentTypeAsync(ConfigurePaymentType);
