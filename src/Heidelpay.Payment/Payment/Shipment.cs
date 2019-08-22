@@ -43,7 +43,7 @@ namespace Heidelpay.Payment
         public Payment Payment { get; internal set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Refund"/> class.
+        /// Initializes a new instance of the <see cref="Shipment"/> class.
         /// </summary>
         [JsonConstructor]
         internal Shipment()

@@ -7,9 +7,22 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
     public class CardTests : PaymentTypeTestsBase
     {
         [Fact]
-        public async Task Create_PaymentType()
+        public async Task Create_PaymentType_Via_Config()
         {
             var result = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCard);
+            Assert.NotNull(result?.Id);
+            Assert.NotNull(result?.CardDetails);
+            Assert.NotNull(result?.CardDetails?.CountryName);
+            Assert.NotNull(result?.CardDetails?.CountryIsoA2);
+        }
+
+        [Fact]
+        public async Task Create_PaymentType_Via_Instance()
+        {
+            var card = new Card(Heidelpay);
+            PaymentTypeCard(card);
+
+            var result = await Heidelpay.CreatePaymentTypeAsync(card);
             Assert.NotNull(result?.Id);
             Assert.NotNull(result?.CardDetails);
             Assert.NotNull(result?.CardDetails?.CountryName);

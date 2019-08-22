@@ -43,11 +43,12 @@ namespace Heidelpay.Payment.External.Tests.Business
 
         protected static string GetRandomId()
         {
-            return Guid.NewGuid().ToString("B")
-                .Replace("{", "")
-                .Replace("}", "")
-                .Replace("-", "")
-                .ToUpper();
+            return new Random().Next(0, 99999).ToString();
+            //return new Random().Next(0, 99999).ToString("B")
+            //    .Replace("{", "")
+            //    .Replace("}", "")
+            //    .Replace("-", "")
+            //    .ToUpper();
         }
 
         protected static string GetRandomInvoiceId()

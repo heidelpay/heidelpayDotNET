@@ -15,7 +15,7 @@ namespace Heidelpay.Payment
         /// <value>
         /// The amount of repayment.
         /// </value>
-        public decimal AmountOfRepayment { get; set; }
+        public decimal? AmountOfRepayment { get; set; }
 
         /// <summary>
         /// Gets or sets the rate.
@@ -23,7 +23,7 @@ namespace Heidelpay.Payment
         /// <value>
         /// The rate.
         /// </value>
-        public decimal Rate { get; set; }
+        public decimal? Rate { get; set; }
 
         /// <summary>
         /// Gets or sets the total remaining amount.
@@ -31,7 +31,7 @@ namespace Heidelpay.Payment
         /// <value>
         /// The total remaining amount.
         /// </value>
-        public decimal TotalRemainingAmount { get; set; }
+        public decimal? TotalRemainingAmount { get; set; }
 
         /// <summary>
         /// Gets or sets the type.
@@ -47,7 +47,7 @@ namespace Heidelpay.Payment
         /// <value>
         /// The index of the rate.
         /// </value>
-        public int RateIndex { get; set; }
+        public int? RateIndex { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="HirePurchaseRate"/> is ultimo.
@@ -55,6 +55,6 @@ namespace Heidelpay.Payment
         /// <value>
         ///   <c>true</c> if ultimo; otherwise, <c>false</c>.
         /// </value>
-        public bool Ultimo { get; set; }
+        public bool? Ultimo { get; set; }
     }
 }

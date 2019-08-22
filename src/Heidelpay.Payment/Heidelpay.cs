@@ -917,6 +917,18 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
+        /// Creates the payment type asynchronous.
+        /// </summary>
+        /// <typeparam name="TPaymentBase">The type of the payment base.</typeparam>
+        /// <param name="paymentTypeInstance">The payment type instance.</param>
+        /// <returns></returns>
+        public async Task<TPaymentBase> CreatePaymentTypeAsync<TPaymentBase>(TPaymentBase paymentTypeInstance)
+            where TPaymentBase : PaymentTypeBase
+        {
+            return await PaymentService.CreatePaymentTypeAsync(paymentTypeInstance);
+        }
+
+        /// <summary>
         /// Updates the payment type as an asynchronous operation.
         /// </summary>
         /// <typeparam name="TPaymentBase">The type of the payment base.</typeparam>
