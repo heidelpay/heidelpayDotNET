@@ -12,7 +12,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             var heidelpay = Heidelpay;
             var card = await heidelpay.CreatePaymentTypeAsync(PaymentTypeCard);
 
-            var charge = await heidelpay.ChargeAsync(decimal.One, "EUR", card, TestReturnUri, card3ds: false);
+            var charge = await heidelpay.ChargeAsync(decimal.One, Currencies.EUR, card, TestReturnUri, card3ds: false);
 
             Assert.NotNull(charge?.Id);
         }
@@ -23,7 +23,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             var heidelpay = Heidelpay;
             var card = await heidelpay.CreatePaymentTypeAsync(PaymentTypeCard);
 
-            var charge = await heidelpay.ChargeAsync(decimal.One, "EUR", card, TestReturnUri, card3ds: false);
+            var charge = await heidelpay.ChargeAsync(decimal.One, Currencies.EUR, card, TestReturnUri, card3ds: false);
 
             Assert.NotNull(charge?.Id);
             Assert.Equal("COR.000.100.112", charge.Message.Code);
@@ -37,7 +37,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             var card = new Card(heidelpay);
             PaymentTypeCard(card);
 
-            var charge = await heidelpay.ChargeAsync(decimal.One, "EUR", card, TestReturnUri, card3ds: false);
+            var charge = await heidelpay.ChargeAsync(decimal.One, Currencies.EUR, card, TestReturnUri, card3ds: false);
 
             Assert.NotNull(charge?.Id);
         }
@@ -48,7 +48,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             var heidelpay = Heidelpay;
 
             var card = new Card(heidelpay) { Number = "4444333322221111", ExpiryDate = "12/19" };
-            var charge = await Heidelpay.ChargeAsync(decimal.One, "EUR", card, TestReturnUri, card3ds: false);
+            var charge = await Heidelpay.ChargeAsync(decimal.One, Currencies.EUR, card, TestReturnUri, card3ds: false);
 
             Assert.NotNull(charge?.Id);
             Assert.Equal("COR.000.100.112", charge.Message.Code);
@@ -63,7 +63,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             var card = new Card(heidelpay) { Number = "4444333322221111", ExpiryDate = "12/19" };
             var customer = GetMinimumCustomer();
 
-            var charge = await heidelpay.ChargeAsync(decimal.One, "EUR", card, TestReturnUri, customer: customer, card3ds: false);
+            var charge = await heidelpay.ChargeAsync(decimal.One, Currencies.EUR, card, TestReturnUri, customer: customer, card3ds: false);
 
             Assert.NotNull(charge?.Id);
             Assert.Equal("COR.000.100.112", charge.Message.Code);
@@ -76,7 +76,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             var customer = await Heidelpay.CreateCustomerAsync(GetMaximumCustomer(GetRandomId()));
             var card = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCard);
 
-            var charge = await Heidelpay.ChargeAsync(decimal.One, "EUR", card.Id, TestReturnUri, customer.Id, false);
+            var charge = await Heidelpay.ChargeAsync(decimal.One, Currencies.EUR, card.Id, TestReturnUri, customer.Id, false);
 
             Assert.NotNull(charge?.Id);
             Assert.Equal("COR.000.100.112", charge.Message.Code);
@@ -90,7 +90,7 @@ namespace Heidelpay.Payment.External.Tests.Business
         {
             var heidelpay = Heidelpay;
             var sofort = new Sofort(heidelpay);
-            var charge = await heidelpay.ChargeAsync(decimal.One, "EUR", sofort, TestReturnUri);
+            var charge = await heidelpay.ChargeAsync(decimal.One, Currencies.EUR, sofort, TestReturnUri);
 
             Assert.NotNull(charge?.Id);
             Assert.NotNull(charge?.RedirectUrl);
@@ -107,7 +107,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             var builtCharge = new Charge(card)
             {
                 Amount = decimal.One,
-                Currency = "EUR",
+                Currency = Currencies.EUR,
                 ReturnUrl = TestReturnUri,
                 OrderId = GetRandomId(),
                 Card3ds = false
@@ -135,7 +135,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             var charge = await Heidelpay.ChargeAsync(new Charge(card)
             {
                 Amount = decimal.One,
-                Currency = "EUR",
+                Currency = Currencies.EUR,
                 ReturnUrl = TestReturnUri,
                 OrderId = GetRandomId(),
                 Card3ds = false
@@ -155,7 +155,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             var charge = await Heidelpay.ChargeAsync(new Charge(card)
             {
                 Amount = decimal.One,
-                Currency = "EUR",
+                Currency = Currencies.EUR,
                 ReturnUrl = TestReturnUri,
                 OrderId = GetRandomId(),
                 Card3ds = true

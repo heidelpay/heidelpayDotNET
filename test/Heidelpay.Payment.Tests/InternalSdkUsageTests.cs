@@ -24,7 +24,6 @@ namespace Heidelpay.Payment.Internal.Tests
 
             var config = configBuilder.Build();
 
-            services.AddHttpClient();
             services.AddLogging();
 
             services.AddHeidelpay(config.GetSection("Heidelpay"));

@@ -1,4 +1,5 @@
 ﻿using Heidelpay.Payment.PaymentTypes;
+using System;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -6,10 +7,24 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
 {
     public class PaypalTests : PaymentTypeTestsBase
     {
-        [Fact]
-        public async Task Create_PaymentType()
+        private Action<Paypal> ConfigurePaymentType { get; } = new Action<Paypal>(x =>
         {
-            var result = await Heidelpay.CreatePaymentTypeAsync<Paypal>();
+
+        });
+
+        [Fact]
+        public async Task Create_PaymentType_Via_Config()
+        {
+            var result = await Heidelpay.CreatePaymentTypeAsync(ConfigurePaymentType);
+            Assert.NotNull(result?.Id);
+        }
+
+        [Fact]
+        public async Task Create_PaymentType_Via_Instance()
+        {
+            var instance = new Paypal(Heidelpay);
+            ConfigurePaymentType(instance);
+            var result = await Heidelpay.CreatePaymentTypeAsync(instance);
             Assert.NotNull(result?.Id);
         }
 
@@ -18,7 +33,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         public async Task Authorize_PaymentType()
         {
             var result = await Heidelpay.CreatePaymentTypeAsync<Paypal>();
-            var auth = await Heidelpay.AuthorizeAsync(decimal.One, "EUR", result, ShopReturnUri);
+            var auth = await Heidelpay.AuthorizeAsync(decimal.One, Currencies.EUR, result, ShopReturnUri);
             Assert.NotNull(result?.Id);
             AssertAuthorizationSimple(auth, decimal.One, Status.Pending);
         }
@@ -27,7 +42,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         public async Task Charge_PaymentType()
         {
             var result = await Heidelpay.CreatePaymentTypeAsync<Paypal>();
-            var charge = await Heidelpay.ChargeAsync(decimal.One, "EUR", result, TestReturnUri);
+            var charge = await Heidelpay.ChargeAsync(decimal.One, Currencies.EUR, result, TestReturnUri);
             AssertCharge(charge, decimal.One, Status.Pending);
         }
 

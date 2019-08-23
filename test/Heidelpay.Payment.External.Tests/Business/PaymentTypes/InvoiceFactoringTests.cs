@@ -1,4 +1,5 @@
 ﻿using Heidelpay.Payment.PaymentTypes;
+using System;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -6,10 +7,24 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
 {
     public class InvoiceFactoringTests : PaymentTypeTestsBase
     {
-        [Fact]
-        public async Task Create_PaymentType()
+        private Action<InvoiceFactoring> ConfigurePaymentType { get; } = new Action<InvoiceFactoring>(x =>
         {
-            var result = await Heidelpay.CreatePaymentTypeAsync<InvoiceFactoring>();
+
+        });
+
+        [Fact]
+        public async Task Create_PaymentType_Via_Config()
+        {
+            var result = await Heidelpay.CreatePaymentTypeAsync(ConfigurePaymentType);
+            Assert.NotNull(result?.Id);
+        }
+
+        [Fact]
+        public async Task Create_PaymentType_Via_Instance()
+        {
+            var instance = new InvoiceFactoring(Heidelpay);
+            ConfigurePaymentType(instance);
+            var result = await Heidelpay.CreatePaymentTypeAsync(instance);
             Assert.NotNull(result?.Id);
         }
 
@@ -17,7 +32,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         public async Task Charge_PaymentType()
         {
             var result = await Heidelpay.CreatePaymentTypeAsync<InvoiceFactoring>();
-            var charge = await result.ChargeAsync(10m, "EUR", ShopReturnUri, 
+            var charge = await result.ChargeAsync(10m, Currencies.EUR, ShopReturnUri, 
                 GetMaximumCustomerSameAddress(GetRandomInvoiceId()), GetMaximumBasket());
 
             AssertCharge(charge, 10m);
@@ -28,7 +43,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         public async Task Charge_PaymentType_Different_Address()
         {
             var result = await Heidelpay.CreatePaymentTypeAsync<InvoiceFactoring>();
-            var ex = await Assert.ThrowsAsync<PaymentException>(() => result.ChargeAsync(10m, "EUR", ShopReturnUri,
+            var ex = await Assert.ThrowsAsync<PaymentException>(() => result.ChargeAsync(10m, Currencies.EUR, ShopReturnUri,
                 GetMaximumCustomer(GetRandomInvoiceId()), GetMaximumBasket()));
         }
 

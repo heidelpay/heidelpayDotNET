@@ -127,6 +127,17 @@ namespace Heidelpay.Payment.Interfaces
         Task<Cancel> CancelChargeAsync(string paymentId, string chargeId, decimal? amount = null);
 
         /// <summary>
+        /// Cancels the charge as an asynchronous operation.
+        /// </summary>
+        /// <param name="paymentId">The payment identifier.</param>
+        /// <param name="chargeId">The charge identifier.</param>
+        /// <param name="amountGross">The amount gross.</param>
+        /// <param name="amountNet">The amount net.</param>
+        /// <param name="amountVat">The amount vat.</param>
+        /// <returns></returns>
+        Task<Cancel> CancelChargeAsync(string paymentId, string chargeId, decimal amountGross, decimal amountNet, decimal amountVat);
+
+        /// <summary>
         /// Charges as an asynchronous operation.
         /// </summary>
         /// <param name="charge">The charge.</param>
@@ -214,6 +225,14 @@ namespace Heidelpay.Payment.Interfaces
         /// <param name="config">The configuration.</param>
         /// <returns>Task&lt;TPaymentBase&gt;.</returns>
         Task<TPaymentBase> CreatePaymentTypeAsync<TPaymentBase>(Action<TPaymentBase> config = null) where TPaymentBase : PaymentTypeBase;
+
+        /// <summary>
+        /// Creates the payment type as an asynchronous operation.
+        /// </summary>
+        /// <typeparam name="TPaymentBase">The type of the payment base.</typeparam>
+        /// <param name="paymentTypeInstance">The payment type instance.</param>
+        /// <returns></returns>
+        Task<TPaymentBase> CreatePaymentTypeAsync<TPaymentBase>(TPaymentBase paymentTypeInstance) where TPaymentBase : PaymentTypeBase;
 
         /// <summary>
         /// Updates the payment type as an asynchronous operation.

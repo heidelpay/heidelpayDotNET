@@ -13,9 +13,18 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         });
 
         [Fact]
-        public async Task Create_PaymentType()
+        public async Task Create_PaymentType_Via_Config()
         {
             var result = await Heidelpay.CreatePaymentTypeAsync(ConfigurePaymentType);
+            Assert.NotNull(result?.Id);
+        }
+
+        [Fact]
+        public async Task Create_PaymentType_Via_Instance()
+        {
+            var instance = new Alipay(Heidelpay);
+            ConfigurePaymentType(instance);
+            var result = await Heidelpay.CreatePaymentTypeAsync(instance);
             Assert.NotNull(result?.Id);
         }
 
@@ -23,7 +32,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         public async Task Charge_PaymentType()
         {
             var typeInstance = await Heidelpay.CreatePaymentTypeAsync(ConfigurePaymentType);
-            var charge = await typeInstance.ChargeAsync(decimal.One, "EUR", ShopReturnUri);
+            var charge = await typeInstance.ChargeAsync(decimal.One, Currencies.EUR, ShopReturnUri);
             Assert.Equal(typeInstance.Id, charge.TypeId);
             AssertCharge(charge, decimal.One, Status.Pending);
         }

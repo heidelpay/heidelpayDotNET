@@ -14,7 +14,6 @@ namespace Heidelpay.Payment.Internal.Tests.Business.Errors
         {
             var services = new ServiceCollection();
 
-            services.AddHttpClient();
             services.AddLogging();
 
             services.AddHeidelpay(opt =>
@@ -34,7 +33,7 @@ namespace Heidelpay.Payment.Internal.Tests.Business.Errors
         {
             var heidelpay = BuildHeidelpay();
 
-            var exception = await Assert.ThrowsAsync<PaymentException>(() => heidelpay.AuthorizeAsync(new Authorization { Amount = 10m, Currency = "EUR", ReturnUrl = new Uri("https://www.google.at"), TypeId = "" }));
+            var exception = await Assert.ThrowsAsync<PaymentException>(() => heidelpay.AuthorizeAsync(new Authorization { Amount = 10m, Currency = Currencies.EUR, ReturnUrl = new Uri("https://www.google.at"), TypeId = "" }));
 
             Assert.NotNull(exception);
             Assert.Single(exception.PaymentErrorList);

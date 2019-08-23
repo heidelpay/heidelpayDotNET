@@ -23,11 +23,7 @@ using Heidelpay.Payment.Interfaces;
 using Heidelpay.Payment.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using System;
-using System.Linq;
-using System.Net.Http;
 
 namespace Heidelpay.Payment.Extensions
 {

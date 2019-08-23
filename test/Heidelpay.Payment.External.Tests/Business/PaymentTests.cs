@@ -15,7 +15,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             var auth = await heidelpay.AuthorizeAsync(new Authorization(card)
             {
                 Amount = 10m,
-                Currency = "EUR",
+                Currency = Currencies.EUR,
                 ReturnUrl = new Uri("https://www.heidelpay.com")
             });
 
@@ -36,7 +36,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             var auth = await Heidelpay.AuthorizeAsync(new Authorization(card)
             {
                 Amount = 10m,
-                Currency = "EUR",
+                Currency = Currencies.EUR,
                 Card3ds = false,
                 ReturnUrl = new Uri("https://www.heidelpay.com")
             });
@@ -53,7 +53,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             var auth = await Heidelpay.AuthorizeAsync(new Authorization(card)
             {
                 Amount = 10m,
-                Currency = "EUR",
+                Currency = Currencies.EUR,
                 Card3ds = false,
                 ReturnUrl = new Uri("https://www.heidelpay.com")
             });
@@ -81,7 +81,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             var auth = await Heidelpay.AuthorizeAsync(new Authorization(card)
             {
                 Amount = 10m,
-                Currency = "EUR",
+                Currency = Currencies.EUR,
                 Card3ds = false,
                 ReturnUrl = new Uri("https://www.heidelpay.com")
             });
@@ -100,7 +100,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             var auth = await Heidelpay.AuthorizeAsync(new Authorization(card)
             {
                 Amount = 10m,
-                Currency = "EUR",
+                Currency = Currencies.EUR,
                 Card3ds = false,
                 ReturnUrl = new Uri("https://www.heidelpay.com")
             });
@@ -120,7 +120,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             var auth = await Heidelpay.AuthorizeAsync(new Authorization(card)
             {
                 Amount = 10m,
-                Currency = "EUR",
+                Currency = Currencies.EUR,
                 Card3ds = false,
                 ReturnUrl = new Uri("https://www.heidelpay.com")
             });
@@ -138,7 +138,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             var charge = await Heidelpay.ChargeAsync(new Charge(card)
             {
                 Amount = 10m,
-                Currency = "EUR",
+                Currency = Currencies.EUR,
                 Card3ds = false,
                 ReturnUrl = TestReturnUri
             });
@@ -155,7 +155,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             var charge = await Heidelpay.ChargeAsync(new Charge(card)
             {
                 Amount = 10m,
-                Currency = "EUR",
+                Currency = Currencies.EUR,
                 Card3ds = false,
                 ReturnUrl = TestReturnUri
             });
@@ -172,9 +172,9 @@ namespace Heidelpay.Payment.External.Tests.Business
             var card = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCard);
             var payment = new Payment(card);
 
-            var authUsingPayment = await payment.AuthorizeAsync(decimal.One, "EUR", returnUrl: TestReturnUri);
+            var authUsingPayment = await payment.AuthorizeAsync(decimal.One, Currencies.EUR, returnUrl: TestReturnUri);
 
-            var authUsingHeidelpay = await Heidelpay.AuthorizeAsync(decimal.One, "EUR", card, TestReturnUri);
+            var authUsingHeidelpay = await Heidelpay.AuthorizeAsync(decimal.One, Currencies.EUR, card, TestReturnUri);
 
             Assert.NotNull(authUsingPayment);
             Assert.NotNull(authUsingHeidelpay);
@@ -184,8 +184,8 @@ namespace Heidelpay.Payment.External.Tests.Business
         public async Task Charge_Without_Authorize()
         {
             var card = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCard);
-            var chargeUsingPayment = await new Payment(card).ChargeAsync(decimal.One, "EUR", TestReturnUri);
-            var chargeUsingHeidelpay = await Heidelpay.ChargeAsync(decimal.One, "EUR", card, TestReturnUri);
+            var chargeUsingPayment = await new Payment(card).ChargeAsync(decimal.One, Currencies.EUR, TestReturnUri);
+            var chargeUsingHeidelpay = await Heidelpay.ChargeAsync(decimal.One, Currencies.EUR, card, TestReturnUri);
 
             Assert.NotNull(chargeUsingPayment);
             Assert.NotNull(chargeUsingHeidelpay);
@@ -195,7 +195,7 @@ namespace Heidelpay.Payment.External.Tests.Business
         public async Task Charge_Payment_Amount()
         {
             var card = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCardNo3DS);
-            var chargeUsingPayment = await new Payment(card).ChargeAsync(decimal.One, "EUR", TestReturnUri);
+            var chargeUsingPayment = await new Payment(card).ChargeAsync(decimal.One, Currencies.EUR, TestReturnUri);
             Assert.Equal(decimal.One, chargeUsingPayment.Payment.AmountCharged);
         }
 
@@ -203,7 +203,7 @@ namespace Heidelpay.Payment.External.Tests.Business
         public async Task Charge_Heidelpay_Amount()
         {
             var card = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCardNo3DS);
-            var chargeUsingHeidelpay = await Heidelpay.ChargeAsync(decimal.One, "EUR", card, TestReturnUri);
+            var chargeUsingHeidelpay = await Heidelpay.ChargeAsync(decimal.One, Currencies.EUR, card, TestReturnUri);
             Assert.Equal(decimal.One, chargeUsingHeidelpay.Payment.AmountCharged);
         }
     }

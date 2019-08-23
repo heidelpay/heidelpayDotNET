@@ -769,6 +769,28 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
+        /// Cancels the charge as an asynchronous operation.
+        /// </summary>
+        /// <param name="paymentId">The payment identifier.</param>
+        /// <param name="chargeId">The charge identifier.</param>
+        /// <param name="amountGross">The amount gross.</param>
+        /// <param name="amountNet">The amount net.</param>
+        /// <param name="amountVat">The amount vat.</param>
+        /// <returns></returns>
+        public async Task<Cancel> CancelChargeAsync(string paymentId, string chargeId, decimal amountGross, decimal amountNet, decimal amountVat)
+        {
+            Check.ThrowIfNullOrEmpty(paymentId, nameof(paymentId));
+            Check.ThrowIfNullOrEmpty(chargeId, nameof(chargeId));
+
+            return await PaymentService.CancelChargeAsync(new Cancel
+            {
+                AmountGross = amountGross,
+                AmountNet = amountNet,
+                AmountVat = amountVat,
+            }, chargeId, paymentId);
+        }
+
+        /// <summary>
         /// Fetch charge as an asynchronous operation.
         /// </summary>
         /// <param name="paymentId">The payment identifier.</param>
@@ -914,6 +936,18 @@ namespace Heidelpay.Payment
             config?.Invoke(instance);
 
             return await PaymentService.CreatePaymentTypeAsync(instance);
+        }
+
+        /// <summary>
+        /// Creates the payment type asynchronous.
+        /// </summary>
+        /// <typeparam name="TPaymentBase">The type of the payment base.</typeparam>
+        /// <param name="paymentTypeInstance">The payment type instance.</param>
+        /// <returns></returns>
+        public async Task<TPaymentBase> CreatePaymentTypeAsync<TPaymentBase>(TPaymentBase paymentTypeInstance)
+            where TPaymentBase : PaymentTypeBase
+        {
+            return await PaymentService.CreatePaymentTypeAsync(paymentTypeInstance);
         }
 
         /// <summary>
