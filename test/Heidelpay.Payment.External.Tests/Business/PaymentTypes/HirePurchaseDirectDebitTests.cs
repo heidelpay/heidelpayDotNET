@@ -141,7 +141,7 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
             var charge = await authorization.ChargeAsync();
 
             var cancel = await charge.CancelAsync(5m, 4m, 1m);
-            AssertCancel(cancel, decimal.One);
+            AssertCancel(cancel, 5m);
         }
 
         [Fact(Skip = "Shipment is not working")]

@@ -73,7 +73,7 @@ namespace Heidelpay.Payment
         }
 
         /// <summary>
-        /// Cancels the asynchronous.
+        /// cancel as an asynchronous operation.
         /// </summary>
         /// <param name="amountGross">The amount gross.</param>
         /// <param name="amountNet">The amount net.</param>
