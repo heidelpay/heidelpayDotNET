@@ -31,7 +31,7 @@ namespace Heidelpay.Payment.External.Tests.Business
 
             var oot = new Payout(heidelpay, card)
             {
-                Amount = 2,
+                Amount = StandardChargedBasketResult,
                 Currency = Currencies.EUR,
                 OrderId = GetRandomId(),
                 PaymentReference = "My Payment Reference",
