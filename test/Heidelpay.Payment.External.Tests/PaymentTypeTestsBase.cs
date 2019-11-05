@@ -12,6 +12,10 @@ namespace Heidelpay.Payment.External.Tests.Business
 {
     public abstract class PaymentTypeTestsBase
     {
+        public const decimal StandardChargedBasketResult = 490.05m;
+        public const string DateOnlyFormat = "yyyy-MM-dd";
+        public const string DateTimeFormat = "yyyy-MM-dd HH:mm:ss";
+
         protected IHeidelpay Heidelpay
         {
             get
@@ -203,9 +207,6 @@ namespace Heidelpay.Payment.External.Tests.Business
             DateTimeFormat,
             DateOnlyFormat,
         };
-
-        public const string DateOnlyFormat = "yyyy-MM-dd";
-        public const string DateTimeFormat = "yyyy-MM-dd HH:mm:ss";
 
         public static bool TryParseDateTime(string value, out DateTime result)
         {

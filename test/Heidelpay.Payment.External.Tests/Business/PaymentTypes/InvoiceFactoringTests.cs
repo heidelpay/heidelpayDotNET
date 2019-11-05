@@ -32,10 +32,10 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         public async Task Charge_PaymentType()
         {
             var result = await Heidelpay.CreatePaymentTypeAsync<InvoiceFactoring>();
-            var charge = await result.ChargeAsync(10m, Currencies.EUR, ShopReturnUri, 
+            var charge = await result.ChargeAsync(StandardChargedBasketResult, Currencies.EUR, ShopReturnUri, 
                 GetMaximumCustomerSameAddress(GetRandomInvoiceId()), GetMaximumBasket());
 
-            AssertCharge(charge, 10m);
+            AssertCharge(charge, StandardChargedBasketResult);
             Assert.NotNull(charge?.PaymentId);
         }
 

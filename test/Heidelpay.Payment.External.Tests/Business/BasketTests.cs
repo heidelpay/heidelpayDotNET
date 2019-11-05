@@ -55,7 +55,13 @@ namespace Heidelpay.Payment.External.Tests.Business
         {
             var card = await Heidelpay.CreatePaymentTypeAsync(PaymentTypeCardNo3DS);
             var maxbasket = await Heidelpay.CreateBasketAsync(GetMaximumBasket());
-            var newAuth = new Authorization(card) { Amount = 10m, Currency = Currencies.EUR, ReturnUrl = TestReturnUri, BasketId = maxbasket.Id };
+            var newAuth = new Authorization(card) 
+            { 
+                Amount = StandardChargedBasketResult, 
+                Currency = Currencies.EUR,
+                ReturnUrl = TestReturnUri,
+                BasketId = maxbasket.Id
+            };
 
             var auth = await Heidelpay.AuthorizeAsync(newAuth);
             var payment = await Heidelpay.FetchPaymentAsync(auth.PaymentId);
@@ -71,7 +77,7 @@ namespace Heidelpay.Payment.External.Tests.Business
             var maxbasket = await Heidelpay.CreateBasketAsync(GetMaximumBasket());
             var newCharge = new Charge(card)
             {
-                Amount = 10m,
+                Amount = StandardChargedBasketResult,
                 Currency = Currencies.EUR,
                 ReturnUrl = TestReturnUri,
                 BasketId = maxbasket.Id,

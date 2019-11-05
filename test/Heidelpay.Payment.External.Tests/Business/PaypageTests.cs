@@ -31,7 +31,7 @@ namespace Heidelpay.Payment.External.Tests.Business
 
             var built = new Paypage(Heidelpay)
             {
-                Amount = 123,
+                Amount = StandardChargedBasketResult,
                 Currency = Currencies.EUR,
                 ReturnUrl = TestReturnUri,
                 CustomerId = customer.Id,

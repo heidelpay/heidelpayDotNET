@@ -1,5 +1,6 @@
 ﻿using Heidelpay.Payment.Extensions;
 using Heidelpay.Payment.Interfaces;
+using Heidelpay.Payment.PaymentTypes;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
@@ -33,14 +34,23 @@ namespace Heidelpay.Payment.Internal.Tests.Business.Errors
         {
             var heidelpay = BuildHeidelpay();
 
-            var exception = await Assert.ThrowsAsync<PaymentException>(() => heidelpay.AuthorizeAsync(new Authorization { Amount = 10m, Currency = Currencies.EUR, ReturnUrl = new Uri("https://www.google.at"), TypeId = "" }));
+            var exception = await Assert.ThrowsAsync<PaymentException>(() =>
+                heidelpay.AuthorizeAsync(
+                    new Authorization
+                    {
+                        Amount = 10m,
+                        Currency = Currencies.EUR,
+                        ReturnUrl = new Uri("https://www.google.at"),
+                        TypeId = ""
+                    }));
+
 
             Assert.NotNull(exception);
             Assert.Single(exception.PaymentErrorList);
 
             var error = exception.PaymentErrorList.First();
 
-            Assert.Equal("API.320.200.143", error.Code);
+            Assert.Equal("API.320.200.163", error.Code);
         }
     }
 }
