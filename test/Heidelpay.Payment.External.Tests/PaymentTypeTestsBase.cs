@@ -60,6 +60,31 @@ namespace Heidelpay.Payment.External.Tests.Business
                 .ToString();
         }
 
+        protected Customer CreateFactoringOKCustomer(string customerId)
+        {
+            var customer = new Customer("Maximilian", "Mustermann");
+
+            customer.Salutation = Salutation.Mr;
+            customer.BirthDate = new DateTime(1980, 11, 22);
+            customer.BillingAddress = CreateAddress("Maximilian Mustermann", "Hugo-Junkers-Str. 3", "Frankfurt am Main", "Frankfurt am Main", "60386", "DE");
+            customer.ShippingAddress = CreateAddress("Maximilian Mustermann", "Hugo-Junkers-Str. 3", "Frankfurt am Main", "Frankfurt am Main", "60386", "DE");
+
+            return customer;
+        }
+
+        protected Address CreateAddress(string name, string street, string city, string state, string zip, string country)
+        {
+            return new Address
+            {
+                Name = name,
+                Street = street,
+                City = city,
+                State = state,
+                Zip = zip,
+                Country = country,
+            };
+        }
+
         protected async Task<Customer> CreateMaximumCustomer(HeidelpayClient heidelpay)
         {
             return await heidelpay.CreateCustomerAsync(GetMaximumCustomer(GetRandomId()));
@@ -112,7 +137,7 @@ namespace Heidelpay.Payment.External.Tests.Business
         }
 
         protected Customer GetMaximumCustomer(string customerId, string companyName = null)
-        { 
+        {
             TryParseDateTime("1974-03-10", out DateTime dt);
 
             return new Customer("Max", "Musterperson")
@@ -178,11 +203,11 @@ namespace Heidelpay.Payment.External.Tests.Business
         protected MetaData TestMetaData { get; } = new MetaData { ["invoice-nr"] = "Rg-2018-11-1", ["shop-id"] = "4711", ["delivery-date"] = "24.12.2018", ["reason"] = "X-mas present" };
         protected MetaData TestMetaDataSorted { get; } = new MetaData(true) { ["invoice-nr"] = "Rg-2018-11-1", ["shop-id"] = "4711", ["delivery-date"] = "24.12.2018", ["reason"] = "X-mas present" };
         protected Address TestAddress { get; } = new Address { Name = "Mozart", Street = "Grüngasse 16", City = "Vienna", State = "Vienna", Zip = "1010", Country = "AT" };
-        protected Action<Card> PaymentTypeCard { get; } = new Action<Card>(x => 
+        protected Action<Card> PaymentTypeCard { get; } = new Action<Card>(x =>
         {
             x.Number = "4444333322221111";
             x.ExpiryDate = "03/20";
-            x.CVC = "123"; 
+            x.CVC = "123";
         });
 
         protected Action<Card> PaymentTypeCardNo3DS { get; } = new Action<Card>(x =>
