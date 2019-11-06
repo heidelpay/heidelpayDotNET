@@ -18,6 +18,8 @@
 
 using Heidelpay.Payment.Interfaces;
 using Newtonsoft.Json;
+using System;
+using System.Threading.Tasks;
 
 namespace Heidelpay.Payment.PaymentTypes
 {
@@ -45,7 +47,22 @@ namespace Heidelpay.Payment.PaymentTypes
         public InvoiceGuaranteed(IHeidelpay heidelpayClient)
             : base(heidelpayClient)
         {
-        }        
+        }
+
+        /// <summary>
+        /// charge as an asynchronous operation.
+        /// </summary>
+        /// <param name="amount">The amount.</param>
+        /// <param name="currency">The currency.</param>
+        /// <param name="returnUrl">The return URL.</param>
+        /// <param name="customer">The customer.</param>
+        /// <param name="basket">The basket.</param>
+        /// <param name="invoiceId">The invoice identifier.</param>
+        /// <returns>Task&lt;Charge&gt;.</returns>
+        public async Task<Charge> ChargeAsync(decimal amount, string currency, Uri returnUrl, Customer customer, Basket basket, string invoiceId = null)
+        {
+            return await Heidelpay.ChargeAsync(amount, currency, this, returnUrl, customer, basket, invoiceId);
+        }
 
         /// <summary>
         /// Gets the heidelpay client.

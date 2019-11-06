@@ -40,6 +40,33 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         }
 
         [Fact]
+        public async Task Charge_PaymentType_With_InvoiceId()
+        {
+            var customer = await Heidelpay.CreateCustomerAsync(CreateFactoringOKCustomer(GetRandomInvoiceId()));
+
+            var result = await Heidelpay.CreatePaymentTypeAsync<InvoiceFactoring>();
+            var charge = await result.ChargeAsync(StandardChargedBasketResult, Currencies.EUR, ShopReturnUri, customer, GetMaximumBasket(), GetRandomInvoiceId());
+            var shipment = await Heidelpay.ShipmentAsync(charge?.PaymentId, GetRandomInvoiceId());
+
+            AssertShipment(shipment);
+            Assert.NotNull(shipment.Id);
+        }
+
+        [Fact]
+        public async Task Shipment_PaymentType_With_InvoiceId()
+        {
+            var customer = await Heidelpay.CreateCustomerAsync(CreateFactoringOKCustomer(GetRandomInvoiceId()));
+            var basket = await Heidelpay.CreateBasketAsync(GetMaximumBasket());
+            var paymentType = await Heidelpay.CreatePaymentTypeAsync<InvoiceFactoring>();
+
+            var charge = await Heidelpay.ChargeAsync(StandardChargedBasketResult, Currencies.EUR, paymentType, ShopReturnUri, customer, basket, card3ds:false);
+            var shipment = await Heidelpay.ShipmentAsync(charge?.PaymentId, GetRandomInvoiceId());
+
+            Assert.NotNull(charge?.PaymentId);
+            AssertShipment(shipment);
+        }
+
+        [Fact]
         public async Task Charge_PaymentType_Different_Address()
         {
             var result = await Heidelpay.CreatePaymentTypeAsync<InvoiceFactoring>();

@@ -46,12 +46,29 @@ namespace Heidelpay.Payment.External.Tests.Business.PaymentTypes
         [Fact]
         public async Task Shipment_PaymentType()
         {
+            string invoiceId = GetRandomInvoiceId();
+
             var result = await Heidelpay.CreatePaymentTypeAsync<InvoiceGuaranteed>();
             var charge = await result.ChargeAsync(10.0m, Currencies.EUR, ShopReturnUri, GetMaximumCustomerSameAddress(GetRandomId()));
-            var shipment = await Heidelpay.ShipmentAsync(charge?.PaymentId, GetRandomInvoiceId());
+            var shipment = await Heidelpay.ShipmentAsync(charge?.PaymentId, invoiceId);
 
             AssertCharge(charge, 10m, Status.Pending);
             AssertShipment(shipment);
+            Assert.Equal(invoiceId, shipment.InvoiceId);
+        }
+
+        [Fact]
+        public async Task Charge_PaymentType_WithInvoiceId()
+        {
+            Basket basket = GetMinimumBasket();
+            string invoiceId = GetRandomInvoiceId();
+
+            var result = await Heidelpay.CreatePaymentTypeAsync<InvoiceGuaranteed>();
+            var charge = await result.ChargeAsync(basket.AmountTotalGross, Currencies.EUR, ShopReturnUri, GetMaximumCustomerSameAddress(GetRandomId()), basket, invoiceId);
+
+            Assert.NotNull(charge);
+            Assert.NotNull(charge.PaymentId);
+            Assert.Equal(invoiceId, charge.InvoiceId);
         }
 
         [Fact]
